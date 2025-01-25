@@ -1,3 +1,14 @@
+# Output/build files
+[Bb]uild/
+[Oo]ut/
+
+# Visual Studio intermediate directory
+[Mm]svc/
+
+# Visual Studio database files
+.vs/
+
+# CMake-generated files
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
