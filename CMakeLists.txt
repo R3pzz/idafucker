@@ -10,6 +10,24 @@ if (POLICY CMP0141)
 endif()
 
 project ("idafucker")
+# CMAKE_PROJECT_NAME - global project name
+# PROJECT_NAME - last project() call
 
-# Include sub-projects.
-add_subdirectory ("src/idafucker-engine")
+# Listing all source files from ./src
+file(GLOB_RECURSE SOURCES "./src/*")
+
+add_executable(${CMAKE_PROJECT_NAME} ${SOURCES})
+
+# todo : add third_party here
+
+# Linking modules
+file(GLOB_RECURSE MODULES "./modules/*")
+foreach(MODULE IN LISTS MODULES)
+    add_subdirectory(${MODULE})
+endforeach()
+
+target_include_directories(${PROJECT_NAME} PRIVATE "./include/*")
+
+target_link_libraries(
+  ${PROJECT_NAME} # PUBLIC deps here
+)
