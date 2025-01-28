@@ -158,9 +158,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EntryPoint.cpp" />
+    <ClCompile Include="src\platform\windows\WindowsApplication.cpp" />
+    <ClCompile Include="src\platform\windows\WindowsWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\CoreDefines.hpp" />
+    <ClInclude Include="include\platform\Application.hpp" />
+    <ClInclude Include="include\platform\Window.hpp" />
+    <ClInclude Include="include\platform\windows\WindowsApplication.hpp" />
+    <ClInclude Include="include\platform\windows\WindowsWindow.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

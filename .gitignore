@@ -1,5 +1,7 @@
 .vs
 
+vcpkg_installed
+
 [Bb]uild
 [Mm]svc
 [Oo]ut
