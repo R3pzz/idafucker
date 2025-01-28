@@ -14,9 +14,12 @@ public:
   void setCursor(HCURSOR icon);
 
   [[nodiscard]] WindowsAppWindow &createWindow(const WindowsAppWindow::CreateParams &params);
+  [[nodiscard]] constexpr auto isMainWindow(HWND hwnd) const noexcept { return _windows.at(0u) == hwnd; }
 
   [[nodiscard]] constexpr auto &window(std::size_t idx) { return _windows.at(idx); }
   [[nodiscard]] constexpr auto running() const noexcept { return _running; }
+
+  constexpr void terminate() noexcept { _running = false; }
 
   [[nodiscard]] static constexpr LPCWSTR windowClassName() noexcept { return L"idafucker_window"; }
 

@@ -1,7 +1,8 @@
+#include <platform/windows/WindowsApplication.hpp>
 #include <platform/windows/WindowsWindow.hpp>
 
 #include <dwmapi.h>
-#pragma comment(lib, "dwmapi.lib")
+#pragma comment(lib, "Dwmapi.lib")
 
 IDAFUCKER_NAMESPACE_BEGIN
 
@@ -28,6 +29,18 @@ WindowsAppWindow::~WindowsAppWindow() {
 void WindowsAppWindow::setVisibility(bool visible) { ::ShowWindow(_hwnd, visible ? SW_SHOW : SW_HIDE); }
 
 LRESULT WINAPI WindowsAppWindow::wndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+  auto app = reinterpret_cast<WindowsApp *>(::GetWindowLongPtrW(hwnd, GWLP_USERDATA));
+  
+  switch (msg) {
+  case WM_DESTROY:
+  case WM_QUIT: {
+      if (app->isMainWindow(hwnd))
+        app->terminate();
+      return 0l;
+  }
+  default: break;
+  }
+
   return DefWindowProcW(hwnd, msg, wParam, lParam);
 }
 

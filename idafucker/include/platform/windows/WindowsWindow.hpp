@@ -23,6 +23,8 @@ public:
 
   ~WindowsAppWindow();
 
+  [[nodiscard]] constexpr auto operator==(HWND rhs) const noexcept { return _hwnd == rhs; }
+
   void setVisibility(bool visible);
 
   [[nodiscard]] constexpr HWND hwnd() const noexcept { return _hwnd; }
