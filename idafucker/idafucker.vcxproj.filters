@@ -5,4 +5,19 @@
       <UniqueIdentifier>{979659a4-5646-4af5-b86a-7c255268301e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\EntryPoint.cpp" />
+    <ClCompile Include="src\platform\windows\WindowsWindow.cpp" />
+    <ClCompile Include="src\platform\windows\WindowsApplication.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\CoreDefines.hpp" />
+    <ClInclude Include="include\platform\windows\WindowsWindow.hpp" />
+    <ClInclude Include="include\platform\windows\WindowsApplication.hpp" />
+    <ClInclude Include="include\platform\Application.hpp" />
+    <ClInclude Include="include\platform\Window.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".clang-format" />
+  </ItemGroup>
 </Project>
