@@ -1,6 +1,7 @@
 {
   "dependencies": [
+    "boost-signals2",
     "spdlog",
-    "boost-signals2"
+    "qt5"
   ]
 }

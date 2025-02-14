@@ -16,6 +16,12 @@
     <ClInclude Include="include\platform\windows\WindowsApplication.hpp" />
     <ClInclude Include="include\platform\Application.hpp" />
     <ClInclude Include="include\platform\Window.hpp" />
+    <ClInclude Include="include\ui\main\MemorySearchUi.hpp" />
+    <ClInclude Include="include\hyperui\core\math\Vector2.hpp" />
+    <ClInclude Include="include\hyperui\widgets\CheckboxWidget.hpp" />
+    <ClInclude Include="include\hyperui\widgets\BaseWidget.hpp" />
+    <ClInclude Include="include\hyperui\core\math\Rectangle.hpp" />
+    <ClInclude Include="include\hyperui\core\math\Scalar.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".clang-format" />

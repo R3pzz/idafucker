@@ -2,6 +2,8 @@
 #include <platform/Application.hpp>
 #include <platform/Window.hpp>
 
+#include <hyperui/widgets/CanvasWidget.hpp>
+
 #include <print> // print
 
 int main(int argc, char* argv[]) {
@@ -14,9 +16,9 @@ int main(int argc, char* argv[]) {
     while (app.running()) {
       MSG msg{};
 
-      while (::PeekMessage(&msg, nullptr, 0u, 0u, PM_REMOVE)) {
+      while (::PeekMessageW(&msg, nullptr, 0u, 0u, PM_REMOVE)) {
         ::TranslateMessage(&msg);
-        ::DispatchMessage(&msg);
+        ::DispatchMessageW(&msg);
       }
     }
   } catch (std::exception &e) {

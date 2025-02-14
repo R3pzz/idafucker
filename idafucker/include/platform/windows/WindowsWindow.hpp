@@ -18,8 +18,8 @@ public:
     [[nodiscard]] constexpr int height() const noexcept { return rect.bottom - rect.top; }
   };
 
-  WindowsAppWindow(const CreateParams &params, LPCWSTR className);
   constexpr WindowsAppWindow(const WindowsAppWindow &) noexcept = default;
+  WindowsAppWindow(const CreateParams &params, LPCWSTR className);
 
   ~WindowsAppWindow();
 
