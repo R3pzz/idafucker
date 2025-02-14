@@ -157,30 +157,34 @@
     <None Include=".clang-format" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\EntryPoint.cpp" />
-    <ClCompile Include="src\platform\windows\WindowsApplication.cpp" />
-    <ClCompile Include="src\platform\windows\WindowsWindow.cpp" />
+    <ClCompile Include="src\idafucker.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowsApplication.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\CoreDefines.hpp" />
-    <ClInclude Include="include\hyperui\core\layout\GenericLayout.hpp" />
-    <ClInclude Include="include\hyperui\core\layout\FlexLayout.hpp" />
-    <ClInclude Include="include\hyperui\core\math\Common.hpp" />
-    <ClInclude Include="include\hyperui\core\math\Scalar.hpp" />
-    <ClInclude Include="include\hyperui\core\math\Rectangle.hpp" />
-    <ClInclude Include="include\hyperui\core\math\Vector2.hpp" />
-    <ClInclude Include="include\hyperui\core\style\Style.hpp" />
-    <ClInclude Include="include\hyperui\core\style\StyleAttribute.hpp" />
-    <ClInclude Include="include\hyperui\core\style\StyleGroup.hpp" />
-    <ClInclude Include="include\hyperui\core\style\StyleSheet.hpp" />
-    <ClInclude Include="include\hyperui\widgets\BaseWidget.hpp" />
-    <ClInclude Include="include\hyperui\widgets\CanvasWidget.hpp" />
-    <ClInclude Include="include\hyperui\widgets\CheckboxWidget.hpp" />
+    <ClInclude Include="include\idafucker\Bootstrapper\Bootstrapper.hpp" />
+    <ClInclude Include="include\idafucker\CoreDefines.hpp" />
+    <ClInclude Include="include\idafucker\HyperUI\Core\Layout\GenericLayout.hpp" />
+    <ClInclude Include="include\idafucker\HyperUI\Core\Layout\FlexLayout.hpp" />
+    <ClInclude Include="include\idafucker\HyperUI\Core\Math\Common.hpp" />
+    <ClInclude Include="include\idafucker\HyperUI\Core\Math\Scalar.hpp" />
+    <ClInclude Include="include\idafucker\HyperUI\Core\Math\Rectangle.hpp" />
+    <ClInclude Include="include\idafucker\HyperUI\Core\Math\Vector2.hpp" />
+    <ClInclude Include="include\idafucker\HyperUI\Core\Style\Style.hpp" />
+    <ClInclude Include="include\idafucker\HyperUI\Core\Style\StyleAttribute.hpp" />
+    <ClInclude Include="include\idafucker\HyperUI\Core\Style\StyleGroup.hpp" />
+    <ClInclude Include="include\idafucker\HyperUI\Core\Style\StyleSheet.hpp" />
+    <ClInclude Include="include\idafucker\HyperUI\Widgets\BaseWidget.hpp" />
+    <ClInclude Include="include\idafucker\HyperUI\Widgets\CanvasWidget.hpp" />
+    <ClInclude Include="include\idafucker\HyperUI\Widgets\CheckboxWidget.hpp" />
+    <ClInclude Include="include\idafucker\Platform\Application.hpp" />
+    <ClInclude Include="include\idafucker\Platform\Window.hpp" />
+    <ClInclude Include="include\idafucker\Platform\Windows\WindowsApplication.hpp" />
+    <ClInclude Include="include\idafucker\Platform\Windows\WindowsWindow.hpp" />
     <ClInclude Include="include\platform\Application.hpp" />
     <ClInclude Include="include\platform\Window.hpp" />
     <ClInclude Include="include\platform\windows\WindowsApplication.hpp" />
     <ClInclude Include="include\platform\windows\WindowsWindow.hpp" />
-    <ClInclude Include="include\ui\main\MemorySearchUi.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

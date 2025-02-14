@@ -1,7 +1,7 @@
 #pragma once
-#include <CoreDefines.hpp>
-#include <hyperui/core/math/Rectangle.hpp>
-#include <hyperui/core/style/StyleGroup.hpp>
+#include <idafucker/CoreDefines.hpp>
+#include <idafucker/HyperUI/Core/Math/Rectangle.hpp>
+#include <idafucker/HyperUI/Core/Style/StyleGroup.hpp>
 
 #include <functional>   // function
 #include <memory>   // shared_ptr

@@ -1,13 +1,18 @@
 #pragma once
-#include <CoreDefines.hpp>
-#include "Vector2.hpp"
+#include <idafucker/CoreDefines.hpp>
 
 IDAFUCKER_NAMESPACE_BEGIN
 
 namespace hyperui
 {
 
-using Dimensions = Vector2<float>;
+class FlexLayout {
+public:
+
+
+private:
+  
+};
 
 } // namespace hyperui
 

@@ -1,18 +1,13 @@
 #pragma once
-#include <CoreDefines.hpp>
+#include <idafucker/CoreDefines.hpp>
 
 IDAFUCKER_NAMESPACE_BEGIN
 
 namespace hyperui
 {
 
-class FlexLayout {
-public:
-
-
-private:
-  
-};
+template <typename T>
+concept scalar = std::is_scalar<T>::value;
 
 } // namespace hyperui
 

@@ -1,13 +1,13 @@
 #pragma once
-#include <CoreDefines.hpp>
+#include <idafucker/CoreDefines.hpp>
+#include "Vector2.hpp"
 
 IDAFUCKER_NAMESPACE_BEGIN
 
 namespace hyperui
 {
 
-template <typename T>
-concept scalar = std::is_scalar<T>::value;
+using Dimensions = Vector2<float>;
 
 } // namespace hyperui
 

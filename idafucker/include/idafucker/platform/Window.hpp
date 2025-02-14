@@ -1,5 +1,5 @@
 #pragma once
-#include <CoreDefines.hpp>
+#include <idafucker/CoreDefines.hpp>
 
 #if (IDAFUCKER_PLATFORM_WIN32)
   #include "windows/WindowsWindow.hpp"

@@ -1,5 +1,5 @@
 #pragma once
-#include <CoreDefines.hpp>
+#include <idafucker/CoreDefines.hpp>
 #include "BaseWidget.hpp"
 
 // A canvas widget encapsulates the whole widget tree, meaning it is a root object for all following widgets.

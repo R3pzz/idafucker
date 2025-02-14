@@ -1,7 +1,29 @@
-#include <idafucker/CoreDefines.hpp>
+#include <idafucker/Platform/Application.hpp>
+#include <idafucker/Platform/Window.hpp>
 
-#include <Windows.h>
+#include <idafucker/HyperUI/Widgets/CanvasWidget.hpp>
 
-int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nCmdShow) {
-	// delegate to real here
+#include <print> // print
+
+int main(int argc, char *argv[]) {
+  try {
+    idafucker::App app{argc, argv};
+    auto &mainWnd = app.createWindow(
+        {.style{WS_OVERLAPPEDWINDOW}, .rect{0, 0, 1920, 1080}, .title{L"idafucker"}, .customTitleBar{true}});
+    mainWnd.setVisibility(true);
+
+    while (app.running()) {
+      MSG msg{};
+
+      while (::PeekMessageW(&msg, nullptr, 0u, 0u, PM_REMOVE)) {
+        ::TranslateMessage(&msg);
+        ::DispatchMessageW(&msg);
+      }
+    }
+  } catch (std::exception &e) {
+    std::print("Exception caught: {}\n", e.what());
+    std::this_thread::sleep_for(std::chrono::seconds{10u});
+  }
+
+  return 0;
 }

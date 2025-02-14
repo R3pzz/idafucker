@@ -1,5 +1,5 @@
 #pragma once
-#include <CoreDefines.hpp>
+#include <idafucker/CoreDefines.hpp>
 #include "Vector2.hpp"
 
 IDAFUCKER_NAMESPACE_BEGIN

@@ -1,7 +1,7 @@
 #pragma once
-#include <CoreDefines.hpp>
-#include <hyperui/core/math/Rectangle.hpp>
-#include <hyperui/core/math/Vector2.hpp>
+#include <idafucker/CoreDefines.hpp>
+#include <idafucker/HyperUI/Core/Math/Rectangle.hpp>
+#include <idafucker/HyperUI/Core/Math/Vector2.hpp>
 
 #include <any> // any
 #include <type_traits> // is_same

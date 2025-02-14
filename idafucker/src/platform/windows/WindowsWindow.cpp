@@ -1,5 +1,5 @@
-#include <platform/windows/WindowsApplication.hpp>
-#include <platform/windows/WindowsWindow.hpp>
+#include <idafucker/Platform/Windows/WindowsApplication.hpp>
+#include <idafucker/Platform/Windows/WindowsWindow.hpp>
 
 #include <dwmapi.h>
 #pragma comment(lib, "Dwmapi.lib")
