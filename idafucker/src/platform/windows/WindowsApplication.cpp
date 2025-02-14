@@ -1,4 +1,4 @@
-#include <platform/windows/WindowsApplication.hpp>
+#include <idafucker/platform/windows/WindowsApplication.hpp>
 
 IDAFUCKER_NAMESPACE_BEGIN
 

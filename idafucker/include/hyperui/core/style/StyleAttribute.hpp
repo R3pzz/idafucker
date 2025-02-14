@@ -30,6 +30,7 @@ public:
   constexpr StyleAttribute() noexcept = default;
 
   [[nodiscard]] constexpr StyleAttributeType type() const noexcept {
+    const auto &typeInfo = _value.type().;
     
   }
 

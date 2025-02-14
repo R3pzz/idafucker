@@ -1,5 +1,5 @@
 #pragma once
-#include <CoreDefines.hpp>
+#include <idafucker/CoreDefines.hpp>
 
 #include <string> // wstring
 
