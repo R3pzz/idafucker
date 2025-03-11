@@ -6,34 +6,63 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
-    <ClCompile Include="src\Platform\Windows\WindowsApplication.cpp" />
-    <ClCompile Include="src\idafucker.cpp" />
+    <ClCompile Include="src\idafucker\resources\ResourceManager.cpp" />
+    <ClCompile Include="src\hyperui\renderer\shaders\ShaderCompilationError.cpp" />
+    <ClCompile Include="src\hyperui\renderer\shaders\ShaderCompiler.cpp" />
+    <ClCompile Include="src\hyperui\renderer\shaders\ShaderProgram.cpp" />
+    <ClCompile Include="src\idafucker\idafucker.cpp" />
+    <ClCompile Include="src\idafucker\runtime\impl\application\WindowsApplication.cpp" />
+    <ClCompile Include="src\idafucker\runtime\impl\window\windows\WindowsWindow.cpp" />
+    <ClCompile Include="src\idafucker\runtime\WindowFactory.cpp" />
+    <ClCompile Include="src\idafucker\runtime\ApplicationFactory.cpp" />
+    <ClCompile Include="src\idafucker\runtime\impl\window\windows\WindowsWindowFactoryImpl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\platform\windows\WindowsWindow.hpp" />
     <ClInclude Include="include\platform\windows\WindowsApplication.hpp" />
     <ClInclude Include="include\platform\Application.hpp" />
     <ClInclude Include="include\platform\Window.hpp" />
-    <ClInclude Include="include\idafucker\HyperUI\Core\Math\Vector2.hpp" />
-    <ClInclude Include="include\idafucker\HyperUI\Widgets\CheckboxWidget.hpp" />
-    <ClInclude Include="include\idafucker\HyperUI\Widgets\BaseWidget.hpp" />
-    <ClInclude Include="include\idafucker\HyperUI\Core\Math\Rectangle.hpp" />
-    <ClInclude Include="include\idafucker\HyperUI\Core\Math\Scalar.hpp" />
-    <ClInclude Include="include\idafucker\HyperUI\Core\Layout\GenericLayout.hpp" />
-    <ClInclude Include="include\idafucker\HyperUI\Core\Layout\FlexLayout.hpp" />
-    <ClInclude Include="include\idafucker\HyperUI\Core\Math\Common.hpp" />
-    <ClInclude Include="include\idafucker\HyperUI\Core\Style\Style.hpp" />
-    <ClInclude Include="include\idafucker\HyperUI\Core\Style\StyleAttribute.hpp" />
-    <ClInclude Include="include\idafucker\HyperUI\Core\Style\StyleGroup.hpp" />
-    <ClInclude Include="include\idafucker\HyperUI\Core\Style\StyleSheet.hpp" />
-    <ClInclude Include="include\idafucker\HyperUI\Widgets\CanvasWidget.hpp" />
-    <ClInclude Include="include\idafucker\Platform\Windows\WindowsApplication.hpp" />
-    <ClInclude Include="include\idafucker\Platform\Windows\WindowsWindow.hpp" />
-    <ClInclude Include="include\idafucker\Platform\Application.hpp" />
-    <ClInclude Include="include\idafucker\Platform\Window.hpp" />
     <ClInclude Include="include\idafucker\CoreDefines.hpp" />
     <ClInclude Include="include\idafucker\Bootstrapper\Bootstrapper.hpp" />
+    <ClInclude Include="include\idafucker\base\templates\TypeFamily.hpp" />
+    <ClInclude Include="include\idafucker\resources\ResourceId.hpp" />
+    <ClInclude Include="include\idafucker\resources\ResourceManager.hpp" />
+    <ClInclude Include="include\idafucker\resources\Resource.hpp" />
+    <ClInclude Include="include\idafucker\resources\ResourceType.hpp" />
+    <ClInclude Include="include\hyperui\events\Event.hpp" />
+    <ClInclude Include="include\hyperui\events\EventType.hpp" />
+    <ClInclude Include="include\hyperui\renderer\shaders\ShaderCompilationError.hpp" />
+    <ClInclude Include="include\hyperui\renderer\shaders\ShaderCompiler.hpp" />
+    <ClInclude Include="include\hyperui\renderer\shaders\ShaderProgram.hpp" />
+    <ClInclude Include="include\hyperui\style\StyleRef.hpp" />
+    <ClInclude Include="include\hyperui\widgets\ButtonWidget.hpp" />
+    <ClInclude Include="include\hyperui\widgets\RichTextInputWidget.hpp" />
+    <ClInclude Include="include\hyperui\widgets\TextFieldWidget.hpp" />
+    <ClInclude Include="include\hyperui\widgets\TextWidget.hpp" />
+    <ClInclude Include="include\hyperui\widgets\InputState.hpp" />
+    <ClInclude Include="include\idafucker\base\math\Common.hpp" />
+    <ClInclude Include="include\idafucker\base\meta\Scalar.hpp" />
+    <ClInclude Include="include\idafucker\base\math\Rectangle.hpp" />
+    <ClInclude Include="include\idafucker\base\math\Vector2.hpp" />
+    <ClInclude Include="include\hyperui\widgets\BaseWidget.hpp" />
+    <ClInclude Include="include\hyperui\widgets\CheckboxWidget.hpp" />
+    <ClInclude Include="include\idafucker\runtime\Application.hpp" />
+    <ClInclude Include="include\idafucker\runtime\Window.hpp" />
+    <ClInclude Include="include\idafucker\runtime\windows\WindowsApplication.hpp" />
+    <ClInclude Include="include\idafucker\runtime\windows\WindowsWindow.hpp" />
+    <ClInclude Include="include\idafucker\base\hash\Fnv1a.hpp" />
+    <ClInclude Include="include\idafucker\base\meta\Convertible.hpp" />
+    <ClInclude Include="include\idafucker\base\templates\BitFlags.hpp" />
+    <ClInclude Include="include\hyperui\CoreDefines.hpp" />
+    <ClInclude Include="include\hyperui\events\types\Types.hpp" />
+    <ClInclude Include="include\hyperui\events\EventRef.hpp" />
+    <ClInclude Include="include\idafucker\runtime\ApplicationFactory.hpp" />
+    <ClInclude Include="include\idafucker\runtime\WindowVisibility.hpp" />
+    <ClInclude Include="include\idafucker\runtime\WindowSpecs.hpp" />
+    <ClInclude Include="src\idafucker\runtime\impl\window\windows\WindowsWindow.hpp" />
+    <ClInclude Include="include\idafucker\runtime\WindowFactory.hpp" />
+    <ClInclude Include="src\idafucker\runtime\impl\application\WindowsApplication.hpp" />
+    <ClInclude Include="src\idafucker\runtime\impl\window\windows\WindowsWindowFactoryImpl.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".clang-format" />
