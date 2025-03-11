@@ -7,6 +7,13 @@
   #define IDAFUCKER_PLATFORM_LINUX (true)
 #endif // defined(_WIN32)
 
+// BUILD VERSION
+#if defined(_DEBUG)
+  #define IDAFUCKER_DEBUG (true)
+#else
+  #define IDAFUCKER_RELEASE (true)
+#endif // defined(_DEBUG)
+
 // PLATFORM HEADER INCLUDES
 #if not defined(WIN32_LEAN_AND_MEAN)
   #define WIN32_LEAN_AND_MEAN
@@ -57,3 +64,17 @@
 #include <cstddef>
 #include <cstdlib>
 #include <stdexcept>
+
+// ARCHITECTURE DETECTION
+#if (INTPTR_MAX == INT32_MAX)
+  #define IDAFUCKER_ARCHITECTURE_X86 (true)
+  #define IDAFUCKER_EACH_ARCH(x86, x64) (x86)
+#else
+  #define IDAFUCKER_ARCHITECTURE_X64 (true)
+  #define IDAFUCKER_EACH_ARCH(x86, x64) (x64)
+#endif // (INTPTR_MAX == INT32_MAX)
+
+// SPDLOG
+#if not defined(SPDLOG_USE_STD_FORMAT)
+  #define SPDLOG_USE_STD_FORMAT
+#endif // not defined(SPDLOG_USE_STD_FORMAT)
