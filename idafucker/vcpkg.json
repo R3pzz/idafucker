@@ -1,7 +1,10 @@
 {
   "dependencies": [
     "boost-signals2",
+    "boost-thread",
+    "glew",
+    "glfw3",
     "spdlog",
-    "qt5"
+    "glad"
   ]
 }
