@@ -1,8 +1,9 @@
 #pragma once
-#include <idafucker/CoreDefines.hpp>
-#include "Application.hpp"
+#include <memory>  // unique_ptr
 
-#include <memory> // unique_ptr
+#include <idafucker/CoreDefines.hpp>
+
+#include "Application.hpp"
 
 //
 // Platform-independent application factory.
@@ -13,18 +14,19 @@
 IDAFUCKER_NAMESPACE_BEGIN
 
 class ApplicationFactory {
-public:
+ public:
   constexpr ApplicationFactory() noexcept = default;
 
   // Creates the application. This function should only be called once!
-  [[nodiscard]] std::shared_ptr<Application> create(int argc, char *argv[]);
+  [[nodiscard]] static Application::Ref create(int argc, char* argv[]);
 
-  [[nodiscard]] auto instance() const noexcept { return _instance; }
+  [[nodiscard]] static constexpr const Application::Ref& instance() noexcept
+  {
+    return instance_;
+  }
 
-private:
-  std::shared_ptr<Application> _instance{};
+ private:
+  inline static std::shared_ptr<Application> instance_{};
 };
-
-extern ApplicationFactory applicationFactory;
 
 IDAFUCKER_NAMESPACE_END

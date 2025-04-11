@@ -1,13 +1,17 @@
 #pragma once
-#include <idafucker/CoreDefines.hpp>
-#include "WindowSpecs.hpp"
-#include "Window.hpp"
+#include <functional>  // function
+#include <memory>      // shared_ptr
 
-#include <memory> // shared_ptr
+#include <idafucker/CoreDefines.hpp>
+#include <idafucker/base/Signal.hpp>
+
+#include "Window.hpp"
+#include "WindowSpecs.hpp"
 
 //
-// Application is a simple and easy-to-use interface of all underlying OS calls, such as:
-// 
+// Application is a simple and easy-to-use interface of all underlying OS calls,
+// such as:
+//
 //  - Taskbar operations
 //  - System object registration
 //  - Config parsing
@@ -16,35 +20,38 @@
 //
 // and etc... We can call it a 'global application context'.
 //
-// An application is created by a factory that can only create one instance of the application
-// at the runtime. A factory implements a method for creating an underlying platform implementation
-// of the application.
+// An application is created by a factory that can only create one instance of
+// the application at the runtime. A factory implements a method for creating an
+// underlying platform implementation of the application.
 //
 
 IDAFUCKER_NAMESPACE_BEGIN
 
 class Application {
-public:
-  virtual ~Application() = default;
+ public:
+  using Ref = std::shared_ptr<Application>;
 
-  // Should we run the main loop the next tick?
-  [[nodiscard]] virtual bool running() const = 0;
-  
-  // Enqueue an application termination request
-  virtual void requestTermination() = 0;
-  [[nodiscard]] virtual bool terminationRequested() const = 0;
-  
-  //
-  // This should be replaced with a proper WindowManager class
-  //
+  constexpr Application() noexcept = default;
+  virtual ~Application() noexcept = default;
 
-  // Window ownership
-  virtual void registerWindow(const std::shared_ptr<Window> &window) = 0;
-  virtual void releaseWindow(const std::shared_ptr<Window> &window) = 0;
+  [[nodiscard]] constexpr bool running() const noexcept
+  {
+    return running_;
+  }
+
+  constexpr void terminate() noexcept
+  {
+    running_ = false;
+  }
+
+  // Windowing interface
+  [[nodiscard]] virtual Window::Ref makeWindow(const WindowSpecs& specs) = 0;
+
+  // Callbacks
+  Signal<void()> onTerminate{};
   
-  // Specific window classes
-  [[nodiscard]] virtual std::shared_ptr<Window> primaryWindow() const = 0;
-  [[nodiscard]] virtual bool isPrimaryWindow(const std::shared_ptr<Window> &window) const = 0;
+ private:
+  bool running_{true};
 };
 
 IDAFUCKER_NAMESPACE_END

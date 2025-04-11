@@ -1,17 +1,20 @@
 #pragma once
+#include <fstream>        // ifstream
+#include <unordered_map>  // unordered_map
+
 #include <idafucker/CoreDefines.hpp>
-#include <idafucker/base/templates/Cache.hpp>
+#include <idafucker/base/IntrusiveHandle.hpp>
+
 #include "Resource.hpp"
-#include "ResourceRef.hpp"
+#include "ResourceError.hpp"
 
 #include <spdlog/spdlog.h>
 
-#include <unordered_map> // unordered_map
-
 //
-// A wrapper around LRU cache.
-// ResourceManager is used to centralize the resource management(caching/uncaching)
-// and gather all resources into a single library for easier access.
+// A wrapper around an intrusive ref-counting cache.
+// ResourceManager is used to centralize the resource
+// management(caching/uncaching) and gather all resources into a single
+// 'library' for easier access.
 //
 // Resource caching:
 //
@@ -20,146 +23,80 @@
 //
 // Resource lifetime:
 //
-//  * When a resource is created, it is automatically registered in the resource system
-//    and its reference count is incremented.
-//  * When the reference count comes to zero, the resource is force
+//  * When a resource is added to the system, its type object is by default
+//  unset;
+//  * When cache() is called, resource data is loaded into a temporary buffer,
+//  passed
+//    to the dependency resoler(where the process repeats for its dependencies)
+//    and the associated factory for object instantiation.
+//  * When uncache() is called, the resource is freed from the memory and the
+//  reference
+//    count on all dependencies is decremented.
+//  * When ResourceManager::releaseResource() is called, the resource is first
+//  uncached
+//    and then removed from the library.
+//
+// Resource type identification guidelines:
+//
+//  * Should be unified for all classes that rely on it;
+//  * Should be easily deduced from an extension and vice-versa;
+//  * Should be of a relatively small size;
+//  * Should be comparable with std::type_info.
 //
 
 IDAFUCKER_NAMESPACE_BEGIN
 
 // Stores resource registrations.
 class ResourceManager {
-public:
+ public:
   constexpr ResourceManager() noexcept = default;
 
-  // Constructs and registers an empty resource of type 'T'
-  template <typename T, typename... Args>
-    requires std::is_base_of<Resource, T>::value
-  auto createProceduralResource(const std::string &name, Args &&...args)
+  void pushFactory(const std::string& extension, ResourceFactory::Ref factory)
   {
-    // Check if we already have such resource registered
-    const auto it = _cache.find(name);
-    if (it != _cache.end()) {
-      // Might as well print a stack trace here
-      spdlog::debug(
-          "ResourceSystem::createProceduralResource: Resource '{}' of type '{}' is already present in the system.",
-          name, typeid(T).name());
-
-      return ResourceRef<T>{it->second};
-    }
-
-    // Allocate an empty resource and construct it
-    auto &resource = _cache[name];
-    resource = std::make_shared<T>(std::forward<Args>(args)...);
-
-    return ResourceRef<T>{resource};
+    factories_[extension] = std::move(factory);
   }
 
-  // Immediately loads a resource of type 'T' from disk
-  template <typename T, typename... Args>
-    requires std::is_base_of<Resource, T>::value
-  auto immediateLoadResource(const std::string &name, Args &&...args)
+  void pushFesolver(const std::string& extension,
+                    ResourceDependencyResolver::Ref resolver)
   {
-    // Check if we already have such resource registered
-    const auto it = _cache.find(name);
-    if (it != _cache.end()) {
-      // Might as well print a stack trace here
-      spdlog::debug(
-          "ResourceSystem::immediateLoadResource: Resource '{}' of type '{}' is already present in the system.",
-          name, typeid(T).name());
-
-      return ResourceRef<T>{it->second};
-    }
-
-    // Allocate an empty resource, construct and cache it
-    auto &resource = _cache[name];
-    resource = std::make_shared<T>(std::forward<Args>(args)...);
-    resource->cache();
-
-    return ResourceRef<T>{resource};
+    resolvers_[extension] = std::move(resolver);
   }
+
+  // Load a resource and cache it immediately
+  auto load(const std::filesystem::path& path) -> IntrusiveHandle<Resource>;
+
+  // Construct a resource of a type 'T'
+  // FIXME: Dependencies are currently not supported
+  template <class T, typename... Args>
+  auto construct(const std::string& name, Args&&... args)
+      -> IntrusiveHandle<Resource>;
 
   // Unregistering resources
-  template <typename T>
-  void releaseResource(const std::string& name, bool ignoreReferences = false)
-  {
-    const auto it = _cache.find(name);
-    if (it == _cache.end())
-      return;
+  void erase(const std::filesystem::path& path, bool ignore_refs = false);
 
-    auto resource = it->second;
-
-    // In theory, we shouldn't encounter such situations
-    if (resource == nullptr) [[unlikely]] {
-      spdlog::debug("ResourceManager::releaseResource: found a null-pointer resource '{}'", name);
-
-      _cache.erase(it);
-      return;
-    }
-
-    // Do not unregister required resources
-    if (resource->isRequired()) {
-      spdlog::debug(
-          "ResourceManager::releaseResource: request to release a required resource '{}' of type '{}' declined",
-          name, resource->type().typeName());
-
-      return;
-    }
-
-    // Only release if not referenced
-    if (!ignoreReferences && resource->isReferenced())
-      return;
-
-    if (resource->type() != TypeFamily<T>::value())
-      return;
-
-    resource->uncache();
-    _cache.erase(it);
-  }
-
-  // Retrieving a resource
-  template <typename T>
-  [[nodiscard]] std::shared_ptr<T> get(const std::string &name) const
-  {
-    const auto it = _cache.find(name);
-    if (it == _cache.end())
-      return ResourceRef<T>{};
-
-    auto resource = it->second;
-
-    if (resource->type() != TypeFamily<T>::value()) {
-      // Might as well print a stack trace here
-      spdlog::debug(
-          "ResourceSystem::get: Requested resource's ('{}') type '{}' does not match the existing one's '{}'. "
-          "Returning an empty handle",
-          name, typeid(T).name(), resource->type().typeName());
-
-      return ResourceRef<T>{};
-    }
-
-    return ResourceRef<T>{std::static_pointer_cast<T>(resource)};
-  }
-
-  // Presence checking
-  template <typename T>
-  [[nodiscard]] bool contains(const std::string &name) const
-  {
-    const auto it = _cache.find(name);
-    if (it == _cache.end())
-      return false;
-
-    return it->second->type() == TypeFamily<T>::value();
-  }
-
-  // Check what resources should be unregistered
+  // Check what resources should be uncached
   void observe();
 
-private:
-  std::unordered_map<std::string, std::shared_ptr<Resource>> _cache{};
+  // Retrieving a resource
+  [[nodiscard]] auto get(const std::filesystem::path& path) const
+      -> IntrusiveHandle<Resource>;
+
+ private:
+  template <class T> using ExtensionMap = std::unordered_map<std::string, T>;
+
+  ExtensionMap<std::shared_ptr<Resource>> cache_{};  //< Resource cache
+  ExtensionMap<std::shared_ptr<ResourceFactory>>
+      factories_{};  //< Resource factories
+  ExtensionMap<std::shared_ptr<ResourceDependencyResolver>>
+      resolvers_{};  //< Resource dependency resolvers
 
   IDAFUCKER_NONCOPYABLE(ResourceManager);
 };
 
-extern ResourceManager resourceManager;
+template <class T, typename... Args>
+auto ResourceManager::construct(const std::string& name, Args&&... args)
+    -> IntrusiveHandle<Resource>
+{
+}
 
 IDAFUCKER_NAMESPACE_END

@@ -7,15 +7,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\idafucker\resources\ResourceManager.cpp" />
-    <ClCompile Include="src\hyperui\renderer\shaders\ShaderCompilationError.cpp" />
-    <ClCompile Include="src\hyperui\renderer\shaders\ShaderCompiler.cpp" />
-    <ClCompile Include="src\hyperui\renderer\shaders\ShaderProgram.cpp" />
     <ClCompile Include="src\idafucker\idafucker.cpp" />
-    <ClCompile Include="src\idafucker\runtime\impl\application\WindowsApplication.cpp" />
-    <ClCompile Include="src\idafucker\runtime\impl\window\windows\WindowsWindow.cpp" />
-    <ClCompile Include="src\idafucker\runtime\WindowFactory.cpp" />
+    <ClCompile Include="src\idafucker\runtime\win\WindowImpl.cpp" />
     <ClCompile Include="src\idafucker\runtime\ApplicationFactory.cpp" />
-    <ClCompile Include="src\idafucker\runtime\impl\window\windows\WindowsWindowFactoryImpl.cpp" />
+    <ClCompile Include="src\idafucker\runtime\win\ApplicationImpl.cpp" />
+    <ClCompile Include="src\idafucker\resources\Resource.cpp" />
+    <ClCompile Include="src\idafucker\base\String.cpp" />
+    <ClCompile Include="src\idafucker\runtime\win\MessageProcessorImpl.cpp" />
+    <ClCompile Include="src\idafucker\runtime\win\detail\DPI.cpp" />
+    <ClCompile Include="src\idafucker\runtime2\impl\ApplicationImpl.cpp" />
+    <ClCompile Include="src\idafucker\runtime2\impl\WindowImpl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\platform\windows\WindowsWindow.hpp" />
@@ -24,11 +25,8 @@
     <ClInclude Include="include\platform\Window.hpp" />
     <ClInclude Include="include\idafucker\CoreDefines.hpp" />
     <ClInclude Include="include\idafucker\Bootstrapper\Bootstrapper.hpp" />
-    <ClInclude Include="include\idafucker\base\templates\TypeFamily.hpp" />
-    <ClInclude Include="include\idafucker\resources\ResourceId.hpp" />
     <ClInclude Include="include\idafucker\resources\ResourceManager.hpp" />
     <ClInclude Include="include\idafucker\resources\Resource.hpp" />
-    <ClInclude Include="include\idafucker\resources\ResourceType.hpp" />
     <ClInclude Include="include\hyperui\events\Event.hpp" />
     <ClInclude Include="include\hyperui\events\EventType.hpp" />
     <ClInclude Include="include\hyperui\renderer\shaders\ShaderCompilationError.hpp" />
@@ -40,31 +38,60 @@
     <ClInclude Include="include\hyperui\widgets\TextFieldWidget.hpp" />
     <ClInclude Include="include\hyperui\widgets\TextWidget.hpp" />
     <ClInclude Include="include\hyperui\widgets\InputState.hpp" />
-    <ClInclude Include="include\idafucker\base\math\Common.hpp" />
-    <ClInclude Include="include\idafucker\base\meta\Scalar.hpp" />
-    <ClInclude Include="include\idafucker\base\math\Rectangle.hpp" />
-    <ClInclude Include="include\idafucker\base\math\Vector2.hpp" />
+    <ClInclude Include="include\idafucker\math\Common.hpp" />
+    <ClInclude Include="include\idafucker\math\Rectangle.hpp" />
+    <ClInclude Include="include\idafucker\math\Vector2.hpp" />
     <ClInclude Include="include\hyperui\widgets\BaseWidget.hpp" />
     <ClInclude Include="include\hyperui\widgets\CheckboxWidget.hpp" />
     <ClInclude Include="include\idafucker\runtime\Application.hpp" />
     <ClInclude Include="include\idafucker\runtime\Window.hpp" />
-    <ClInclude Include="include\idafucker\runtime\windows\WindowsApplication.hpp" />
-    <ClInclude Include="include\idafucker\runtime\windows\WindowsWindow.hpp" />
-    <ClInclude Include="include\idafucker\base\hash\Fnv1a.hpp" />
-    <ClInclude Include="include\idafucker\base\meta\Convertible.hpp" />
-    <ClInclude Include="include\idafucker\base\templates\BitFlags.hpp" />
+    <ClInclude Include="include\idafucker\base\Hash.hpp" />
+    <ClInclude Include="include\idafucker\base\Flags.hpp" />
     <ClInclude Include="include\hyperui\CoreDefines.hpp" />
     <ClInclude Include="include\hyperui\events\types\Types.hpp" />
     <ClInclude Include="include\hyperui\events\EventRef.hpp" />
     <ClInclude Include="include\idafucker\runtime\ApplicationFactory.hpp" />
-    <ClInclude Include="include\idafucker\runtime\WindowVisibility.hpp" />
     <ClInclude Include="include\idafucker\runtime\WindowSpecs.hpp" />
-    <ClInclude Include="src\idafucker\runtime\impl\window\windows\WindowsWindow.hpp" />
-    <ClInclude Include="include\idafucker\runtime\WindowFactory.hpp" />
-    <ClInclude Include="src\idafucker\runtime\impl\application\WindowsApplication.hpp" />
-    <ClInclude Include="src\idafucker\runtime\impl\window\windows\WindowsWindowFactoryImpl.hpp" />
+    <ClInclude Include="src\idafucker\runtime\win\WindowImpl.hpp" />
+    <ClInclude Include="include\hyperui\renderer\base\Color.hpp" />
+    <ClInclude Include="include\hyperui\renderer\RenderContext.hpp" />
+    <ClInclude Include="include\hyperui\renderer\Renderer.hpp" />
+    <ClInclude Include="include\idafucker\math\Vector4.hpp" />
+    <ClInclude Include="include\idafucker\base\IntrusiveHandle.hpp" />
+    <ClInclude Include="include\idafucker\runtime\WindowType.hpp" />
+    <ClInclude Include="src\idafucker\runtime\win\ApplicationImpl.hpp" />
+    <ClInclude Include="include\hyperui\markup\Markup.hpp" />
+    <ClInclude Include="include\hyperui\markup\MarkupFactory.hpp" />
+    <ClInclude Include="include\idafucker\base\Underlying.hpp" />
+    <ClInclude Include="include\idafucker\resources\ResourceDependencyResolver.hpp" />
+    <ClInclude Include="include\idafucker\resources\ResourceError.hpp" />
+    <ClInclude Include="include\idafucker\resources\ResourceFactory.hpp" />
+    <ClInclude Include="include\idafucker\base\Any.hpp" />
+    <ClInclude Include="include\idafucker\base\TypeTraits.hpp" />
+    <ClInclude Include="include\idafucker\base\Bitmask.hpp" />
+    <ClInclude Include="include\idafucker\base\String.hpp" />
+    <ClInclude Include="include\idafucker\exceptions\Exception.hpp" />
+    <ClInclude Include="include\idafucker\exceptions\PlatformException.hpp" />
+    <ClInclude Include="src\hyperui\engine\impl\webview\WebViewEngine.hpp" />
+    <ClInclude Include="src\idafucker\runtime\win\detail\Character.hpp" />
+    <ClInclude Include="src\idafucker\runtime\win\detail\WindowClass.hpp" />
+    <ClInclude Include="src\idafucker\runtime\win\detail\DPI.hpp" />
+    <ClInclude Include="include\idafucker\runtime\MessageProcessor.hpp" />
+    <ClInclude Include="src\idafucker\runtime\win\MessageProcessorImpl.hpp" />
+    <ClInclude Include="include\idafucker\runtime\Message.hpp" />
+    <ClInclude Include="include\idafucker\runtime\messages\CloseMessage.hpp" />
+    <ClInclude Include="include\idafucker\base\Signal.hpp" />
+    <ClInclude Include="include\idafucker\base\CommandLine.hpp" />
+    <ClInclude Include="include\idafucker\runtime2\Application.hpp" />
+    <ClInclude Include="include\idafucker\runtime2\Window.hpp" />
+    <ClInclude Include="include\idafucker\runtime2\WindowOptions.hpp" />
+    <ClInclude Include="include\idafucker\runtime2\impl\win\ApplicationImpl.hpp" />
+    <ClInclude Include="include\idafucker\runtime2\impl\win\Types.hpp" />
+    <ClInclude Include="include\idafucker\runtime2\impl\win\WindowImpl.hpp" />
+    <ClInclude Include="include\idafucker\runtime2\impl\win\WindowOptionsImpl.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".clang-format" />
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

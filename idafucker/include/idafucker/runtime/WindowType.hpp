@@ -4,8 +4,8 @@
 IDAFUCKER_NAMESPACE_BEGIN
 
 enum class WindowType {
-  Default, //< A regular window with a resize box and a title bar
-  Popup,   //< A popup window with way less decorations
+  Default,  //< A regular window with a resize box and a title bar
+  Popup,    //< A popup window with way less decorations
 };
 
 IDAFUCKER_NAMESPACE_END
