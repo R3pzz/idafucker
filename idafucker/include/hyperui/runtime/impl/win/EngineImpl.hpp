@@ -6,7 +6,7 @@
 #include <hyperui/data/HtmlFile.hpp>
 #include <idafucker/runtime2/impl/win/Types.hpp>
 
-#include "IncludeWebView2.hpp"
+#include "InteropHostImpl.hpp"
 
 HYPERUI_NAMESPACE_BEGIN
 
@@ -19,6 +19,12 @@ class EngineImpl {
   using Url = std::wstring;
 
   EngineImpl(HWND window, const std::filesystem::path &userDataFolder);
+
+  // Interop
+  [[nodiscard]] InteropHostImpl &interop() noexcept
+  {
+    return *interop_.Get();
+  }
 
   // WebView2 navigation
   void navigate(const Url &where) noexcept;
@@ -33,9 +39,14 @@ class EngineImpl {
 
   HWND window_{};
 
+  // WebView2 core
   ComPtr<ICoreWebView2> core_{};
   ComPtr<ICoreWebView2Controller> controller_{};
   ComPtr<ICoreWebView2Environment> env_{};
+  
+  // Web<->app comunication host
+  ComPtr<InteropHostImpl> interop_{};
+  EventRegistrationToken interopToken_{};
 };
 }  // namespace impl::win
 

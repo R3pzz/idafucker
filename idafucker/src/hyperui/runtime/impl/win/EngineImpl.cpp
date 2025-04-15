@@ -7,7 +7,7 @@ HYPERUI_NAMESPACE_BEGIN
 namespace impl::win
 {
 EngineImpl::EngineImpl(HWND window, const std::filesystem::path &userDataFolder)
-    : window_{window}
+    : window_{window}, interop_{new InteropHostImpl{}}
 {
   using Env = ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler;
   using Ctrl = ICoreWebView2CreateCoreWebView2ControllerCompletedHandler;
@@ -22,6 +22,9 @@ EngineImpl::EngineImpl(HWND window, const std::filesystem::path &userDataFolder)
     controller_ = ctrl;
     controller_->get_CoreWebView2(&core_);
     controller_->put_IsVisible(TRUE);
+
+    core_->add_WebMessageReceived(interop_.Get(), &interopToken_);
+
     initDone = true;
     return S_OK;
   };

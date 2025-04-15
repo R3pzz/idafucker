@@ -38,6 +38,15 @@ struct ToNarrow final {
   {
     return impl(value.data(), value.size());
   }
+
+  [[nodiscard]] std::string operator()(const wchar_t *value) const
+  {
+    std::size_t size{};
+    for (; value[size] != '\0'; ++size)
+      ;
+
+    return impl(value, size);
+  }
 };
 
 [[nodiscard]] auto widen(const auto& value)

@@ -222,6 +222,7 @@
   <ItemGroup>
     <ClCompile Include="src\hyperui\HyperuiWindow.cpp" />
     <ClCompile Include="src\hyperui\runtime\impl\win\EngineImpl.cpp" />
+    <ClCompile Include="src\hyperui\runtime\impl\win\InteropHostImpl.cpp" />
     <ClCompile Include="src\idafucker\base\String.cpp" />
     <ClCompile Include="src\idafucker\resources\Resource.cpp" />
     <ClCompile Include="src\idafucker\resources\ResourceManager.cpp" />
@@ -245,6 +246,7 @@
     <ClInclude Include="include\hyperui\runtime\Engine.hpp" />
     <ClInclude Include="include\hyperui\runtime\impl\win\IncludeWebView2.hpp" />
     <ClInclude Include="include\hyperui\runtime\impl\win\EngineImpl.hpp" />
+    <ClInclude Include="include\hyperui\runtime\impl\win\InteropHostImpl.hpp" />
     <ClInclude Include="include\idafucker\base\Bitmask.hpp" />
     <ClInclude Include="include\idafucker\base\CommandLine.hpp" />
     <ClInclude Include="include\idafucker\base\Signal.hpp" />

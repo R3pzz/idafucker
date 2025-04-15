@@ -14,7 +14,7 @@ auto ResourceManager::load(const std::filesystem::path& path)
     -> RcHandle<Resource>
 {
   const auto cache = cache_.find(path.string());
-  if (cache != cache_.end()) {
+  if (cache != std::end(cache_)) {
     spdlog::debug(
         "ResourceSystem::load: Resource '{}' of type '{}' is already "
         "present in the system",
@@ -27,7 +27,7 @@ auto ResourceManager::load(const std::filesystem::path& path)
 
   // Look up the factory from the registration table
   const auto factory = factories_.find(ext);
-  if (factory == factories_.end()) {
+  if (factory == std::end(factories_)) {
     spdlog::error(
         "ResourceSystem::load: No factory found for a resource '{}'",
         path.string());
@@ -76,9 +76,8 @@ void ResourceManager::erase(const std::filesystem::path& path, bool ignore_refs)
   }
 
   // Do not unregister required resources
-  if (resource->required() || (!ignore_refs && resource->refCount() != 0u)) {
+  if (resource->required() || (!ignore_refs && resource->refCount() != 0u))
     return;
-  }
 
   resource->unload();
   cache_.erase(it);
@@ -88,10 +87,8 @@ void ResourceManager::erase(const std::filesystem::path& path, bool ignore_refs)
     -> RcHandle<Resource>
 {
   const auto it = cache_.find(path.string());
-  if (it == cache_.end()) {
+  if (it == cache_.end())
     return {};
-  }
-
   return RcHandle<Resource>{it->second};
 }
 

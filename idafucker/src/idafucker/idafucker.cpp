@@ -12,6 +12,29 @@
 
 #include <spdlog/spdlog.h>
 
+constexpr auto SampleHtml{
+    R"html(
+<div>
+  <button id="increment">+</button>
+  <button id="decrement">-</button>
+  <span>Counter: <span id="counterResult">0</span></span>
+</div>
+<hr />
+<div>
+  <button id="getSomeShit">Get some shit</button>
+</div>
+<script type="module">
+  const getElements = ids => Object.assign({}, ...ids.map(
+    id => ({ [id]: document.getElementById(id) })));
+  const ui = getElements([
+    "increment", "decrement", "getSomeShit"
+  ]);
+  ui.getSomeShit.addEventListener("click", async () => {
+    window.chrome.webview.postMessage("{\"request\":\"getSomeShit\"}");
+  });
+</script>
+    )html"};
+
 int main(int argc, char* argv[])
 {
   using namespace idafucker;
@@ -48,9 +71,14 @@ int main(int argc, char* argv[])
     if (index == nullptr)
       throw Exception{"index.html not found"};
 
-    auto data = index->get<HtmlFile>();
-    //hyperuiWindow.engine()->navigate(*data);
-    hyperuiWindow.engine()->navigate(L"https://www.youtube.com/");
+    // auto data = index->get<HtmlFile>();
+    hyperuiWindow.engine()->interop().bind(
+        "getSomeShit", [](nlohmann::json message) -> std::wstring {
+          spdlog::info("getSomeShit called from script");
+          return L"";
+        });
+
+    hyperuiWindow.engine()->navigate(HtmlFile{SampleHtml});
 
     app.runEventLoop();
   } catch (std::exception& e) {

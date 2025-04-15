@@ -7,6 +7,11 @@ HYPERUI_NAMESPACE_BEGIN
 
 class HtmlFile {
  public:
+  explicit constexpr HtmlFile(std::string data) noexcept
+      : data_{std::move(data)}
+  {
+  }
+
   explicit HtmlFile(std::istream &stream)
       : data_{
             std::istreambuf_iterator<char>{stream},

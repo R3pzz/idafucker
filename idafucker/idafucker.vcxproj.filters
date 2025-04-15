@@ -14,6 +14,7 @@
     <ClCompile Include="src\idafucker\runtime2\impl\WindowImpl.cpp" />
     <ClCompile Include="src\hyperui\HyperuiWindow.cpp" />
     <ClCompile Include="src\hyperui\runtime\impl\win\EngineImpl.cpp" />
+    <ClCompile Include="src\hyperui\runtime\impl\win\InteropHostImpl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\platform\windows\WindowsWindow.hpp" />
@@ -79,6 +80,7 @@
     <ClInclude Include="include\hyperui\runtime\impl\win\IncludeWebView2.hpp" />
     <ClInclude Include="include\hyperui\runtime\impl\win\EngineImpl.hpp" />
     <ClInclude Include="include\hyperui\runtime\Engine.hpp" />
+    <ClInclude Include="include\hyperui\runtime\impl\win\InteropHostImpl.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".clang-format" />
