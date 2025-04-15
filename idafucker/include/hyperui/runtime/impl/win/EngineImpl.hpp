@@ -1,4 +1,7 @@
 #pragma once
+#include <filesystem>  // path
+#include <memory>      // shared_ptr
+
 #include <hyperui/CoreDefines.hpp>
 #include <hyperui/data/HtmlFile.hpp>
 #include <idafucker/runtime2/impl/win/Types.hpp>
@@ -9,13 +12,13 @@ HYPERUI_NAMESPACE_BEGIN
 
 namespace impl::win
 {
-
 // Encapsulates a WebView2 engine.
 class EngineImpl {
  public:
+  using Ref = std::shared_ptr<EngineImpl>;
   using Url = std::wstring;
 
-  EngineImpl(HWND window, const idafucker::impl::win::String &userDataFolder);
+  EngineImpl(HWND window, const std::filesystem::path &userDataFolder);
 
   // WebView2 navigation
   void navigate(const Url &where) noexcept;
@@ -34,7 +37,6 @@ class EngineImpl {
   ComPtr<ICoreWebView2Controller> controller_{};
   ComPtr<ICoreWebView2Environment> env_{};
 };
-
 }  // namespace impl::win
 
 HYPERUI_NAMESPACE_END

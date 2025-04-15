@@ -1,8 +1,8 @@
 #pragma once
+#include <memory>  // shared_ptr
+
 #include <idafucker/CoreDefines.hpp>
 #include <idafucker/math/Common.hpp>
-
-#include <memory> // shared_ptr
 
 IDAFUCKER_NAMESPACE_BEGIN
 

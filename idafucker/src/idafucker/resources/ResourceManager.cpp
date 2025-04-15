@@ -29,8 +29,9 @@ auto ResourceManager::load(const std::filesystem::path& path)
   // Look up the factory from the registration table
   const auto factory = factories_.find(ext);
   if (factory == factories_.end()) {
-    spdlog::error("ResourceSystem::load: No factory found for a resource '{}'",
-                  path.string());
+    spdlog::error(
+        "ResourceSystem::load: No factory found for a resource '{}'",
+        path.string());
 
     return {};
   }
@@ -38,12 +39,13 @@ auto ResourceManager::load(const std::filesystem::path& path)
   // Emplace a new resource
   const auto& resource =
       cache_
-          .emplace(path.string(),
-                   new Resource{
-                       *this,
-                       factory->second,
-                       resolvers_.contains(ext) ? resolvers_.at(ext) : nullptr,
-                       {}})
+          .emplace(
+              path.string(),
+              new Resource{
+                  *this,
+                  factory->second,
+                  resolvers_.contains(ext) ? resolvers_.at(ext) : nullptr,
+                  {}})
           .first->second;
   // Open up the stream
   std::ifstream stream{path};
@@ -67,8 +69,9 @@ void ResourceManager::erase(const std::filesystem::path& path, bool ignore_refs)
 
   // In theory, we shouldn't encounter such situations
   if (resource == nullptr) [[unlikely]] {
-    spdlog::debug("ResourceManager::erase: found a null-pointer resource '{}'",
-                  path.string());
+    spdlog::debug(
+        "ResourceManager::erase: found a null-pointer resource '{}'",
+        path.string());
 
     cache_.erase(it);
     return;

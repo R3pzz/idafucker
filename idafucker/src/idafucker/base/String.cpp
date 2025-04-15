@@ -3,8 +3,8 @@
 
 IDAFUCKER_NAMESPACE_BEGIN
 
-[[nodiscard]] std::wstring ToWide::impl(const char* data,
-                                        const std::size_t size) const
+[[nodiscard]] std::wstring ToWide::impl(
+    const char* data, const std::size_t size) const
 {
 #if defined(IDAFUCKER_PLATFORM_WIN32)
   std::wstring converted{};
@@ -16,8 +16,8 @@ IDAFUCKER_NAMESPACE_BEGIN
   }
 
   converted.resize(static_cast<std::size_t>(convertedSize));
-  if (::MultiByteToWideChar(CP_UTF8, NULL, data, size, converted.data(),
-                            converted.size()) < 0) {
+  if (::MultiByteToWideChar(
+          CP_UTF8, NULL, data, size, converted.data(), converted.size()) < 0) {
     throw PlatformException{"Failed to convert `"} << data << "` to Unicode";
   }
 
@@ -29,8 +29,8 @@ IDAFUCKER_NAMESPACE_BEGIN
 #endif  // defined(IDAFUCKER_PLATFORM_WIN32)
 }
 
-[[nodiscard]] std::string ToNarrow::impl(const wchar_t* data,
-                                         const std::size_t size) const
+[[nodiscard]] std::string ToNarrow::impl(
+    const wchar_t* data, const std::size_t size) const
 {
 #if defined(IDAFUCKER_PLATFORM_WIN32)
   std::string converted{};
@@ -43,8 +43,9 @@ IDAFUCKER_NAMESPACE_BEGIN
   }
 
   converted.resize(static_cast<std::size_t>(convertedSize));
-  if (::WideCharToMultiByte(CP_UTF8, NULL, data, size, converted.data(),
-                            converted.size(), NULL, NULL) < 0) {
+  if (::WideCharToMultiByte(
+          CP_UTF8, NULL, data, size, converted.data(), converted.size(), NULL,
+          NULL) < 0) {
     throw PlatformException{"Failed to convert data at `"}
         << decor::hex << reinterpret_cast<std::uintptr_t>(data) << "` to UTF-8";
   }

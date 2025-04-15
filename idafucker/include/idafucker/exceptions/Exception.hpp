@@ -15,7 +15,8 @@
 
 IDAFUCKER_NAMESPACE_BEGIN
 
-namespace decor {
+namespace decor
+{
 struct Hex final {
   constexpr Hex() noexcept = default;
 
@@ -39,27 +40,29 @@ class Exception : public std::exception {
   [[nodiscard]] static std::string formatSourceLocation(
       const std::source_location& src_loc)
   {
-    return std::format("[{}:{}] `{}`: ", src_loc.file_name(), src_loc.line(),
-                       src_loc.function_name());
+    return std::format(
+        "[{}:{}] `{}`: ", src_loc.file_name(), src_loc.line(),
+        src_loc.function_name());
   }
 
  public:
-  explicit Exception(const std::source_location src_loc =
-                         std::source_location::current()) noexcept
+  explicit Exception(
+      const std::source_location src_loc =
+          std::source_location::current()) noexcept
       : message_{formatSourceLocation(src_loc)}, nextFormatter_{}
   {
   }
 
-  explicit Exception(const char* message,
-                     const std::source_location src_loc =
-                         std::source_location::current()) noexcept
+  explicit Exception(
+      const char* message, const std::source_location src_loc =
+                               std::source_location::current()) noexcept
       : message_{formatSourceLocation(src_loc) + message}, nextFormatter_{}
   {
   }
 
-  explicit Exception(std::string message,
-                     const std::source_location src_loc =
-                         std::source_location::current()) noexcept
+  explicit Exception(
+      std::string message, const std::source_location src_loc =
+                               std::source_location::current()) noexcept
       : message_{formatSourceLocation(src_loc) + std::move(message)},
         nextFormatter_{}
   {

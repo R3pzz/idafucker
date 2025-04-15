@@ -6,7 +6,8 @@
 
 IDAFUCKER_NAMESPACE_BEGIN
 
-namespace impl::win {
+namespace impl::win
+{
 struct WindowOptionsImpl {
   enum class Type {
     Normal,

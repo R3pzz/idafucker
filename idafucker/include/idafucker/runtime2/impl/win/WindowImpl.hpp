@@ -8,8 +8,8 @@
 
 IDAFUCKER_NAMESPACE_BEGIN
 
-namespace impl::win {
-
+namespace impl::win
+{
 // Just a wrapper around HWND.
 // This class does not process any messages.
 // This is essentially a base class for creating custom windows
@@ -39,11 +39,14 @@ class WindowImpl {
   [[nodiscard]] HWND platformHandle() const noexcept;
 
   // Events:
-  Signal<void(BoundsChangedEvent::Ref)> boundsChangedEvent{};  //< The window bounds got changed.
-  Signal<void(std::uint64_t)> keyboardEvent{}; //< A key has been pressed/released on the keyboard.
-  Signal<void(std::uint64_t)> mouseEvent{}; //< The mouse was moved/its key was pressed/released.
-  Signal<void()> closeEvent{}; //< The window is preparing to be closed.
-  Signal<void(std::uint64_t)> focusEvent{}; //< The window entered focus.
+  Signal<void(BoundsChangedEvent::Ref)>
+      boundsChangedEvent{};  //< The window bounds got changed.
+  Signal<void(std::uint64_t)>
+      keyboardEvent{};  //< A key has been pressed/released on the keyboard.
+  Signal<void(std::uint64_t)>
+      mouseEvent{};  //< The mouse was moved/its key was pressed/released.
+  Signal<void()> closeEvent{};  //< The window is preparing to be closed.
+  Signal<void(std::uint64_t)> focusEvent{};  //< The window entered focus.
 
  protected:
   virtual LRESULT onWindowMesasge(UINT message, WPARAM wparam, LPARAM lparam);
@@ -52,6 +55,6 @@ class WindowImpl {
 
   friend class ApplicationImpl;
 };
-}  // namespace win
+}  // namespace impl::win
 
 IDAFUCKER_NAMESPACE_END

@@ -12,8 +12,8 @@ concept string_like =
 
 struct ToWide final {
  private:
-  [[nodiscard]] std::wstring impl(const char* data,
-                                  const std::size_t size) const;
+  [[nodiscard]] std::wstring impl(
+      const char* data, const std::size_t size) const;
 
  public:
   constexpr ToWide() noexcept = default;
@@ -27,8 +27,8 @@ struct ToWide final {
 
 struct ToNarrow final {
  private:
-  [[nodiscard]] std::string impl(const wchar_t* data,
-                                 const std::size_t size) const;
+  [[nodiscard]] std::string impl(
+      const wchar_t* data, const std::size_t size) const;
 
  public:
   constexpr ToNarrow() noexcept = default;

@@ -13,22 +13,22 @@ IDAFUCKER_NAMESPACE_END
 template <idafucker::scoped_enum T>
 [[nodiscard]] constexpr auto operator|(const T lhs, const T rhs) noexcept
 {
-  return static_cast<T>(idafucker::underlying(lhs) |
-                        idafucker::underlying(rhs));
+  return static_cast<T>(
+      idafucker::underlying(lhs) | idafucker::underlying(rhs));
 }
 
 template <idafucker::scoped_enum T>
 [[nodiscard]] constexpr auto operator&(const T lhs, const T rhs) noexcept
 {
-  return static_cast<T>(idafucker::underlying(lhs) &
-                        idafucker::underlying(rhs));
+  return static_cast<T>(
+      idafucker::underlying(lhs) & idafucker::underlying(rhs));
 }
 
 template <idafucker::scoped_enum T>
 [[nodiscard]] constexpr auto operator^(const T lhs, const T rhs) noexcept
 {
-  return static_cast<T>(idafucker::underlying(lhs) ^
-                        idafucker::underlying(rhs));
+  return static_cast<T>(
+      idafucker::underlying(lhs) ^ idafucker::underlying(rhs));
 }
 
 template <idafucker::scoped_enum T>

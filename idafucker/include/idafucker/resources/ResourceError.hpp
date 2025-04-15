@@ -41,14 +41,15 @@ class ResourceError final : public std::runtime_error {
   {
   }
 
-  ResourceError(ResourceErrorCategory category,
-                const std::string& path) noexcept
+  ResourceError(
+      ResourceErrorCategory category, const std::string& path) noexcept
       : std::runtime_error{nullptr}, category_{category}, path_{path}
   {
   }
 
-  ResourceError(ResourceErrorCategory category,
-                const std::filesystem::path& path) noexcept
+  ResourceError(
+      ResourceErrorCategory category,
+      const std::filesystem::path& path) noexcept
       : std::runtime_error{nullptr}, category_{category}, path_{path}
   {
   }
@@ -65,8 +66,9 @@ class ResourceError final : public std::runtime_error {
 
   [[nodiscard]] virtual const char* what() const override
   {
-    const auto formatted = std::format("ResourceError '{}' for a '{}' resource",
-                                       stringify(category_), path_.string());
+    const auto formatted = std::format(
+        "ResourceError '{}' for a '{}' resource", stringify(category_),
+        path_.string());
     return formatted.c_str();
   }
 

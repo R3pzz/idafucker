@@ -1,8 +1,8 @@
 #pragma once
+#include <idafucker/CoreDefines.hpp>
+
 #include "Rectangle.hpp"
 #include "Vector2.hpp"
-
-#include <idafucker/CoreDefines.hpp>
 
 IDAFUCKER_NAMESPACE_BEGIN
 

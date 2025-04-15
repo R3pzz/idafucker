@@ -19,8 +19,8 @@ bool Resource::load(const std::istream& stream)
         resolver_->resolve(stream)
             .and_then([this](const auto& dep_path_list) {
               for (auto&& dep_path : dep_path_list) {
-                spdlog::debug("Resource::load: loading dependency {}",
-                              dep_path.string());
+                spdlog::debug(
+                    "Resource::load: loading dependency {}", dep_path.string());
                 deps_.push_back(manager_.load(dep_path).raw());
               }
               return ResourceErrorOr<DependencyList>{dep_path_list};

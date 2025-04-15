@@ -52,9 +52,9 @@ enum class ResourceFlags {
 
 class Resource final {
  public:
-  explicit Resource(ResourceManager& manager, ResourceFactory::Ref factory,
-                    ResourceDependencyResolver::Ref resolver,
-                    ResourceFlags flags) noexcept
+  explicit Resource(
+      ResourceManager& manager, ResourceFactory::Ref factory,
+      ResourceDependencyResolver::Ref resolver, ResourceFlags flags) noexcept
       : manager_{manager},
         factory_{std::move(factory)},
         resolver_{std::move(resolver)},

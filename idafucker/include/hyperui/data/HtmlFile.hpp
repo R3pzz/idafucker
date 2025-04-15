@@ -8,8 +8,9 @@ HYPERUI_NAMESPACE_BEGIN
 class HtmlFile {
  public:
   explicit HtmlFile(std::istream &stream)
-      : data_{std::istreambuf_iterator<char>{stream},
-              std::istreambuf_iterator<char>{}}
+      : data_{
+            std::istreambuf_iterator<char>{stream},
+            std::istreambuf_iterator<char>{}}
   {
   }
 

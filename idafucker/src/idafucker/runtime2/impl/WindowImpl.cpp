@@ -1,14 +1,14 @@
-#include <idafucker/runtime2/impl/win/WindowImpl.hpp>
+#include <dwmapi.h>
+
 #include <idafucker/base/String.hpp>
 #include <idafucker/exceptions/PlatformException.hpp>
-
-#include <dwmapi.h>
+#include <idafucker/runtime2/impl/win/WindowImpl.hpp>
 #pragma comment(lib, "Dwmapi.lib")
 
 IDAFUCKER_NAMESPACE_BEGIN
 
-namespace impl::win {
-
+namespace impl::win
+{
 WindowImpl::WindowImpl(const WindowOptionsImpl& options)
 {
   // clang-format off
@@ -104,9 +104,9 @@ void WindowImpl::adjustBounds(const Rectangle<int>& rect) noexcept
     target.bottom = rect.bottom;
   }
 
-  ::SetWindowPos(handle_, NULL, target.left, target.top,
-                 target.right - target.left, target.bottom - target.top,
-                 SWP_NOZORDER | SWP_NOACTIVATE);
+  ::SetWindowPos(
+      handle_, NULL, target.left, target.top, target.right - target.left,
+      target.bottom - target.top, SWP_NOZORDER | SWP_NOACTIVATE);
 }
 
 [[nodiscard]] int WindowImpl::dpi() const noexcept
@@ -139,7 +139,6 @@ LRESULT WindowImpl::onWindowMesasge(UINT message, WPARAM wparam, LPARAM lparam)
 
   return ::DefWindowProc(handle_, message, wparam, lparam);
 }
-
-} // namespace impl::win
+}  // namespace impl::win
 
 IDAFUCKER_NAMESPACE_END

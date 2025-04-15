@@ -19,8 +19,8 @@ template <scalar T> class Rectangle {
     fromBounds(mins, maxs);
   }
 
-  constexpr auto& fromBounds(const Vector2<T>& mins,
-                             const Vector2<T>& maxs) noexcept
+  constexpr auto& fromBounds(
+      const Vector2<T>& mins, const Vector2<T>& maxs) noexcept
   {
     left = mins.x;
     top = mins.y;

@@ -1,13 +1,14 @@
 #pragma once
-#include <ranges>  // find
-#include <vector>  // vector
+#include <filesystem>  // path
+#include <ranges>      // find
+#include <vector>      // vector
 
 #include <idafucker/CoreDefines.hpp>
 
 IDAFUCKER_NAMESPACE_BEGIN
 
-namespace detail {
-
+namespace detail
+{
 template <typename> struct select_argument_identifier {};
 
 template <> struct select_argument_identifier<char> {
@@ -18,46 +19,94 @@ template <> struct select_argument_identifier<wchar_t> {
   static constexpr auto value = L'-';
 };
 
-} // namespace detail
+template <typename> struct select_delimiter {};
 
-// Command line parser.
-template <typename Character, Character Delimiter> class CommandLine {
+template <> struct select_delimiter<char> {
+  static constexpr auto value = ' ';
+};
+
+template <> struct select_delimiter<wchar_t> {
+  static constexpr auto value = L' ';
+};
+}  // namespace detail
+
+// Command line argument.
+template <typename Character> class Argument {
  public:
   using View = std::basic_string_view<Character>;
 
+  constexpr Argument() noexcept = default;
+
+  constexpr Argument(View name) noexcept : name_{name} {}
+
+  constexpr Argument(View name, View value) noexcept
+      : name_{name}, value_{value}
+  {
+  }
+
+  // Flag properties
+  [[nodiscard]] constexpr bool isSet() const noexcept
+  {
+    return !name_.empty();
+  }
+
+  // Parameter properties
+  [[nodiscard]] constexpr bool hasValue() const noexcept
+  {
+    return !value_.empty();
+  }
+
+  [[nodiscard]] constexpr View value() const noexcept
+  {
+    return value_;
+  }
+
+  [[nodiscard]] constexpr View valueOr(View &&backup) const noexcept
+  {
+    return value_.empty() ? std::move(backup) : value_;
+  }
+
+  [[nodiscard]] constexpr const View &valueOr(const View &backup) const noexcept
+  {
+    return value_.empty() ? backup : value_;
+  }
+
+  // Cast-to
+  [[nodiscard]] constexpr std::filesystem::path toPath() const noexcept
+  {
+    return {value_};
+  }
+
+ private:
+  View name_{};
+  View value_{};
+};
+
+// Command line parser.
+template <typename Character> class CommandLine {
+ public:
+  using View = std::basic_string_view<Character>;
+
+  static constexpr auto Delimiter = detail::select_delimiter<Character>::value;
   static constexpr auto ArgumentIdentifier =
       detail::select_argument_identifier<Character>::value;
 
-  constexpr CommandLine(Character *data) noexcept
-      : data_{tokenize(data)}
-  {
-  }
+  constexpr CommandLine(Character *data) noexcept : data_{tokenize(data)} {}
 
-  constexpr CommandLine(View data) noexcept
-    : data_{tokenize(data)}
-  {
-  }
-
-  [[nodiscard]] constexpr bool hasFlag(
-      const std::basic_string<Character> &name) const noexcept
-  {
-    return std::ranges::find(data_, name.c_str()) != std::end(data_);
-  }
+  constexpr CommandLine(View data) noexcept : data_{tokenize(data)} {}
 
   [[nodiscard]] constexpr auto find(const std::basic_string<Character> &name)
-      const noexcept -> std::basic_string_view<Character>
+      const noexcept -> Argument<Character>
   {
     const auto it = std::ranges::find(data_, name.c_str());
-    if (it == std::end(data_)) {
+    if (it == std::end(data_))
       return {};
-    }
 
-    const auto &next = *std::next(it);
-    if (next.starts_with(ArgumentIdentifier)) {
-      return {};
-    }
+    const auto next = std::next(it);
+    if (next == std::end(data_) || next->starts_with(ArgumentIdentifier))
+      return {*it};
 
-    return next;
+    return {*it, *next};
   }
 
  private:
@@ -79,18 +128,16 @@ template <typename Character, Character Delimiter> class CommandLine {
   std::vector<View> data_{};
 };
 
-template <typename Character, Character Delimiter>
-CommandLine(std::string_view) -> CommandLine<char, ' '>;
+template <typename Character>
+CommandLine(std::string_view) -> CommandLine<char>;
 
-template <typename Character, Character Delimiter>
-CommandLine(std::wstring_view) -> CommandLine<wchar_t, L' '>;
+template <typename Character>
+CommandLine(std::wstring_view) -> CommandLine<wchar_t>;
 
 #if defined(IDAFUCKER_PLATFORM_WIN32)
-template <typename Character, Character Delimiter>
-CommandLine(LPSTR) -> CommandLine<char, ' '>;
+template <typename Character> CommandLine(LPSTR) -> CommandLine<char>;
 
-template <typename Character, Character Delimiter>
-CommandLine(LPWSTR) -> CommandLine<wchar_t, L' '>;
-#endif // defined(IDAFUCKER_PLATFORM_WIN32)
+template <typename Character> CommandLine(LPWSTR) -> CommandLine<wchar_t>;
+#endif  // defined(IDAFUCKER_PLATFORM_WIN32)
 
 IDAFUCKER_NAMESPACE_END

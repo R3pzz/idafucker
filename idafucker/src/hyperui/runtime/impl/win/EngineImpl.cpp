@@ -6,8 +6,7 @@ HYPERUI_NAMESPACE_BEGIN
 
 namespace impl::win
 {
-EngineImpl::EngineImpl(
-    HWND window, const idafucker::impl::win::String &userDataFolder)
+EngineImpl::EngineImpl(HWND window, const std::filesystem::path &userDataFolder)
     : window_{window}
 {
   using Env = ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler;

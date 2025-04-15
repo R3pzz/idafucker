@@ -5,8 +5,8 @@
   #define HYPERUI_NAMESPACE_BEGIN \
     namespace hyperui             \
     {
-#endif // not defined(HYPERUI_NAMESPACE_BEGIN)
+#endif  // not defined(HYPERUI_NAMESPACE_BEGIN)
 
 #if not defined(HYPERUI_NAMESPACE_END)
   #define HYPERUI_NAMESPACE_END }
-#endif // not defined(HYPERUI_NAMESPACE_END)
+#endif  // not defined(HYPERUI_NAMESPACE_END)

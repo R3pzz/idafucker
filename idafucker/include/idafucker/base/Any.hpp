@@ -8,7 +8,8 @@
 
 IDAFUCKER_NAMESPACE_BEGIN
 
-namespace detail {
+namespace detail
+{
 template <std::size_t Size> class AnyBase {
  private:
   enum class Request {
@@ -94,8 +95,9 @@ template <std::size_t Size> class AnyBase {
       type_ = &typeid(Base);
       repr_ = Representation::Embedded;
 
-      std::construct_at(reinterpret_cast<Base*>(&embedded_),
-                        std::forward<decltype(value)>(value));
+      std::construct_at(
+          reinterpret_cast<Base*>(&embedded_),
+          std::forward<decltype(value)>(value));
     } else {
       rttiFunction_ = &rttiFunction<Base>;
       type_ = &typeid(Base);
@@ -118,8 +120,7 @@ template <std::size_t Size> class AnyBase {
     type_ = rhs.type_;
 
     rttiFunction_ = rhs.rttiFunction_;
-    rttiFunction_(Request::CopyConstruct, this,
-                   static_cast<const void*>(&rhs));
+    rttiFunction_(Request::CopyConstruct, this, static_cast<const void*>(&rhs));
 
     return *this;
   }

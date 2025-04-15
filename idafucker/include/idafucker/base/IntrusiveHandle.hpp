@@ -67,7 +67,8 @@ template <ref_countable T> class IntrusiveHandle {
     handle_->onReferenceRemoved();
   }
 
-  [[nodiscard]] constexpr bool operator==(std::nullptr_t) const noexcept {
+  [[nodiscard]] constexpr bool operator==(std::nullptr_t) const noexcept
+  {
     return handle_ == nullptr;
   }
 

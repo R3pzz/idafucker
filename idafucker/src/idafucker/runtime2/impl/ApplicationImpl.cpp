@@ -1,16 +1,16 @@
+#include <combaseapi.h>
+
 #include <idafucker/base/CommandLine.hpp>
 #include <idafucker/exceptions/PlatformException.hpp>
 #include <idafucker/runtime2/impl/win/ApplicationImpl.hpp>
 #include <idafucker/runtime2/impl/win/WindowImpl.hpp>
 
 #include <spdlog/spdlog.h>
-#include <combaseapi.h>
 
 IDAFUCKER_NAMESPACE_BEGIN
 
 namespace
 {
-
 constexpr auto PerMonitorDpiAware{2};
 
 [[nodiscard]] HRESULT WINAPI SetProcessDpiAwareness(int level)
@@ -19,41 +19,30 @@ constexpr auto PerMonitorDpiAware{2};
 
   const auto library =
       ::LoadLibrary(UTF8_OR_UNICODE_VARIANT("shcore.dll", L"shcore.dll"));
-  if (library == NULL) {
+  if (library == NULL)
     return E_FAIL;
-  }
 
   const auto function = reinterpret_cast<Type *>(
       ::GetProcAddress(library, "SetProcessDpiAwareness"));
-  if (function == nullptr) {
+  if (function == nullptr)
     return E_FAIL;
-  }
 
   return function(level);
 }
-
 }  // namespace
 
 namespace impl::win
 {
-
-ApplicationImpl::ApplicationImpl()
+ApplicationImpl::ApplicationImpl(const CommandLine<Character> &commandLine)
 {
   ::CoInitialize(NULL);
 
-  CommandLine<wchar_t, L' '> commandLine{::GetCommandLine()};
-
   auto className = commandLine.find(L"--class-name");
-  if (className.empty()) {
-    className = L"idafucker-window";
-  }
+  registerClass(className.valueOr(L"IdafuckerMain"));
 
-  auto dpiSensitive = commandLine.hasFlag(L"--dpi-sensitive");
-  if (dpiSensitive) {
+  auto dpiSensitive = commandLine.find(L"--dpi-sensitive");
+  if (dpiSensitive.isSet())
     configureDpi();
-  }
-
-  registerClass(className);
 }
 
 ApplicationImpl::~ApplicationImpl()
@@ -89,9 +78,8 @@ void ApplicationImpl::registerClass(View name)
       .lpszClassName = name.data(),
   };
 
-  if (wcAtom_ = ::RegisterClassEx(&wc); wcAtom_ == NULL) {
+  if (wcAtom_ = ::RegisterClassEx(&wc); wcAtom_ == NULL)
     throw PlatformException{"Failed to register window class"};
-  }
 }
 
 void ApplicationImpl::unregisterClass() noexcept
@@ -102,24 +90,19 @@ void ApplicationImpl::unregisterClass() noexcept
 void ApplicationImpl::configureDpi()
 {
   if (::SetProcessDpiAwarenessContext(
-          DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE) != TRUE) {
+          DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE) != TRUE)
     throw PlatformException{"Failed to set process' DPI awareness context"};
-  }
 
   if (const auto result = SetProcessDpiAwareness(PerMonitorDpiAware);
-      result != S_OK && result != E_ACCESSDENIED) {
+      result != S_OK && result != E_ACCESSDENIED)
     throw PlatformException{"Failed to set process' DPI awareness"};
-  }
 
-  if (::SetProcessDPIAware() != TRUE) {
+  if (::SetProcessDPIAware() != TRUE)
     throw PlatformException{"Failed to make the process DPI aware"};
-  }
 }
 
-[[nodiscard]] LRESULT CALLBACK ApplicationImpl::windowProc(HWND hwnd,
-                                                           UINT message,
-                                                           WPARAM wparam,
-                                                           LPARAM lparam)
+[[nodiscard]] LRESULT CALLBACK ApplicationImpl::windowProc(
+    HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam)
 {
   auto window =
       reinterpret_cast<WindowImpl *>(::GetWindowLongPtr(hwnd, GWLP_USERDATA));
@@ -134,7 +117,6 @@ void ApplicationImpl::configureDpi()
   // Let the window handle the message
   return window->onWindowMesasge(message, wparam, lparam);
 }
-
 }  // namespace impl::win
 
 IDAFUCKER_NAMESPACE_END

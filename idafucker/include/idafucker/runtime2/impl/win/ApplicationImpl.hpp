@@ -10,13 +10,14 @@
 
 IDAFUCKER_NAMESPACE_BEGIN
 
-namespace impl::win {
+namespace impl::win
+{
 // Windows application implementation.
 class ApplicationImpl final {
   IDAFUCKER_NONCOPYABLE(ApplicationImpl);
 
  public:
-  ApplicationImpl();
+  ApplicationImpl(const CommandLine<Character> &commandLine);
   ~ApplicationImpl();
 
   [[nodiscard]] constexpr ATOM wcAtom() const noexcept
@@ -32,10 +33,10 @@ class ApplicationImpl final {
   void runEventLoop() noexcept;
 
   // Events(these are freely accessible in other parts of code):
-  Signal<void(CommandLine<Character, Delimiter>)> initializationEvent{};
+  Signal<void(CommandLine<Character>)> initializationEvent{};
   Signal<void()>
       terminationEvent{};  //< This event gets emitted when `runEventLoop()`
-                           //starts the termination sequence or when
+                           // starts the termination sequence or when
                            //`~ApplicationImpl()` gets called.
 
  private:
@@ -50,9 +51,8 @@ class ApplicationImpl final {
   static void configureDpi();
 
   // A window message handler
-  [[nodiscard]] static LRESULT CALLBACK windowProc(HWND hwnd, UINT message,
-                                                   WPARAM wparam,
-                                                   LPARAM lparam);
+  [[nodiscard]] static LRESULT CALLBACK
+  windowProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam);
 };
 }  // namespace impl::win
 

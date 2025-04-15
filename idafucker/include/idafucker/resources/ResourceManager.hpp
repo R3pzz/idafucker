@@ -56,8 +56,8 @@ class ResourceManager {
     factories_[extension] = std::move(factory);
   }
 
-  void pushFesolver(const std::string& extension,
-                    ResourceDependencyResolver::Ref resolver)
+  void pushFesolver(
+      const std::string& extension, ResourceDependencyResolver::Ref resolver)
   {
     resolvers_[extension] = std::move(resolver);
   }
