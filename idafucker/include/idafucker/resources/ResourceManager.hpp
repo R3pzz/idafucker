@@ -3,7 +3,7 @@
 #include <unordered_map>  // unordered_map
 
 #include <idafucker/CoreDefines.hpp>
-#include <idafucker/base/IntrusiveHandle.hpp>
+#include <idafucker/base/RefCount.hpp>
 
 #include "Resource.hpp"
 #include "ResourceError.hpp"
@@ -63,13 +63,13 @@ class ResourceManager {
   }
 
   // Load a resource and cache it immediately
-  auto load(const std::filesystem::path& path) -> IntrusiveHandle<Resource>;
+  auto load(const std::filesystem::path& path) -> RcHandle<Resource>;
 
   // Construct a resource of a type 'T'
   // FIXME: Dependencies are currently not supported
   template <class T, typename... Args>
   auto construct(const std::string& name, Args&&... args)
-      -> IntrusiveHandle<Resource>;
+      -> RcHandle<Resource>;
 
   // Unregistering resources
   void erase(const std::filesystem::path& path, bool ignore_refs = false);
@@ -79,7 +79,7 @@ class ResourceManager {
 
   // Retrieving a resource
   [[nodiscard]] auto get(const std::filesystem::path& path) const
-      -> IntrusiveHandle<Resource>;
+      -> RcHandle<Resource>;
 
  private:
   template <class T> using ExtensionMap = std::unordered_map<std::string, T>;
@@ -95,7 +95,7 @@ class ResourceManager {
 
 template <class T, typename... Args>
 auto ResourceManager::construct(const std::string& name, Args&&... args)
-    -> IntrusiveHandle<Resource>
+    -> RcHandle<Resource>
 {
 }
 

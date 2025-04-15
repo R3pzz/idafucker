@@ -53,7 +53,7 @@ void Resource::unload()
 {
   data_.reset();
   for (auto&& dep : deps_) {
-    dep->onReferenceRemoved();
+    dep->refRemoved();
   }
   deps_.clear();
 }

@@ -5,14 +5,13 @@ IDAFUCKER_NAMESPACE_BEGIN
 void ResourceManager::observe()
 {
   for (auto&& resource : cache_) {
-    if (!resource.second->hasReferences() && !resource.second->required()) {
+    if (resource.second->refCount() == 0u && !resource.second->required())
       resource.second->unload();
-    }
   }
 }
 
 auto ResourceManager::load(const std::filesystem::path& path)
-    -> IntrusiveHandle<Resource>
+    -> RcHandle<Resource>
 {
   const auto cache = cache_.find(path.string());
   if (cache != cache_.end()) {
@@ -21,7 +20,7 @@ auto ResourceManager::load(const std::filesystem::path& path)
         "present in the system",
         path.string(), cache->second->type().name());
 
-    return IntrusiveHandle<Resource>{cache->second};
+    return RcHandle<Resource>{cache->second};
   }
 
   const auto ext = path.extension().string();
@@ -55,15 +54,14 @@ auto ResourceManager::load(const std::filesystem::path& path)
         path.string(), factory->second->type().name());
   }
 
-  return IntrusiveHandle<Resource>{resource};
+  return RcHandle<Resource>{resource};
 }
 
 void ResourceManager::erase(const std::filesystem::path& path, bool ignore_refs)
 {
   const auto it = cache_.find(path.string());
-  if (it == cache_.end()) {
+  if (it == std::end(cache_))
     return;
-  }
 
   auto resource = it->second;
 
@@ -78,7 +76,7 @@ void ResourceManager::erase(const std::filesystem::path& path, bool ignore_refs)
   }
 
   // Do not unregister required resources
-  if (resource->required() || (!ignore_refs && resource->hasReferences())) {
+  if (resource->required() || (!ignore_refs && resource->refCount() != 0u)) {
     return;
   }
 
@@ -87,14 +85,14 @@ void ResourceManager::erase(const std::filesystem::path& path, bool ignore_refs)
 }
 
 [[nodiscard]] auto ResourceManager::get(const std::filesystem::path& path) const
-    -> IntrusiveHandle<Resource>
+    -> RcHandle<Resource>
 {
   const auto it = cache_.find(path.string());
   if (it == cache_.end()) {
     return {};
   }
 
-  return IntrusiveHandle<Resource>{it->second};
+  return RcHandle<Resource>{it->second};
 }
 
 IDAFUCKER_NAMESPACE_END

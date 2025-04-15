@@ -49,7 +49,8 @@ int main(int argc, char* argv[])
       throw Exception{"index.html not found"};
 
     auto data = index->get<HtmlFile>();
-    hyperuiWindow.engine()->navigate(*data);
+    //hyperuiWindow.engine()->navigate(*data);
+    hyperuiWindow.engine()->navigate(L"https://www.youtube.com/");
 
     app.runEventLoop();
   } catch (std::exception& e) {

@@ -255,7 +255,7 @@
     <ClInclude Include="include\idafucker\math\Vector4.hpp" />
     <ClInclude Include="include\idafucker\base\Underlying.hpp" />
     <ClInclude Include="include\idafucker\base\Any.hpp" />
-    <ClInclude Include="include\idafucker\base\IntrusiveHandle.hpp" />
+    <ClInclude Include="include\idafucker\base\RefCount.hpp" />
     <ClInclude Include="include\idafucker\resources\ResourceDependencyResolver.hpp" />
     <ClInclude Include="include\idafucker\resources\ResourceError.hpp" />
     <ClInclude Include="include\idafucker\resources\ResourceFactory.hpp" />

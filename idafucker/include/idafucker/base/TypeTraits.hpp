@@ -47,6 +47,10 @@ concept castable_to_one_of = is_castable_to_one_of_v<From, To...>;
 template <typename T, typename... Types>
 constexpr auto is_any_of_v = std::disjunction_v<std::is_same<T, Types>...>;
 
+template <typename Derived, typename... Bases>
+constexpr auto is_any_base_of_v =
+    std::disjunction_v<std::is_base_of<Bases, Derived>...>;
+
 template <typename T>
 concept scalar = std::is_scalar<T>::value;
 

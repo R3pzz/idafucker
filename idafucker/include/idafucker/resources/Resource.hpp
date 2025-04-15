@@ -6,7 +6,7 @@
 #include <idafucker/CoreDefines.hpp>
 #include <idafucker/base/Any.hpp>
 #include <idafucker/base/Flags.hpp>
-#include <idafucker/base/IntrusiveHandle.hpp>
+#include <idafucker/base/RefCount.hpp>
 
 #include "ResourceDependencyResolver.hpp"
 #include "ResourceError.hpp"
@@ -50,7 +50,7 @@ enum class ResourceFlags {
                         // not referenced.
 };
 
-class Resource final {
+class Resource final : public RefCountable<> {
  public:
   explicit Resource(
       ResourceManager& manager, ResourceFactory::Ref factory,
@@ -83,27 +83,6 @@ class Resource final {
     return data_.type();
   }
 
-  // Reference counting
-  std::size_t onReferenceAdded() const
-  {
-    return ++ref_count_;
-  }
-
-  std::size_t onReferenceRemoved() const
-  {
-    return --ref_count_;
-  }
-
-  [[nodiscard]] bool hasReferences() const
-  {
-    return ref_count_ != 0u;
-  }
-
-  [[nodiscard]] std::size_t referenceCount() const
-  {
-    return ref_count_.load();
-  }
-
   // Resource properties
   [[nodiscard]] constexpr bool empty() const noexcept
   {
@@ -127,7 +106,6 @@ class Resource final {
   ResourceDependencyResolver::Ref resolver_;  //< Dependency resolver
   std::vector<Resource*> deps_;               //< Dependencies
   Flags<ResourceFlags> flags_;                //< Flags
-  mutable std::atomic_size_t ref_count_;      //< Reference count
 
   IDAFUCKER_NONCOPYABLE(Resource);
 };

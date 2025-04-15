@@ -49,7 +49,7 @@
     <ClInclude Include="include\hyperui\renderer\RenderContext.hpp" />
     <ClInclude Include="include\hyperui\renderer\Renderer.hpp" />
     <ClInclude Include="include\idafucker\math\Vector4.hpp" />
-    <ClInclude Include="include\idafucker\base\IntrusiveHandle.hpp" />
+    <ClInclude Include="include\idafucker\base\RefCount.hpp" />
     <ClInclude Include="include\hyperui\markup\Markup.hpp" />
     <ClInclude Include="include\hyperui\markup\MarkupFactory.hpp" />
     <ClInclude Include="include\idafucker\base\Underlying.hpp" />
