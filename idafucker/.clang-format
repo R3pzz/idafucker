@@ -3,7 +3,7 @@ BasedOnStyle: Google
 
 # Basic formatting
 AccessModifierOffset: -1
-AlignAfterOpenBracket: Align
+AlignAfterOpenBracket: AlwaysBreak
 AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: false
 AlignEscapedNewlines: Left
@@ -30,7 +30,7 @@ BraceWrapping:
   AfterControlStatement: false
   AfterEnum: false
   AfterFunction: true
-  AfterNamespace: false
+  AfterNamespace: true
   AfterStruct: false
   AfterUnion: false
   AfterExternBlock: false
@@ -72,6 +72,9 @@ IncludeCategories:
   - Regex: '^<idafucker/.*>'  # idafucker headers
     Priority: 2
     SortPriority: 0
+  - Regex: '^<hyperui/.*>'  # hyperui headers
+    Priority: 2
+    SortPriority: 0
   - Regex: '^".*\.hpp"'  # Project .hpp headers
     Priority: 3
     SortPriority: 0
@@ -110,7 +113,7 @@ PenaltyBreakFirstLessLess: 120
 PenaltyBreakString: 1000
 PenaltyBreakTemplateDeclaration: 10
 PenaltyExcessCharacter: 1000000
-PenaltyReturnTypeOnItsOwnLine: 200
+PenaltyReturnTypeOnItsOwnLine: 10000000
 
 # Pointer alignment
 PointerAlignment: Left
@@ -143,7 +146,7 @@ UseTab: Never
 
 # C++20 and C++23 specific settings
 IndentRequires: true
-InsertBraces: true
+InsertBraces: false
 SeparateDefinitionBlocks: Always
 EmptyLineBeforeAccessModifier: LogicalBlock
 PackConstructorInitializers: NextLine

@@ -220,7 +220,7 @@ template <std::size_t Size> class AnyBase {
 using Any = detail::AnyBase<40u>;
 
 template <typename T, typename... Args>
-[[nodiscard]] auto make_any(Args&&... args) -> Any
+[[nodiscard]] Any makeAny(Args&&... args)
 {
   return Any{T{std::forward<Args>(args)...}};
 }

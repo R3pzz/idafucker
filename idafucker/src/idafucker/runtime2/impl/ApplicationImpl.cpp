@@ -4,10 +4,13 @@
 #include <idafucker/runtime2/impl/win/WindowImpl.hpp>
 
 #include <spdlog/spdlog.h>
+#include <combaseapi.h>
 
 IDAFUCKER_NAMESPACE_BEGIN
 
-namespace {
+namespace
+{
+
 constexpr auto PerMonitorDpiAware{2};
 
 [[nodiscard]] HRESULT WINAPI SetProcessDpiAwareness(int level)
@@ -28,11 +31,16 @@ constexpr auto PerMonitorDpiAware{2};
 
   return function(level);
 }
+
 }  // namespace
 
-namespace impl::win {
+namespace impl::win
+{
+
 ApplicationImpl::ApplicationImpl()
 {
+  ::CoInitialize(NULL);
+
   CommandLine<wchar_t, L' '> commandLine{::GetCommandLine()};
 
   auto className = commandLine.find(L"--class-name");
@@ -52,6 +60,7 @@ ApplicationImpl::~ApplicationImpl()
 {
   terminationEvent.emit();
   unregisterClass();
+  ::CoUninitialize();
 }
 
 void ApplicationImpl::runEventLoop() noexcept
@@ -70,8 +79,8 @@ void ApplicationImpl::runEventLoop() noexcept
 
 void ApplicationImpl::registerClass(View name)
 {
-  ::WNDCLASSEX wc{
-      .cbSize = sizeof(::WNDCLASSEX),
+  WNDCLASSEX wc{
+      .cbSize = sizeof(WNDCLASSEX),
       .style = CS_HREDRAW | CS_VREDRAW,
       .lpfnWndProc = &windowProc,
       .hInstance = ::GetModuleHandle(nullptr),
@@ -125,6 +134,7 @@ void ApplicationImpl::configureDpi()
   // Let the window handle the message
   return window->onWindowMesasge(message, wparam, lparam);
 }
+
 }  // namespace impl::win
 
 IDAFUCKER_NAMESPACE_END

@@ -67,6 +67,10 @@ template <ref_countable T> class IntrusiveHandle {
     handle_->onReferenceRemoved();
   }
 
+  [[nodiscard]] constexpr bool operator==(std::nullptr_t) const noexcept {
+    return handle_ == nullptr;
+  }
+
   // Assign from a raw pointer
   auto& operator=(T* ref) noexcept(
       noexcept(std::declval<T>().onReferenceAdded()) && noexcept(

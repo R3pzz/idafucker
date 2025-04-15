@@ -18,8 +18,6 @@ struct WindowOptionsImpl {
   Size size{};
   bool fixedSize{false};
   Type type{Type::Normal};
-
-  constexpr WindowOptionsImpl() noexcept = default;
 };
 }  // namespace impl::win
 

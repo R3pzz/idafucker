@@ -1,6 +1,8 @@
 #pragma once
 #include <idafucker/CoreDefines.hpp>
+#include <idafucker/base/Signal.hpp>
 #include <idafucker/math/Common.hpp>
+#include <idafucker/runtime2/events/Events.hpp>
 
 #include "WindowOptionsImpl.hpp"
 
@@ -33,7 +35,15 @@ class WindowImpl {
   // DPI support
   [[nodiscard]] virtual int dpi() const noexcept;
 
-  [[nodiscard]] void* platformHandle() const noexcept;
+  // Native interface
+  [[nodiscard]] HWND platformHandle() const noexcept;
+
+  // Events:
+  Signal<void(BoundsChangedEvent::Ref)> boundsChangedEvent{};  //< The window bounds got changed.
+  Signal<void(std::uint64_t)> keyboardEvent{}; //< A key has been pressed/released on the keyboard.
+  Signal<void(std::uint64_t)> mouseEvent{}; //< The mouse was moved/its key was pressed/released.
+  Signal<void()> closeEvent{}; //< The window is preparing to be closed.
+  Signal<void(std::uint64_t)> focusEvent{}; //< The window entered focus.
 
  protected:
   virtual LRESULT onWindowMesasge(UINT message, WPARAM wparam, LPARAM lparam);

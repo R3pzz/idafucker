@@ -8,15 +8,12 @@
   <ItemGroup>
     <ClCompile Include="src\idafucker\resources\ResourceManager.cpp" />
     <ClCompile Include="src\idafucker\idafucker.cpp" />
-    <ClCompile Include="src\idafucker\runtime\win\WindowImpl.cpp" />
-    <ClCompile Include="src\idafucker\runtime\ApplicationFactory.cpp" />
-    <ClCompile Include="src\idafucker\runtime\win\ApplicationImpl.cpp" />
     <ClCompile Include="src\idafucker\resources\Resource.cpp" />
     <ClCompile Include="src\idafucker\base\String.cpp" />
-    <ClCompile Include="src\idafucker\runtime\win\MessageProcessorImpl.cpp" />
-    <ClCompile Include="src\idafucker\runtime\win\detail\DPI.cpp" />
     <ClCompile Include="src\idafucker\runtime2\impl\ApplicationImpl.cpp" />
     <ClCompile Include="src\idafucker\runtime2\impl\WindowImpl.cpp" />
+    <ClCompile Include="src\hyperui\HyperuiWindow.cpp" />
+    <ClCompile Include="src\hyperui\runtime\impl\win\EngineImpl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\platform\windows\WindowsWindow.hpp" />
@@ -43,23 +40,16 @@
     <ClInclude Include="include\idafucker\math\Vector2.hpp" />
     <ClInclude Include="include\hyperui\widgets\BaseWidget.hpp" />
     <ClInclude Include="include\hyperui\widgets\CheckboxWidget.hpp" />
-    <ClInclude Include="include\idafucker\runtime\Application.hpp" />
-    <ClInclude Include="include\idafucker\runtime\Window.hpp" />
     <ClInclude Include="include\idafucker\base\Hash.hpp" />
     <ClInclude Include="include\idafucker\base\Flags.hpp" />
     <ClInclude Include="include\hyperui\CoreDefines.hpp" />
     <ClInclude Include="include\hyperui\events\types\Types.hpp" />
     <ClInclude Include="include\hyperui\events\EventRef.hpp" />
-    <ClInclude Include="include\idafucker\runtime\ApplicationFactory.hpp" />
-    <ClInclude Include="include\idafucker\runtime\WindowSpecs.hpp" />
-    <ClInclude Include="src\idafucker\runtime\win\WindowImpl.hpp" />
     <ClInclude Include="include\hyperui\renderer\base\Color.hpp" />
     <ClInclude Include="include\hyperui\renderer\RenderContext.hpp" />
     <ClInclude Include="include\hyperui\renderer\Renderer.hpp" />
     <ClInclude Include="include\idafucker\math\Vector4.hpp" />
     <ClInclude Include="include\idafucker\base\IntrusiveHandle.hpp" />
-    <ClInclude Include="include\idafucker\runtime\WindowType.hpp" />
-    <ClInclude Include="src\idafucker\runtime\win\ApplicationImpl.hpp" />
     <ClInclude Include="include\hyperui\markup\Markup.hpp" />
     <ClInclude Include="include\hyperui\markup\MarkupFactory.hpp" />
     <ClInclude Include="include\idafucker\base\Underlying.hpp" />
@@ -72,14 +62,6 @@
     <ClInclude Include="include\idafucker\base\String.hpp" />
     <ClInclude Include="include\idafucker\exceptions\Exception.hpp" />
     <ClInclude Include="include\idafucker\exceptions\PlatformException.hpp" />
-    <ClInclude Include="src\hyperui\engine\impl\webview\WebViewEngine.hpp" />
-    <ClInclude Include="src\idafucker\runtime\win\detail\Character.hpp" />
-    <ClInclude Include="src\idafucker\runtime\win\detail\WindowClass.hpp" />
-    <ClInclude Include="src\idafucker\runtime\win\detail\DPI.hpp" />
-    <ClInclude Include="include\idafucker\runtime\MessageProcessor.hpp" />
-    <ClInclude Include="src\idafucker\runtime\win\MessageProcessorImpl.hpp" />
-    <ClInclude Include="include\idafucker\runtime\Message.hpp" />
-    <ClInclude Include="include\idafucker\runtime\messages\CloseMessage.hpp" />
     <ClInclude Include="include\idafucker\base\Signal.hpp" />
     <ClInclude Include="include\idafucker\base\CommandLine.hpp" />
     <ClInclude Include="include\idafucker\runtime2\Application.hpp" />
@@ -89,6 +71,14 @@
     <ClInclude Include="include\idafucker\runtime2\impl\win\Types.hpp" />
     <ClInclude Include="include\idafucker\runtime2\impl\win\WindowImpl.hpp" />
     <ClInclude Include="include\idafucker\runtime2\impl\win\WindowOptionsImpl.hpp" />
+    <ClInclude Include="include\idafucker\runtime2\events\BoundsChangedEvent.hpp" />
+    <ClInclude Include="include\idafucker\runtime2\events\Events.hpp" />
+    <ClInclude Include="include\hyperui\HyperuiWindow.hpp" />
+    <ClInclude Include="include\hyperui\data\HtmlFile.hpp" />
+    <ClInclude Include="include\hyperui\data\factories\HtmlFileFactory.hpp" />
+    <ClInclude Include="include\hyperui\runtime\impl\win\IncludeWebView2.hpp" />
+    <ClInclude Include="include\hyperui\runtime\impl\win\EngineImpl.hpp" />
+    <ClInclude Include="include\hyperui\runtime\Engine.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".clang-format" />

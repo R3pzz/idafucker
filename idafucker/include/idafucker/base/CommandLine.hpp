@@ -1,17 +1,35 @@
 #pragma once
 #include <ranges>  // find
+#include <vector>  // vector
 
 #include <idafucker/CoreDefines.hpp>
 
 IDAFUCKER_NAMESPACE_BEGIN
+
+namespace detail {
+
+template <typename> struct select_argument_identifier {};
+
+template <> struct select_argument_identifier<char> {
+  static constexpr auto value = '-';
+};
+
+template <> struct select_argument_identifier<wchar_t> {
+  static constexpr auto value = L'-';
+};
+
+} // namespace detail
 
 // Command line parser.
 template <typename Character, Character Delimiter> class CommandLine {
  public:
   using View = std::basic_string_view<Character>;
 
+  static constexpr auto ArgumentIdentifier =
+      detail::select_argument_identifier<Character>::value;
+
   constexpr CommandLine(Character *data) noexcept
-      : data_{tokenize(std::string_view{data})}
+      : data_{tokenize(data)}
   {
   }
 
@@ -35,7 +53,7 @@ template <typename Character, Character Delimiter> class CommandLine {
     }
 
     const auto &next = *std::next(it);
-    if (next.starts_with("-")) {
+    if (next.starts_with(ArgumentIdentifier)) {
       return {};
     }
 

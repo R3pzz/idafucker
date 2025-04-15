@@ -117,13 +117,26 @@ void WindowImpl::adjustBounds(const Rectangle<int>& rect) noexcept
   return 96;
 }
 
-[[nodiscard]] void* WindowImpl::platformHandle() const noexcept
+[[nodiscard]] HWND WindowImpl::platformHandle() const noexcept
 {
-  return reinterpret_cast<void*>(handle_);
+  return handle_;
 }
 
 LRESULT WindowImpl::onWindowMesasge(UINT message, WPARAM wparam, LPARAM lparam)
 {
+  switch (message) {
+    case WM_SIZE:
+      boundsChangedEvent.emit(std::make_shared<SizeChangedEvent>(
+          static_cast<SizeChangedEvent::Type>(wparam),
+          Size{LOWORD(lparam), HIWORD(lparam)}));
+      break;
+    case WM_DESTROY:
+      closeEvent.emit();
+      break;
+    default:
+      break;
+  }
+
   return ::DefWindowProc(handle_, message, wparam, lparam);
 }
 
