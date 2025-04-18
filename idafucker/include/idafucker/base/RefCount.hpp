@@ -39,36 +39,44 @@ using select_concurrent_storage_t =
 }  // namespace detail
 
 template <ConcurrentModel Model = ConcurrentModel::Atomic> class RefCountable {
- public:
+public:
   constexpr RefCountable() noexcept = default;
-  constexpr ~RefCountable() noexcept = default;
 
-  constexpr RefCountable(const RefCountable&) noexcept = default;
-  constexpr RefCountable& operator=(const RefCountable&) noexcept = default;
+  ~RefCountable()
+  {
+    if (refCount_ > 0u)
+      throw Exception{"ValueContainer destroyed while still referenced"};
+  }
+
+  // We do not want to copy the ref count as technically we are spawning a new
+  // object
+  constexpr RefCountable(const RefCountable&) noexcept {}
+
+  constexpr RefCountable& operator=(const RefCountable&) noexcept {}
 
   constexpr RefCountable(RefCountable&&) noexcept = default;
-  constexpr RefCountable& operator=(RefCountable&&) noexcept = default;
+  constexpr RefCountable& operator=(RefCountable&) noexcept = default;
 
   std::size_t refAdded() const noexcept
   {
-    return ++value_;
+    return ++refCount_;
   }
 
   std::size_t refRemoved() const noexcept
   {
-    return --value_;
+    return --refCount_;
   }
 
   std::size_t refCount() const noexcept
   {
-    return value_;
+    return refCount_;
   }
 
- private:
+private:
   using ValueType = detail::select_concurrent_storage_t<std::size_t, Model>;
 
- protected:
-  mutable ValueType value_{};
+protected:
+  mutable ValueType refCount_{};
 };
 
 template <typename T>
@@ -77,7 +85,7 @@ concept ref_countable = is_any_base_of_v<
     RefCountable<ConcurrentModel::Atomic>>;
 
 template <ref_countable T> class RcHandle {
- public:
+public:
   constexpr RcHandle() noexcept = default;
 
   // Construct from a raw pointer
@@ -120,11 +128,11 @@ template <ref_countable T> class RcHandle {
   {
     if (handle_ != nullptr)
       handle_->refRemoved();
-    
+
     handle_ = ref;
     if (handle_ != nullptr)
       handle_->refAdded();
-    
+
     return *this;
   }
 
@@ -133,11 +141,11 @@ template <ref_countable T> class RcHandle {
   {
     if (handle_ != nullptr)
       handle_->refRemoved();
-    
+
     handle_ = rhs.handle_;
     if (handle_ != nullptr)
       handle_->refAdded();
-    
+
     return *this;
   }
 
@@ -146,11 +154,11 @@ template <ref_countable T> class RcHandle {
   {
     if (handle_ != nullptr)
       handle_->refRemoved();
-    
+
     handle_ = rhs.get();
     if (handle_ != nullptr)
       handle_->refAdded();
-    
+
     return *this;
   }
 
@@ -163,7 +171,7 @@ template <ref_countable T> class RcHandle {
     return *this;
   }
 
-  [[nodiscard]] constexpr auto operator->() const noexcept -> T*
+  [[nodiscard]] constexpr T* operator->() const noexcept
   {
     return handle_;
   }
@@ -202,7 +210,7 @@ template <ref_countable T> class RcHandle {
     handle_ = nullptr;
   }
 
- private:
+private:
   T* handle_{};
 };
 

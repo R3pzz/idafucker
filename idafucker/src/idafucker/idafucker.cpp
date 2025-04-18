@@ -4,6 +4,7 @@
 
 #include <hyperui/HyperuiWindow.hpp>
 #include <hyperui/data/factories/HtmlFileFactory.hpp>
+#include <hyperui/rpc/Host.hpp>
 #include <idafucker/base/String.hpp>
 #include <idafucker/resources/ResourceManager.hpp>
 #include <idafucker/runtime2/Application.hpp>
@@ -12,6 +13,7 @@
 
 #include <spdlog/spdlog.h>
 
+// Same contents as in index.html
 constexpr auto SampleHtml{
     R"html(
 <div>
@@ -27,11 +29,22 @@ constexpr auto SampleHtml{
   const getElements = ids => Object.assign({}, ...ids.map(
     id => ({ [id]: document.getElementById(id) })));
   const ui = getElements([
-    "increment", "decrement", "getSomeShit"
+    "increment", "decrement", "getSomeShit", "counterResult"
   ]);
   ui.getSomeShit.addEventListener("click", async () => {
-    window.chrome.webview.postMessage("{\"request\":\"getSomeShit\"}");
+    ui.counterResult.textContent = await window.nativeBridge.count(123123123);
   });
+  ui.increment.addEventListener("click", async () => {
+    ui.counterResult.textContent = await window.nativeBridge.count(1);
+  });
+  ui.decrement.addEventListener("click", async () => {
+    ui.counterResult.textContent = await window.nativeBridge.count(-1);
+  });
+</script>
+<script>
+  window.multiply = function(a, b) {
+    return (a * b), (a + b);
+  };
 </script>
     )html"};
 
@@ -66,21 +79,21 @@ int main(int argc, char* argv[])
     };
     hyperuiWindow.show();
 
+    RpcHost rpcHost{*hyperuiWindow.engine()};
+    rpcHost.bind("count", [](const nlohmann::json& args) -> std::string {
+      static auto counter{0};
+
+      const int direction = args[0];
+      return std::to_string(counter += direction);
+    });
+
     // Load index.html from C:/boostware/
     auto index = resourceManager.load(L"C:/boostware/index.html");
     if (index == nullptr)
       throw Exception{"index.html not found"};
-
-    // auto data = index->get<HtmlFile>();
-    hyperuiWindow.engine()->interop().bind(
-        "getSomeShit", [](nlohmann::json message) -> std::wstring {
-          spdlog::info("getSomeShit called from script");
-          return L"";
-        });
-
-    hyperuiWindow.engine()->navigate(HtmlFile{SampleHtml});
-
-    app.runEventLoop();
+    hyperuiWindow.engine()->navigate(*index->get<HtmlFile>());
+    
+    app.runEventLoop(nullptr);
   } catch (std::exception& e) {
     spdlog::critical("Exception caught: {}", e.what());
     std::this_thread::sleep_for(std::chrono::seconds{10u});

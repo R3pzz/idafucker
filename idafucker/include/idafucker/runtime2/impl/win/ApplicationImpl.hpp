@@ -30,7 +30,7 @@ class ApplicationImpl final {
     awaitingTermination_ = true;
   }
 
-  void runEventLoop() noexcept;
+  void runEventLoop(std::function<void()> &&loopFunc) noexcept;
 
   // Events(these are freely accessible in other parts of code):
   Signal<void(CommandLine<Character>)> initializationEvent{};

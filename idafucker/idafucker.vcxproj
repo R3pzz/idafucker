@@ -220,9 +220,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\hyperui\data\factories\HtmlFileFactory.cpp" />
     <ClCompile Include="src\hyperui\HyperuiWindow.cpp" />
     <ClCompile Include="src\hyperui\runtime\impl\win\EngineImpl.cpp" />
-    <ClCompile Include="src\hyperui\runtime\impl\win\InteropHostImpl.cpp" />
     <ClCompile Include="src\idafucker\base\String.cpp" />
     <ClCompile Include="src\idafucker\resources\Resource.cpp" />
     <ClCompile Include="src\idafucker\resources\ResourceManager.cpp" />
@@ -243,12 +243,15 @@
     <ClInclude Include="include\hyperui\renderer\base\Color.hpp" />
     <ClInclude Include="include\hyperui\renderer\RenderContext.hpp" />
     <ClInclude Include="include\hyperui\renderer\Renderer.hpp" />
+    <ClInclude Include="include\hyperui\rpc\Host.hpp" />
     <ClInclude Include="include\hyperui\runtime\Engine.hpp" />
     <ClInclude Include="include\hyperui\runtime\impl\win\IncludeWebView2.hpp" />
     <ClInclude Include="include\hyperui\runtime\impl\win\EngineImpl.hpp" />
-    <ClInclude Include="include\hyperui\runtime\impl\win\InteropHostImpl.hpp" />
     <ClInclude Include="include\idafucker\base\Bitmask.hpp" />
     <ClInclude Include="include\idafucker\base\CommandLine.hpp" />
+    <ClInclude Include="include\idafucker\base\future\Future.hpp" />
+    <ClInclude Include="include\idafucker\base\future\Promise.hpp" />
+    <ClInclude Include="include\idafucker\base\future\ValueContainer.hpp" />
     <ClInclude Include="include\idafucker\base\Signal.hpp" />
     <ClInclude Include="include\idafucker\base\String.hpp" />
     <ClInclude Include="include\idafucker\base\TypeTraits.hpp" />
@@ -296,6 +299,7 @@
     <ClInclude Include="include\platform\Window.hpp" />
     <ClInclude Include="include\platform\windows\WindowsApplication.hpp" />
     <ClInclude Include="include\platform\windows\WindowsWindow.hpp" />
+    <ClInclude Include="src\hyperui\concepts\HasSerializer.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

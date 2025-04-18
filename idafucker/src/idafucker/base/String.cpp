@@ -3,7 +3,7 @@
 
 IDAFUCKER_NAMESPACE_BEGIN
 
-[[nodiscard]] std::wstring ToWide::impl(
+[[nodiscard]] std::wstring ToUnicode::impl(
     const char* data, const std::size_t size) const
 {
 #if defined(IDAFUCKER_PLATFORM_WIN32)
@@ -29,7 +29,7 @@ IDAFUCKER_NAMESPACE_BEGIN
 #endif  // defined(IDAFUCKER_PLATFORM_WIN32)
 }
 
-[[nodiscard]] std::string ToNarrow::impl(
+[[nodiscard]] std::string ToUtf8::impl(
     const wchar_t* data, const std::size_t size) const
 {
 #if defined(IDAFUCKER_PLATFORM_WIN32)

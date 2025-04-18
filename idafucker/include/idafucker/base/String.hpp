@@ -10,13 +10,13 @@ template <typename T, typename Char>
 concept string_like =
     is_any_of_v<T, std::basic_string<Char>, std::basic_string_view<Char>>;
 
-struct ToWide final {
+struct ToUnicode final {
  private:
   [[nodiscard]] std::wstring impl(
       const char* data, const std::size_t size) const;
 
  public:
-  constexpr ToWide() noexcept = default;
+  constexpr ToUnicode() noexcept = default;
 
   template <string_like<char> String>
   [[nodiscard]] std::wstring operator()(const String& value) const
@@ -25,13 +25,13 @@ struct ToWide final {
   }
 };
 
-struct ToNarrow final {
+struct ToUtf8 final {
  private:
   [[nodiscard]] std::string impl(
       const wchar_t* data, const std::size_t size) const;
 
  public:
-  constexpr ToNarrow() noexcept = default;
+  constexpr ToUtf8() noexcept = default;
 
   template <string_like<wchar_t> String>
   [[nodiscard]] std::string operator()(const String& value) const
@@ -49,14 +49,14 @@ struct ToNarrow final {
   }
 };
 
-[[nodiscard]] auto widen(const auto& value)
+[[nodiscard]] auto convertToUnicode(const auto& value)
 {
-  return ToWide{}(value);
+  return ToUnicode{}(value);
 }
 
-[[nodiscard]] auto narrow(const auto& value)
+[[nodiscard]] auto convertToUtf8(const auto& value)
 {
-  return ToNarrow{}(value);
+  return ToUtf8{}(value);
 }
 
 IDAFUCKER_NAMESPACE_END

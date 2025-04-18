@@ -5,35 +5,55 @@
 #include <hyperui/CoreDefines.hpp>
 #include <hyperui/data/HtmlFile.hpp>
 #include <idafucker/runtime2/impl/win/Types.hpp>
+#include <idafucker/exceptions/PlatformException.hpp>
 
-#include "InteropHostImpl.hpp"
+#include "IncludeWebView2.hpp"
 
 HYPERUI_NAMESPACE_BEGIN
 
 namespace impl::win
 {
-// Encapsulates a WebView2 engine.
+// Encapsulates a WebView2 engine
 class EngineImpl {
  public:
   using Ref = std::shared_ptr<EngineImpl>;
+
   using Url = std::wstring;
 
   EngineImpl(HWND window, const std::filesystem::path &userDataFolder);
 
-  // Interop
-  [[nodiscard]] InteropHostImpl &interop() noexcept
-  {
-    return *interop_.Get();
-  }
-
-  // WebView2 navigation
+  // Navigation
   void navigate(const Url &where) noexcept;
   void navigate(const HtmlFile &html) noexcept;
+
+  // Messaging
+  void postMessage(const std::wstring &message) const noexcept;
+  
+  void addMessageListener(auto &&callback) noexcept
+  {
+    core_->add_WebMessageReceived(
+        makeHander<handlers::MessageReceived>(
+            std::forward<decltype(callback)>(callback))
+            .Get(),
+        nullptr);
+  }
+
+  // Scripts
+  void addInitScript(const std::wstring &script) noexcept;
 
   // Window events
   void onResize(const RECT &size) noexcept;
 
  private:
+  void pumpWebView2EventsUntil(auto &&function) noexcept
+  {
+    MSG message{};
+    while (!function() && ::GetMessage(&message, NULL, 0u, 0u) >= 0) {
+      ::TranslateMessage(&message);
+      ::DispatchMessage(&message);
+    }
+  }
+
   HRESULT onEnvCreated(HRESULT code, ICoreWebView2Environment *env);
   HRESULT onCtrlCreated(HRESULT code, ICoreWebView2Controller *ctrl);
 
@@ -43,10 +63,6 @@ class EngineImpl {
   ComPtr<ICoreWebView2> core_{};
   ComPtr<ICoreWebView2Controller> controller_{};
   ComPtr<ICoreWebView2Environment> env_{};
-  
-  // Web<->app comunication host
-  ComPtr<InteropHostImpl> interop_{};
-  EventRegistrationToken interopToken_{};
 };
 }  // namespace impl::win
 

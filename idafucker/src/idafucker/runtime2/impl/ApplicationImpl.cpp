@@ -52,13 +52,21 @@ ApplicationImpl::~ApplicationImpl()
   ::CoUninitialize();
 }
 
-void ApplicationImpl::runEventLoop() noexcept
+void ApplicationImpl::runEventLoop(std::function<void()> &&loopFunc) noexcept
 {
   while (!awaitingTermination_) {
     MSG message{};
     while (::PeekMessage(&message, nullptr, 0u, 0u, PM_REMOVE)) {
       ::TranslateMessage(&message);
       ::DispatchMessage(&message);
+    }
+
+    try {
+      if (loopFunc != nullptr)
+        loopFunc();
+    } catch (std::exception &e) {
+      spdlog::error("Unhandled exception in event loop: {}", e.what());
+      return;
     }
   }
 

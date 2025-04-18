@@ -27,7 +27,7 @@ WindowImpl::WindowImpl(const WindowOptionsImpl& options)
   // clang-format on
   if (handle_ == NULL) {
     throw PlatformException{"Failed to create a window `"}
-        << narrow(options.title) << "`";
+        << convertToUtf8(options.title) << "`";
   }
 
   ::SetWindowLongPtr(handle_, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
