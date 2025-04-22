@@ -6,7 +6,7 @@
 IDAFUCKER_NAMESPACE_BEGIN
 
 template <scalar T> class Rectangle {
- public:
+public:
   constexpr Rectangle() noexcept = default;
 
   constexpr Rectangle(T left, T top, T right, T bottom) noexcept

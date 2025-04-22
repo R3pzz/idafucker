@@ -13,14 +13,14 @@ public:
   ~Future() noexcept = default;
 
   Future(const Future &) noexcept = default;
-  Future& operator=(const Future &) noexcept = default;
+  Future &operator=(const Future &) noexcept = default;
 
   Future(Future &&) noexcept = default;
   Future &operator=(Future &&) noexcept = default;
 
   [[nodiscard]] operator const Type &() const
   {
-    return container->get();   
+    return container->get();
   }
 
   [[nodiscard]] const Type &get() const
@@ -42,7 +42,7 @@ public:
   {
     return container->hasException();
   }
-  
+
   [[nodiscard]] bool ready() const noexcept
   {
     return container->ready();

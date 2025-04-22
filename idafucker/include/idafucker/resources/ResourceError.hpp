@@ -35,7 +35,7 @@ enum class ResourceErrorCategory {
 }
 
 class ResourceError final : public std::runtime_error {
- public:
+public:
   ResourceError(ResourceErrorCategory category) noexcept
       : std::runtime_error{nullptr}, category_{category}
   {
@@ -72,7 +72,7 @@ class ResourceError final : public std::runtime_error {
     return formatted.c_str();
   }
 
- private:
+private:
   ResourceErrorCategory category_;
   std::filesystem::path path_;
 };

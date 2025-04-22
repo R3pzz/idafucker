@@ -138,7 +138,7 @@ private:
     } catch (std::exception &e) {
       response["exception"] = e.what();
     }
-    
+
     engine.postMessage(idafucker::convertToUnicode(response.dump()).c_str());
   }
 
@@ -157,7 +157,7 @@ private:
     } else if (message.contains("result")) {
       promises[id] = std::move(message["result"]);
     }
-      
+
     promises.erase(std::begin(promises) + id);
   }
 

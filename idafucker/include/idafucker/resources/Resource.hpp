@@ -104,7 +104,7 @@ public:
   }
 
 private:
-  void reset(Any &&newData) noexcept
+  void reset(Any&& newData) noexcept
   {
     data_ = newData;
   }

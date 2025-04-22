@@ -17,7 +17,7 @@ namespace impl::win
 class WindowImpl {
   IDAFUCKER_NONCOPYABLE(WindowImpl);
 
- public:
+public:
   explicit WindowImpl(const WindowOptionsImpl& options);
   virtual ~WindowImpl() noexcept;
 
@@ -48,7 +48,7 @@ class WindowImpl {
   Signal<void()> closeEvent{};  //< The window is preparing to be closed.
   Signal<void(std::uint64_t)> focusEvent{};  //< The window entered focus.
 
- protected:
+protected:
   virtual LRESULT onWindowMesasge(UINT message, WPARAM wparam, LPARAM lparam);
 
   HWND handle_;

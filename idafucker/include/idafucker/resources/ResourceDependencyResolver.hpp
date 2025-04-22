@@ -19,7 +19,7 @@ IDAFUCKER_NAMESPACE_BEGIN
 using DependencyList = std::vector<std::filesystem::path>;
 
 class ResourceDependencyResolver {
- public:
+public:
   using Ref = std::shared_ptr<ResourceDependencyResolver>;
 
   virtual ~ResourceDependencyResolver() noexcept = default;

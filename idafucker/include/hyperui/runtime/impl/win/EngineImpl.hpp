@@ -4,8 +4,8 @@
 
 #include <hyperui/CoreDefines.hpp>
 #include <hyperui/data/HtmlFile.hpp>
-#include <idafucker/runtime2/impl/win/Types.hpp>
 #include <idafucker/exceptions/PlatformException.hpp>
+#include <idafucker/runtime2/impl/win/Types.hpp>
 
 #include "IncludeWebView2.hpp"
 
@@ -15,13 +15,12 @@ namespace impl::win
 {
 // Encapsulates a WebView2 engine
 class EngineImpl {
- public:
+public:
   using Ref = std::shared_ptr<EngineImpl>;
 
   using Url = std::wstring;
 
-  EngineImpl(
-      HWND window, const std::filesystem::path &userDataFolde);
+  EngineImpl(HWND window, const std::filesystem::path &userDataFolde);
 
   // Navigation
   void navigate(const Url &where) noexcept;
@@ -29,7 +28,7 @@ class EngineImpl {
 
   // Messaging
   void postMessage(const std::wstring &message) const noexcept;
-  
+
   void addMessageListener(auto &&callback) noexcept
   {
     core_->add_WebMessageReceived(
@@ -55,7 +54,7 @@ class EngineImpl {
   // Window events
   void onResize(const RECT &size) noexcept;
 
- private:
+private:
   void pumpWebView2EventsUntil(auto &&function) noexcept
   {
     MSG message{};

@@ -8,7 +8,7 @@
 IDAFUCKER_NAMESPACE_BEGIN
 
 class PlatformException final : public Exception {
- private:
+private:
   [[nodiscard]] static auto platform_error_code()
   {
 #if defined(IDAFUCKER_PLATFORM_WIN32)
@@ -20,7 +20,7 @@ class PlatformException final : public Exception {
 #endif  // defined(IDAFUCKER_PLATFORM_WIN32)
   }
 
- public:
+public:
   using Exception::Exception;
   using Exception::operator<<;
 

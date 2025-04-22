@@ -11,7 +11,7 @@ HYPERUI_NAMESPACE_BEGIN
 
 // A `Window` extension that is built to handle WebView2 engine events
 class HyperuiWindow final : public idafucker::Window {
- public:
+public:
   static constexpr auto DefaultUserDataFolder{L"C:/temp/idafucker/hyperui/"};
 
   HyperuiWindow(
@@ -24,7 +24,7 @@ class HyperuiWindow final : public idafucker::Window {
     return engine_;
   }
 
- private:
+private:
   // Custom window message handler
   LRESULT onWindowMesasge(UINT message, WPARAM wparam, LPARAM lparam) override;
 

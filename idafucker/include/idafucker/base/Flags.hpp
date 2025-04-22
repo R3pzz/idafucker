@@ -6,7 +6,7 @@
 IDAFUCKER_NAMESPACE_BEGIN
 
 template <scoped_enum Enum> class Flags {
- public:
+public:
   constexpr Flags() noexcept = default;
 
   constexpr Flags(const Enum value) noexcept : value_{value} {}
@@ -68,7 +68,7 @@ template <scoped_enum Enum> class Flags {
     return value_;
   }
 
- private:
+private:
   Enum value_{};
 };
 

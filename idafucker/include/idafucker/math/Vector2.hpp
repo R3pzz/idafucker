@@ -5,7 +5,7 @@
 IDAFUCKER_NAMESPACE_BEGIN
 
 template <scalar T> class Vector2 {
- public:
+public:
   constexpr Vector2() noexcept = default;
 
   constexpr Vector2(T&& x, T&& y) noexcept

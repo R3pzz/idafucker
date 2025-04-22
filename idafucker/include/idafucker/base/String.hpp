@@ -11,11 +11,11 @@ concept string_like =
     is_any_of_v<T, std::basic_string<Char>, std::basic_string_view<Char>>;
 
 struct ToUnicode final {
- private:
+private:
   [[nodiscard]] std::wstring impl(
       const char* data, const std::size_t size) const;
 
- public:
+public:
   constexpr ToUnicode() noexcept = default;
 
   template <string_like<char> String>
@@ -26,11 +26,11 @@ struct ToUnicode final {
 };
 
 struct ToUtf8 final {
- private:
+private:
   [[nodiscard]] std::string impl(
       const wchar_t* data, const std::size_t size) const;
 
- public:
+public:
   constexpr ToUtf8() noexcept = default;
 
   template <string_like<wchar_t> String>
@@ -39,7 +39,7 @@ struct ToUtf8 final {
     return impl(value.data(), value.size());
   }
 
-  [[nodiscard]] std::string operator()(const wchar_t *value) const
+  [[nodiscard]] std::string operator()(const wchar_t* value) const
   {
     std::size_t size{};
     for (; value[size] != '\0'; ++size)

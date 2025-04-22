@@ -5,12 +5,12 @@
 
 IDAFUCKER_NAMESPACE_BEGIN
 
-template <class Type>
-class Promise {
+template <class Type> class Promise {
 public:
   Promise() noexcept : container{new detail::ValueContainer<Type>{}} {}
+
   ~Promise() = default;
-  
+
   Promise(Promise &&) noexcept = default;
   Promise &operator=(Promise &&) noexcept = default;
 

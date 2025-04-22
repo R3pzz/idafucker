@@ -16,7 +16,7 @@ namespace impl::win
 class ApplicationImpl final {
   IDAFUCKER_NONCOPYABLE(ApplicationImpl);
 
- public:
+public:
   ApplicationImpl(const CommandLine<Character> &commandLine);
   ~ApplicationImpl();
 
@@ -39,7 +39,7 @@ class ApplicationImpl final {
                            // starts the termination sequence or when
                            //`~ApplicationImpl()` gets called.
 
- private:
+private:
   // Window class helpers
   void registerClass(View name);
   void unregisterClass() noexcept;

@@ -15,7 +15,7 @@
 // ResourceManager is used to centralize the resource
 // management(caching/uncaching) and gather all resources into a single
 // 'library' for easier access.
-// 
+//
 // Resource dependencies are not supported for now, this concept has
 // to be reworked.
 //
@@ -40,7 +40,7 @@ public:
       auto&&... args) -> RcHandle<Resource>;
 
   // Refreshes the resource contents from its associated file
-  void reload(const std::filesystem::path &path);
+  void reload(const std::filesystem::path& path);
   void reload(const RcHandle<Resource>& resource);
 
   // Unregistering resources

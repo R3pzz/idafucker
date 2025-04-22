@@ -5,7 +5,7 @@
 HYPERUI_NAMESPACE_BEGIN
 
 class HtmlFileFactory final : public idafucker::ResourceFactory {
- public:
+public:
   constexpr HtmlFileFactory() noexcept = default;
 
   [[nodiscard]] idafucker::Any construct(
@@ -14,7 +14,8 @@ class HtmlFileFactory final : public idafucker::ResourceFactory {
   [[nodiscard]] const std::type_info& type() const noexcept override;
 };
 
-[[nodiscard]] inline auto makeHtmlFileFactory() -> std::shared_ptr<HtmlFileFactory>
+[[nodiscard]] inline auto makeHtmlFileFactory()
+    -> std::shared_ptr<HtmlFileFactory>
 {
   return std::make_shared<HtmlFileFactory>();
 }

@@ -1,5 +1,5 @@
-#include <idafucker/resources/ResourceManager.hpp>
 #include <idafucker/exceptions/Exception.hpp>
+#include <idafucker/resources/ResourceManager.hpp>
 
 IDAFUCKER_NAMESPACE_BEGIN
 
@@ -55,9 +55,9 @@ void ResourceManager::erase(const std::filesystem::path& path, bool force)
     return;
 
   // Do not unregister required resources
-  const auto &resource = it->second;
+  const auto& resource = it->second;
   if (!resource->required() && (force || resource->refCount() == 0u))
-    cache_.erase(it); //< The resource will de-allocate itself on release
+    cache_.erase(it);  //< The resource will de-allocate itself on release
 }
 
 void ResourceManager::observe()
@@ -74,7 +74,7 @@ void ResourceManager::observe()
   const auto it = cache_.find(path);
   if (it == std::end(cache_))
     throw Exception{"Resource `"} << path.string() << "` not found";
-  
+
   return RcHandle<Resource>{it->second};
 }
 

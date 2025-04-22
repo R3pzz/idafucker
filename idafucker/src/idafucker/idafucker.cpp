@@ -36,8 +36,7 @@ int main(int argc, char* argv[])
 
     // Instantiate the main window
     HyperuiWindowOptions options{};
-    options.atom = app.wcAtom(),
-    options.title = L"idafucker | x86_64 | v1.0.0",
+    options.atom = app.wcAtom(), options.title = L"idafucker | x86_64 | v1.0.0",
     options.size = {1280, 960};
     options.hotkeysToDisable |= HyperuiWindowOptions::Hotkeys::F5;
     HyperuiWindow hyperuiWindow{options, commandLine};
@@ -70,7 +69,8 @@ document.addEventListener('DOMContentLoaded', () => {
       return std::to_string(args[0].get<int>() + args[1].get<int>());
     });
 
-    // Load the `index.html` file from `idafucker/idafucker/examples/hyperui/bind/`
+    // Load the `index.html` file from
+    // `idafucker/idafucker/examples/hyperui/bind/`
     auto index = resourceManager.load(SampleHtmlPath, {});
     if (index == nullptr)
       throw Exception{"index.html not found"};
@@ -79,8 +79,9 @@ document.addEventListener('DOMContentLoaded', () => {
     hyperuiWindow.keyboardEvent << [&](KeyboardEvent::Ref event) -> void {
       if (event->state() == KeyboardEvent::State::Pressed &&
           event->virtualKeyCode() == VK_F5) {
-        resourceManager.reload(index); //< Reload the underlying web resource
-        hyperuiWindow.engine()->navigate(*index->get<HtmlFile>()); //< Re-open the newly loaded html file
+        resourceManager.reload(index);  //< Reload the underlying web resource
+        hyperuiWindow.engine()->navigate(
+            *index->get<HtmlFile>());  //< Re-open the newly loaded html file
       }
     };
 

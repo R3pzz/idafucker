@@ -45,7 +45,7 @@ class Exception : public std::exception {
         src_loc.function_name());
   }
 
- public:
+public:
   explicit Exception(
       const std::source_location src_loc =
           std::source_location::current()) noexcept
@@ -103,7 +103,7 @@ class Exception : public std::exception {
     return message_.c_str();
   }
 
- protected:
+protected:
   std::string message_;
   FormatFunc* nextFormatter_;
 };

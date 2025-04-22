@@ -32,7 +32,7 @@ template <> struct select_delimiter<wchar_t> {
 
 // Command line argument.
 template <typename Character> class Argument {
- public:
+public:
   using View = std::basic_string_view<Character>;
 
   constexpr Argument() noexcept = default;
@@ -77,14 +77,14 @@ template <typename Character> class Argument {
     return {value_};
   }
 
- private:
+private:
   View name_{};
   View value_{};
 };
 
 // Command line parser.
 template <typename Character> class CommandLine {
- public:
+public:
   using View = std::basic_string_view<Character>;
 
   static constexpr auto Delimiter = detail::select_delimiter<Character>::value;
@@ -109,7 +109,7 @@ template <typename Character> class CommandLine {
     return {*it, *next};
   }
 
- private:
+private:
   [[nodiscard]] static constexpr auto tokenize(View data) noexcept
       -> std::vector<View>
   {

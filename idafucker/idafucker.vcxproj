@@ -228,8 +228,8 @@
     <ClCompile Include="src\idafucker\resources\Resource.cpp" />
     <ClCompile Include="src\idafucker\resources\ResourceManager.cpp" />
     <ClCompile Include="src\idafucker\idafucker.cpp" />
-    <ClCompile Include="src\idafucker\runtime2\impl\ApplicationImpl.cpp" />
-    <ClCompile Include="src\idafucker\runtime2\impl\WindowImpl.cpp" />
+    <ClCompile Include="src\idafucker\runtime2\impl\win\ApplicationImpl.cpp" />
+    <ClCompile Include="src\idafucker\runtime2\impl\win\WindowImpl.cpp" />
     <ClCompile Include="tests\base\Variant.cpp" Condition="'$(Configuration)'=='UnitTests'" />
   </ItemGroup>
   <ItemGroup>

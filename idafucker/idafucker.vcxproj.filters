@@ -10,8 +10,8 @@
     <ClCompile Include="src\idafucker\idafucker.cpp" />
     <ClCompile Include="src\idafucker\resources\Resource.cpp" />
     <ClCompile Include="src\idafucker\base\String.cpp" />
-    <ClCompile Include="src\idafucker\runtime2\impl\ApplicationImpl.cpp" />
-    <ClCompile Include="src\idafucker\runtime2\impl\WindowImpl.cpp" />
+    <ClCompile Include="src\idafucker\runtime2\impl\win\ApplicationImpl.cpp" />
+    <ClCompile Include="src\idafucker\runtime2\impl\win\WindowImpl.cpp" />
     <ClCompile Include="src\hyperui\HyperuiWindow.cpp" />
     <ClCompile Include="src\hyperui\runtime\impl\win\EngineImpl.cpp" />
     <ClCompile Include="src\hyperui\data\factories\HtmlFileFactory.cpp" />

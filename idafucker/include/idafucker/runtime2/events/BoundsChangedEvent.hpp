@@ -7,7 +7,7 @@
 IDAFUCKER_NAMESPACE_BEGIN
 
 class BoundsChangedEvent {
- public:
+public:
   using Ref = std::shared_ptr<BoundsChangedEvent>;
 
   constexpr BoundsChangedEvent() noexcept = default;
@@ -15,7 +15,7 @@ class BoundsChangedEvent {
 };
 
 class SizeChangedEvent : public BoundsChangedEvent {
- public:
+public:
   enum class Type {
     Default = 0,    //< A regular size change.
     Minimized = 1,  //< The window was minimized.
@@ -37,7 +37,7 @@ class SizeChangedEvent : public BoundsChangedEvent {
     return size_;
   }
 
- private:
+private:
   Type type_{};
   Size size_{};
 };

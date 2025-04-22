@@ -12,7 +12,7 @@ template <typename Type>
 concept slot_like = std::is_function_v<Type>;
 
 template <slot_like Signature> class Signal {
- public:
+public:
   using Slot = std::function<Signature>;
 
   constexpr Signal() noexcept = default;
@@ -52,7 +52,7 @@ template <slot_like Signature> class Signal {
     }
   }
 
- private:
+private:
   std::vector<Slot> slots_{};
 };
 

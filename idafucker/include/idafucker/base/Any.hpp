@@ -13,7 +13,7 @@ IDAFUCKER_NAMESPACE_BEGIN
 namespace detail
 {
 template <std::size_t Size> class AnyBase {
- private:
+private:
   enum class Request {
     CopyConstruct,  //< Call a copy-constructor of a contained object
     MoveConstruct,  //< Call a move-constructor of a contained object
@@ -77,7 +77,7 @@ template <std::size_t Size> class AnyBase {
   static constexpr auto is_embeddable_v =
       sizeof(typename std::remove_cvref<T>::type) <= Size;
 
- public:
+public:
   enum class Representation {
     Empty,      //< No data is stored
     Embedded,   //< Data is stored internally, inside the Any object
@@ -217,7 +217,7 @@ template <std::size_t Size> class AnyBase {
     repr_ = Representation::Empty;
   }
 
- private:
+private:
   RTTIFunction* rttiFunction_{};
   const std::type_info* type_{};
   Representation repr_{};
