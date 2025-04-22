@@ -20,7 +20,8 @@ class EngineImpl {
 
   using Url = std::wstring;
 
-  EngineImpl(HWND window, const std::filesystem::path &userDataFolder);
+  EngineImpl(
+      HWND window, const std::filesystem::path &userDataFolde);
 
   // Navigation
   void navigate(const Url &where) noexcept;
@@ -33,6 +34,16 @@ class EngineImpl {
   {
     core_->add_WebMessageReceived(
         makeHander<handlers::MessageReceived>(
+            std::forward<decltype(callback)>(callback))
+            .Get(),
+        nullptr);
+  }
+
+  // Events
+  void addHotkeyListener(auto &&callback) noexcept
+  {
+    controller_->add_AcceleratorKeyPressed(
+        makeHander<handlers::HotkeyPressed>(
             std::forward<decltype(callback)>(callback))
             .Get(),
         nullptr);

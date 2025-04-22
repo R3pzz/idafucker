@@ -13,40 +13,8 @@
 
 #include <spdlog/spdlog.h>
 
-// Same contents as in index.html
-constexpr auto SampleHtml{
-    R"html(
-<div>
-  <button id="increment">+</button>
-  <button id="decrement">-</button>
-  <span>Counter: <span id="counterResult">0</span></span>
-</div>
-<hr />
-<div>
-  <button id="getSomeShit">Get some shit</button>
-</div>
-<script type="module">
-  const getElements = ids => Object.assign({}, ...ids.map(
-    id => ({ [id]: document.getElementById(id) })));
-  const ui = getElements([
-    "increment", "decrement", "getSomeShit", "counterResult"
-  ]);
-  ui.getSomeShit.addEventListener("click", async () => {
-    ui.counterResult.textContent = await window.nativeBridge.count(123123123);
-  });
-  ui.increment.addEventListener("click", async () => {
-    ui.counterResult.textContent = await window.nativeBridge.count(1);
-  });
-  ui.decrement.addEventListener("click", async () => {
-    ui.counterResult.textContent = await window.nativeBridge.count(-1);
-  });
-</script>
-<script>
-  window.multiply = function(a, b) {
-    return (a * b), (a + b);
-  };
-</script>
-    )html"};
+constexpr auto SampleHtmlPath{
+    "../../../idafucker/examples/hyperui/bind/index.html"};
 
 int main(int argc, char* argv[])
 {
@@ -56,44 +24,71 @@ int main(int argc, char* argv[])
   try {
     spdlog::set_level(spdlog::level::debug);
 
+    // Instantiate the command line parser object
     CommandLine commandLine{::GetCommandLine()};
 
-    // Instantiate the application
+    // Instantiate the application given the command line
     Application app{commandLine};
 
     // Instantiate the resource manager and the resource factories
     ResourceManager resourceManager{};
-    resourceManager.pushFactory(".html", makeHtmlFileFactory());
+    resourceManager.registerFactory(".html", makeHtmlFileFactory());
 
     // Instantiate the main window
-    WindowOptions options{
-        .atom = app.wcAtom(),
-        .title = L"idafucker | x86_64 | v1.0.0",
-        .size = {1280, 960}};
+    HyperuiWindowOptions options{};
+    options.atom = app.wcAtom(),
+    options.title = L"idafucker | x86_64 | v1.0.0",
+    options.size = {1280, 960};
+    options.hotkeysToDisable |= HyperuiWindowOptions::Hotkeys::F5;
     HyperuiWindow hyperuiWindow{options, commandLine};
 
-    // Put some event handlers
+    // Add an on-close event handler
     hyperuiWindow.closeEvent << [&app]() -> void {
       spdlog::info("Main window closed. Terminating the application");
       app.terminate();
     };
+
+    // Show the main window
     hyperuiWindow.show();
 
-    RpcHost rpcHost{*hyperuiWindow.engine()};
-    rpcHost.bind("count", [](const nlohmann::json& args) -> std::string {
-      static auto counter{0};
+    // Disable the context menu
+    hyperuiWindow.engine()->addInitScript(
+        LR"js(
+document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('contextmenu', (e) => {
+    e.preventDefault()
+  })
+})
+    )js");
 
-      const int direction = args[0];
-      return std::to_string(counter += direction);
+    // Instantiate the js-native RPC
+    RpcHost rpcHost{*hyperuiWindow.engine()};
+
+    // Bind the `add` function that the javascript code calls in
+    // `await window.nativeBridge.add(a, b)` in the `index.html` file
+    rpcHost.bind("add", [](const nlohmann::json& args) -> std::string {
+      return std::to_string(args[0].get<int>() + args[1].get<int>());
     });
 
-    // Load index.html from C:/boostware/
-    auto index = resourceManager.load(L"C:/boostware/index.html");
+    // Load the `index.html` file from `idafucker/idafucker/examples/hyperui/bind/`
+    auto index = resourceManager.load(SampleHtmlPath, {});
     if (index == nullptr)
       throw Exception{"index.html not found"};
+
+    // Add a hot-reload hotkey
+    hyperuiWindow.keyboardEvent << [&](KeyboardEvent::Ref event) -> void {
+      if (event->state() == KeyboardEvent::State::Pressed &&
+          event->virtualKeyCode() == VK_F5) {
+        resourceManager.reload(index); //< Reload the underlying web resource
+        hyperuiWindow.engine()->navigate(*index->get<HtmlFile>()); //< Re-open the newly loaded html file
+      }
+    };
+
+    // Open up the `index.html` file
     hyperuiWindow.engine()->navigate(*index->get<HtmlFile>());
-    
-    app.runEventLoop(nullptr);
+
+    // Run the event loop
+    app.runEventLoop([&] { resourceManager.observe(); });
   } catch (std::exception& e) {
     spdlog::critical("Exception caught: {}", e.what());
     std::this_thread::sleep_for(std::chrono::seconds{10u});

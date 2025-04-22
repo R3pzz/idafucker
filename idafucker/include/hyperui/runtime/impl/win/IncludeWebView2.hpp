@@ -29,6 +29,7 @@ using EnvCreated = ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler;
 using CtrlCreated = ICoreWebView2CreateCoreWebView2ControllerCompletedHandler;
 using MessageReceived = ICoreWebView2WebMessageReceivedEventHandler;
 using InitScriptAdded = ICoreWebView2AddScriptToExecuteOnDocumentCreatedCompletedHandler;
+using HotkeyPressed = ICoreWebView2AcceleratorKeyPressedEventHandler;
 }  // namespace handlers
 }  // namespace impl::win
 

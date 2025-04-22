@@ -130,6 +130,12 @@ LRESULT WindowImpl::onWindowMesasge(UINT message, WPARAM wparam, LPARAM lparam)
           static_cast<SizeChangedEvent::Type>(wparam),
           Size{LOWORD(lparam), HIWORD(lparam)}));
       break;
+    case WM_KEYDOWN:
+    case WM_KEYUP:
+      keyboardEvent.emit(std::make_shared<KeyboardEvent>(
+          wparam, message == WM_KEYDOWN ? KeyboardEvent::State::Pressed
+                                        : KeyboardEvent::State::Released));
+      break;
     case WM_DESTROY:
       closeEvent.emit();
       break;

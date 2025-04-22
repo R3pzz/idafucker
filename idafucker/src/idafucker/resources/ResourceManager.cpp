@@ -1,95 +1,87 @@
 #include <idafucker/resources/ResourceManager.hpp>
+#include <idafucker/exceptions/Exception.hpp>
 
 IDAFUCKER_NAMESPACE_BEGIN
 
-void ResourceManager::observe()
-{
-  for (auto&& resource : cache_) {
-    if (resource.second->refCount() == 0u && !resource.second->required())
-      resource.second->unload();
-  }
-}
-
-auto ResourceManager::load(const std::filesystem::path& path)
+auto ResourceManager::load(
+    const std::filesystem::path& path, const ResourceFlags flags)
     -> RcHandle<Resource>
 {
-  const auto cache = cache_.find(path.string());
-  if (cache != std::end(cache_)) {
-    spdlog::debug(
-        "ResourceSystem::load: Resource '{}' of type '{}' is already "
-        "present in the system",
-        path.string(), cache->second->type().name());
-
+  // Look for the resource in the cache
+  const auto cache = cache_.find(path);
+  if (cache != std::end(cache_))
     return RcHandle<Resource>{cache->second};
-  }
 
-  const auto ext = path.extension().string();
+  // If not found, proceed to constructing it
+  const auto extension = path.extension().string();
+  const auto factory = factories_.find(extension);
 
-  // Look up the factory from the registration table
-  const auto factory = factories_.find(ext);
-  if (factory == std::end(factories_)) {
-    spdlog::error(
-        "ResourceSystem::load: No factory found for a resource '{}'",
-        path.string());
+  // Can't construct a resource without a factory...
+  if (factory == std::end(factories_))
+    throw Exception{"No factory registered for extension `"} << extension
+                                                             << "`";
 
-    return {};
-  }
-
-  // Emplace a new resource
-  const auto& resource =
-      cache_
-          .emplace(
-              path.string(),
-              new Resource{
-                  *this,
-                  factory->second,
-                  resolvers_.contains(ext) ? resolvers_.at(ext) : nullptr,
-                  {}})
-          .first->second;
-  // Open up the stream
-  std::ifstream stream{path};
-  if (stream.is_open() && !resource->load(stream)) {
-    spdlog::warn(
-        "ResourceSystem::load: Unable to load a resource '{}' of type '{}'",
-        path.string(), factory->second->type().name());
-  }
-
-  return RcHandle<Resource>{resource};
+  // Now we can finally load the resource
+  auto resource = new Resource{*this, flags, factory->second->construct(path)};
+  return RcHandle<Resource>{cache_.emplace(path, resource).first->second};
 }
 
-void ResourceManager::erase(const std::filesystem::path& path, bool ignore_refs)
+void ResourceManager::reload(const std::filesystem::path& path)
 {
-  const auto it = cache_.find(path.string());
+  const auto it = cache_.find(path);
   if (it == std::end(cache_))
     return;
 
-  auto resource = it->second;
+  const auto factory = factories_.at(it->first.extension().string());
+  it->second->reset(factory->construct(it->first));
+}
 
-  // In theory, we shouldn't encounter such situations
-  if (resource == nullptr) [[unlikely]] {
-    spdlog::debug(
-        "ResourceManager::erase: found a null-pointer resource '{}'",
-        path.string());
-
-    cache_.erase(it);
+void ResourceManager::reload(const RcHandle<Resource>& resource)
+{
+  const auto it = std::find_if(
+      std::begin(cache_), std::end(cache_),
+      [&](const auto& pair) { return pair.second == resource; });
+  if (it == std::end(cache_))
     return;
-  }
+
+  const auto factory = factories_.at(it->first.extension().string());
+  it->second->reset(factory->construct(it->first));
+}
+
+void ResourceManager::erase(const std::filesystem::path& path, bool force)
+{
+  const auto it = cache_.find(path);
+  if (it == std::end(cache_))
+    return;
 
   // Do not unregister required resources
-  if (resource->required() || (!ignore_refs && resource->refCount() != 0u))
-    return;
+  const auto &resource = it->second;
+  if (!resource->required() && (force || resource->refCount() == 0u))
+    cache_.erase(it); //< The resource will de-allocate itself on release
+}
 
-  resource->unload();
-  cache_.erase(it);
+void ResourceManager::observe()
+{
+  for (auto it = std::begin(cache_); it != std::end(cache_); ++it) {
+    if (it->second->refCount() == 0u && !it->second->required())
+      cache_.erase(it);  //< The resource will de-allocate itself on release
+  }
 }
 
 [[nodiscard]] auto ResourceManager::get(const std::filesystem::path& path) const
     -> RcHandle<Resource>
 {
-  const auto it = cache_.find(path.string());
-  if (it == cache_.end())
-    return {};
+  const auto it = cache_.find(path);
+  if (it == std::end(cache_))
+    throw Exception{"Resource `"} << path.string() << "` not found";
+  
   return RcHandle<Resource>{it->second};
+}
+
+void ResourceManager::registerFactory(
+    const std::string& extension, ResourceFactory::Ref factory)
+{
+  factories_[extension] = std::move(factory);
 }
 
 IDAFUCKER_NAMESPACE_END

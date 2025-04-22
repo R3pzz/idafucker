@@ -2,6 +2,8 @@
 #include <idafucker/CoreDefines.hpp>
 #include <idafucker/base/Any.hpp>
 
+#include <filesystem> // path
+
 IDAFUCKER_NAMESPACE_BEGIN
 
 class ResourceFactory {
@@ -10,7 +12,8 @@ class ResourceFactory {
 
   virtual ~ResourceFactory() noexcept = default;
 
-  [[nodiscard]] virtual Any construct(const std::istream& stream) const = 0;
+  [[nodiscard]] virtual Any construct(
+      const std::filesystem::path& dataPath) const = 0;
   [[nodiscard]] virtual const std::type_info& type() const noexcept = 0;
 };
 

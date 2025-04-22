@@ -8,13 +8,14 @@ HYPERUI_NAMESPACE_BEGIN
 
 namespace impl::win
 {
-EngineImpl::EngineImpl(HWND window, const std::filesystem::path &userDataFolder)
+EngineImpl::EngineImpl(
+    HWND window, const std::filesystem::path &userDataFolder)
     : window_{window}
 {
   using Env = ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler;
   using Ctrl = ICoreWebView2CreateCoreWebView2ControllerCompletedHandler;
 
-  std::atomic_bool initDone{false};
+  std::atomic_bool done{false};
 
   const auto onCtrlCreated = [&](HRESULT code,
                                  ICoreWebView2Controller *ctrl) -> HRESULT {
@@ -25,7 +26,7 @@ EngineImpl::EngineImpl(HWND window, const std::filesystem::path &userDataFolder)
     controller_->get_CoreWebView2(&core_);
     controller_->put_IsVisible(TRUE);
 
-    initDone = true;
+    done = true;
     return S_OK;
   };
 
@@ -45,11 +46,7 @@ EngineImpl::EngineImpl(HWND window, const std::filesystem::path &userDataFolder)
       Callback<Env>(onEnvCreated).Get());
 
   // Let webview2 process its messages
-  MSG msg{};
-  while (!initDone && ::GetMessage(&msg, nullptr, 0u, 0u) >= 0) {
-    ::TranslateMessage(&msg);
-    ::DispatchMessage(&msg);
-  }
+  pumpWebView2EventsUntil([&done] { return done.load(); });
 }
 
 void EngineImpl::navigate(const Url &where) noexcept

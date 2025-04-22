@@ -18,6 +18,11 @@ public:
   Future(Future &&) noexcept = default;
   Future &operator=(Future &&) noexcept = default;
 
+  [[nodiscard]] operator const Type &() const
+  {
+    return container->get();   
+  }
+
   [[nodiscard]] const Type &get() const
   {
     return container->get();

@@ -41,7 +41,7 @@ class WindowImpl {
   // Events:
   Signal<void(BoundsChangedEvent::Ref)>
       boundsChangedEvent{};  //< The window bounds got changed.
-  Signal<void(std::uint64_t)>
+  Signal<void(KeyboardEvent::Ref)>
       keyboardEvent{};  //< A key has been pressed/released on the keyboard.
   Signal<void(std::uint64_t)>
       mouseEvent{};  //< The mouse was moved/its key was pressed/released.

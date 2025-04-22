@@ -6,6 +6,8 @@
 
 #include "TypeTraits.hpp"
 
+#include <spdlog/spdlog.h>
+
 IDAFUCKER_NAMESPACE_BEGIN
 
 namespace detail
@@ -33,27 +35,34 @@ template <std::size_t Size> class AnyBase {
       case Request::CopyConstruct:
         // Copy-construct Any from rhs assuming that any->reset() has
         // already been called
-        if constexpr (std::is_copy_constructible<T>::value) {
-          std::construct_at(
-              const_cast<T*>(lhs),
-              *static_cast<const T*>(static_cast<const AnyBase*>(rhs)->data()));
+        if constexpr (std::is_copy_constructible_v<T>) {
+          auto data =
+              static_cast<const T*>(static_cast<const AnyBase*>(rhs)->data());
+          ::new (const_cast<T*>(lhs)) T{*data};
+        }
+        break;
+      case Request::MoveConstruct:
+        // Move-construct Any from rhs assuming that any->reset() has
+        // already been called
+        if constexpr (std::is_move_constructible_v<T>) {
+          auto data =
+              static_cast<const T*>(static_cast<const AnyBase*>(rhs)->data());
+          ::new (const_cast<T*>(lhs)) T{std::move(*const_cast<T*>(data))};
         }
         break;
       case Request::Destruct:
         // Destruct an object owned by Any
-        if constexpr (std::is_array<T>::value) {
+        if constexpr (std::is_array_v<T>)
           delete[] lhs;
-        } else {
+        else
           any->repr_ == Representation::Embedded ? lhs->~T() : delete lhs;
-        }
         break;
       case Request::Copy:
-        if constexpr (std::is_copy_assignable<T>::value) {
+        if constexpr (std::is_copy_assignable_v<T>)
           *const_cast<T*>(lhs) = *static_cast<const T*>(rhs);
-        }
         break;
       case Request::Move:
-        if constexpr (std::is_move_assignable<T>::value) {
+        if constexpr (std::is_move_assignable_v<T>) {
           *const_cast<T*>(lhs) =
               std::move(*const_cast<T*>(static_cast<const T*>(rhs)));
         }
@@ -106,22 +115,34 @@ template <std::size_t Size> class AnyBase {
     }
   }
 
+  AnyBase(AnyBase&& other)
+      : rttiFunction_{other.rttiFunction_},
+        type_{other.type_},
+        repr_{other.repr_}
+  {
+    if (other.repr_ == Representation::Embedded)
+      rttiFunction_(
+          Request::MoveConstruct, this, static_cast<const void*>(&other));
+    else if (other.repr_ == Representation::Remote)
+      remote_ = std::move(other.remote_);
+    else
+      reference_ = std::move(other.reference_);
+  }
+
   ~AnyBase()
   {
     reset();
   }
 
-  // Copy-assign this to an Any
+  // Copy-assign an Any to this
   auto& operator=(const AnyBase& rhs) noexcept
   {
     reset();
 
     repr_ = rhs.repr_;
     type_ = rhs.type_;
-
     rttiFunction_ = rhs.rttiFunction_;
     rttiFunction_(Request::CopyConstruct, this, static_cast<const void*>(&rhs));
-
     return *this;
   }
 
@@ -136,9 +157,8 @@ template <std::size_t Size> class AnyBase {
       case Representation::Remote:
         return remote_;
       case Representation::Reference:
-        if (auto ptr = reference_.lock()) {
+        if (auto ptr = reference_.lock())
           return ptr.get();
-        }
         return nullptr;
     }
   }
@@ -154,9 +174,8 @@ template <std::size_t Size> class AnyBase {
       case Representation::Remote:
         return remote_;
       case Representation::Reference:
-        if (auto ptr = reference_.lock()) {
+        if (auto ptr = reference_.lock())
           return ptr.get();
-        }
         return nullptr;
     }
   }
@@ -164,19 +183,13 @@ template <std::size_t Size> class AnyBase {
   // Type-compare and get a typed data pointer
   template <typename T> [[nodiscard]] auto get() noexcept -> T*
   {
-    if (type() != typeid(T)) {
-      return nullptr;
-    }
-    return static_cast<T*>(data());
+    return type() == typeid(T) ? static_cast<T*>(data()) : nullptr;
   }
 
   // Type-compare and get a typed data const pointer
   template <typename T> [[nodiscard]] auto get() const noexcept -> const T*
   {
-    if (type() != typeid(T)) {
-      return nullptr;
-    }
-    return static_cast<const T*>(data());
+    return type() == typeid(T) ? static_cast<const T*>(data()) : nullptr;
   }
 
   // Get type information if it is valid, type information of 'void' otherwise

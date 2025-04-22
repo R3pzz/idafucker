@@ -4,7 +4,8 @@
 #include <idafucker/base/CommandLine.hpp>
 #include <idafucker/resources/ResourceManager.hpp>
 #include <idafucker/runtime2/Window.hpp>
-#include <idafucker/runtime2/WindowOptions.hpp>
+
+#include "HyperuiWindowOptions.hpp"
 
 HYPERUI_NAMESPACE_BEGIN
 
@@ -14,7 +15,7 @@ class HyperuiWindow final : public idafucker::Window {
   static constexpr auto DefaultUserDataFolder{L"C:/temp/idafucker/hyperui/"};
 
   HyperuiWindow(
-      const idafucker::WindowOptions &options,
+      const HyperuiWindowOptions &options,
       const idafucker::CommandLine<idafucker::impl::win::Character>
           &commandLine);
 

@@ -118,6 +118,17 @@ public:
     handle_->refRemoved();
   }
 
+  [[nodiscard]] constexpr bool operator==(const RcHandle& rhs) const noexcept
+  {
+    return handle_ == rhs.handle_;
+  }
+
+  [[nodiscard]] constexpr bool operator==(
+      const std::shared_ptr<T>& rhs) const noexcept
+  {
+    return handle_ == rhs.get();
+  }
+
   [[nodiscard]] constexpr bool operator==(std::nullptr_t) const noexcept
   {
     return handle_ == nullptr;

@@ -51,22 +51,26 @@ enum class ResourceFlags {
 };
 
 class Resource final : public RefCountable<> {
- public:
-  explicit Resource(
-      ResourceManager& manager, ResourceFactory::Ref factory,
-      ResourceDependencyResolver::Ref resolver, ResourceFlags flags) noexcept
-      : manager_{manager},
-        factory_{std::move(factory)},
-        resolver_{std::move(resolver)},
-        flags_{flags}
+public:
+  // Constructs the resource holder from an any-object
+  Resource(
+      ResourceManager& manager, const ResourceFlags flags, Any data) noexcept
+      : manager_{manager}, flags_{flags}, data_{std::move(data)}
   {
   }
 
-  ~Resource() noexcept = default;
+  // Constructs the resource holder in-place
+  template <class T>
+  Resource(
+      [[maybe_unused]] std::in_place_type_t<T>, ResourceManager& manager,
+      const ResourceFlags flags, auto&&... args) noexcept
+      : manager_{manager},
+        flags_{flags},
+        data_{T{std::forward<decltype(args)>(args)...}}
+  {
+  }
 
-  // Load/unload data from a stream
-  bool load(const std::istream& stream);
-  void unload();
+  ~Resource() = default;
 
   template <class T> [[nodiscard]] auto get() -> T*
   {
@@ -99,13 +103,18 @@ class Resource final : public RefCountable<> {
     flags_.add(ResourceFlags::Required);
   }
 
- private:
+private:
+  void reset(Any &&newData) noexcept
+  {
+    data_ = newData;
+  }
+
   ResourceManager& manager_;
-  Any data_;                                  //< The data
-  ResourceFactory::Ref factory_;              //< Resource constructor
-  ResourceDependencyResolver::Ref resolver_;  //< Dependency resolver
-  std::vector<Resource*> deps_;               //< Dependencies
-  Flags<ResourceFlags> flags_;                //< Flags
+  Any data_;                     //< The data
+  std::vector<Resource*> deps_;  //< Dependencies
+  Flags<ResourceFlags> flags_;   //< Flags
+
+  friend class ResourceManager;
 
   IDAFUCKER_NONCOPYABLE(Resource);
 };

@@ -9,7 +9,7 @@ class HtmlFileFactory final : public idafucker::ResourceFactory {
   constexpr HtmlFileFactory() noexcept = default;
 
   [[nodiscard]] idafucker::Any construct(
-      const std::istream& stream) const override;
+      const std::filesystem::path& dataPath) const override;
 
   [[nodiscard]] const std::type_info& type() const noexcept override;
 };

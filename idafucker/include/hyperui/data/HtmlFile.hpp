@@ -6,7 +6,7 @@
 HYPERUI_NAMESPACE_BEGIN
 
 class HtmlFile {
- public:
+public:
   explicit constexpr HtmlFile(std::string data) noexcept
       : data_{std::move(data)}
   {
@@ -19,12 +19,15 @@ class HtmlFile {
   {
   }
 
+  constexpr HtmlFile(const HtmlFile &) noexcept = default;
+  constexpr HtmlFile(HtmlFile &&) noexcept = default;
+
   [[nodiscard]] constexpr const std::string &data() const noexcept
   {
     return data_;
   }
 
- private:
+private:
   std::string data_;
 };
 

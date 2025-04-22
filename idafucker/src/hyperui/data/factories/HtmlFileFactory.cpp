@@ -1,12 +1,19 @@
 #include <hyperui/data/HtmlFile.hpp>
 #include <hyperui/data/factories/HtmlFileFactory.hpp>
+#include <idafucker/exceptions/Exception.hpp>
+
+#include <fstream> // ifstream
 
 HYPERUI_NAMESPACE_BEGIN
 
 [[nodiscard]] idafucker::Any HtmlFileFactory::construct(
-    const std::istream& stream) const
+    const std::filesystem::path& dataPath) const
 {
-  return idafucker::makeAny<HtmlFile>(const_cast<std::istream&>(stream));
+  std::ifstream stream{dataPath};
+  if (!stream.is_open())
+    throw idafucker::Exception{"Cannot open `"} << dataPath.string() << "`";
+
+  return idafucker::makeAny<HtmlFile>(stream);
 }
 
 [[nodiscard]] const std::type_info& HtmlFileFactory::type() const noexcept

@@ -80,14 +80,16 @@
     <ClInclude Include="include\hyperui\runtime\impl\win\IncludeWebView2.hpp" />
     <ClInclude Include="include\hyperui\runtime\impl\win\EngineImpl.hpp" />
     <ClInclude Include="include\hyperui\runtime\Engine.hpp" />
-    <ClInclude Include="src\hyperui\concepts\HasSerializer.hpp" />
     <ClInclude Include="include\hyperui\rpc\Host.hpp" />
     <ClInclude Include="include\idafucker\base\future\Promise.hpp" />
     <ClInclude Include="include\idafucker\base\future\Future.hpp" />
     <ClInclude Include="include\idafucker\base\future\ValueContainer.hpp" />
+    <ClInclude Include="include\idafucker\runtime2\events\KeyboardEvent.hpp" />
+    <ClInclude Include="include\hyperui\HyperuiWindowOptions.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".clang-format" />
     <None Include="packages.config" />
+    <None Include="examples\hyperui\bind\index.html" />
   </ItemGroup>
 </Project>
