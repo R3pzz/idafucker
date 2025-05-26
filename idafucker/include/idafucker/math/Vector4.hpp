@@ -1,10 +1,11 @@
 #pragma once
-#include <idafucker/CoreDefines.hpp>
-#include <idafucker/base/TypeTraits.hpp>
+#include <idafucker/Config.hpp>
 
-IDAFUCKER_NAMESPACE_BEGIN
+#include <fuse/TypeTraits.hpp>
 
-template <scalar T> class Vector4 {
+namespace idafucker
+{
+template <fuse::scalar T> class Vector4 {
 public:
   constexpr Vector4() noexcept = default;
 
@@ -12,5 +13,4 @@ public:
 
   T x{}, y{}, z{}, w{};
 };
-
-IDAFUCKER_NAMESPACE_END
+}  // namespace idafucker

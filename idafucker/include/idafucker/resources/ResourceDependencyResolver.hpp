@@ -1,7 +1,9 @@
 #pragma once
-#include <idafucker/CoreDefines.hpp>
+#include <filesystem>  // path
+#include <memory>      // shared_ptr
+#include <vector>      // vector
 
-#include "ResourceError.hpp"
+#include <idafucker/Config.hpp>
 
 //
 // Abstract dependency resolver class that is implemented differently
@@ -14,8 +16,8 @@
 //  * Manifests -> Parse the .json file.
 //
 
-IDAFUCKER_NAMESPACE_BEGIN
-
+namespace idafucker
+{
 using DependencyList = std::vector<std::filesystem::path>;
 
 class ResourceDependencyResolver {
@@ -25,8 +27,7 @@ public:
   virtual ~ResourceDependencyResolver() noexcept = default;
 
   // Parse the resource and extract all dependencies
-  [[nodiscard]] virtual auto resolve(const std::istream& stream) const
-      -> ResourceErrorOr<DependencyList> = 0;
+  [[nodiscard]] virtual DependencyList resolve(
+      const std::istream& stream) const = 0;
 };
-
-IDAFUCKER_NAMESPACE_END
+}  // namespace idafucker

@@ -1,0 +1,11 @@
+{
+  "dependencies": [
+    "boost-signals2",
+    "boost-test",
+    "boost-thread",
+    "nlohmann-json",
+    "spdlog",
+    "zydis",
+    "webview2"
+  ]
+}

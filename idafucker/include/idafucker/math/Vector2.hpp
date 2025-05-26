@@ -1,19 +1,17 @@
 #pragma once
-#include <idafucker/CoreDefines.hpp>
-#include <idafucker/base/TypeTraits.hpp>
+#include <idafucker/Config.hpp>
 
-IDAFUCKER_NAMESPACE_BEGIN
+#include <fuse/TypeTraits.hpp>
 
-template <scalar T> class Vector2 {
+namespace idafucker
+{
+template <fuse::scalar Base> class Vector2 {
 public:
   constexpr Vector2() noexcept = default;
 
-  constexpr Vector2(T&& x, T&& y) noexcept
-      : x{std::forward<T>(x)}, y{std::forward<T>(y)}
-  {
-  }
+  constexpr Vector2(Base&& x, Base&& y) noexcept
+      : x{std::forward<Base>(x)}, y{std::forward<Base>(y)} {}
 
-  T x{}, y{};
+  Base x{}, y{};
 };
-
-IDAFUCKER_NAMESPACE_END
+}  // namespace idafucker

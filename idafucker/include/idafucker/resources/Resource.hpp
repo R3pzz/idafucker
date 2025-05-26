@@ -2,121 +2,80 @@
 #include <any>     // any
 #include <atomic>  // atomic_size_t
 #include <memory>  // unique_ptr
+#include <vector>  // vector
 
-#include <idafucker/CoreDefines.hpp>
-#include <idafucker/base/Any.hpp>
-#include <idafucker/base/Flags.hpp>
-#include <idafucker/base/RefCount.hpp>
+#include <idafucker/Config.hpp>
 
-#include "ResourceDependencyResolver.hpp"
-#include "ResourceError.hpp"
-#include "ResourceFactory.hpp"
+#include <fuse/Any.hpp>
+#include <fuse/Bits.hpp>
+#include <fuse/Class.hpp>
+#include <fuse/RefCount.hpp>
 
-//
-// A Resource is basically an object whose data is loaded from somewhere(whether
-// it be a string, a drive, a website, etc...).
-//
-// Resource's on-disk representation has its own:
-//
-//  * Traits file - tells us information about the resource, meaning, what
-//    is its data file, how the data is stored, what is the destination type,
-//    when it was created/modified, its CRC, its dependencies, etc...;
-//  * Data file - provides the actual data of the resource, meaning that if a
-//    resource is an image, the data will be stored in either PNG, JPG, BMP,
-//    etc...
-//
-// A Resource object has its own:
-//
-//  * Reference count - used for optimizing memory usage and unloading
-//  unnecessary
-//    resources;
-//  * Traits object - a virtual representation of the traits file. Also contains
-//    a pointer to the resource factory of a given type. If no factory exists,
-//    the resource is not loaded;
-//  * Data pointer - a pointer to an object of a specified data type(
-//    ex: Data file is an image, Data pointer points to an object of a type
-//    'Image');
-//  * Flags - used for internal computations;
-//  * Type - type identification of the resource;
-//
-
-IDAFUCKER_NAMESPACE_BEGIN
-
+namespace idafucker
+{
 class ResourceManager;
 
-enum class ResourceFlags {
-  None = 0u,
-  Required = 1u << 0u,  //< The resource is required to stay in memory even if
-                        // not referenced.
-};
-
-class Resource final : public RefCountable<> {
+class Resource final : public fuse::RefCountable<> {
 public:
+  enum class Flags {
+    kNone = 0u,
+    kRequired =
+        1u << 0u,  //< The resource is required to stay in memory even if
+                   // not referenced.
+  };
+
   // Constructs the resource holder from an any-object
-  Resource(
-      ResourceManager& manager, const ResourceFlags flags, Any data) noexcept
-      : manager_{manager}, flags_{flags}, data_{std::move(data)}
-  {
-  }
+  Resource(ResourceManager& manager, const Flags flags, fuse::Any data) noexcept
+      : manager{manager}, flags{flags}, data{std::move(data)} {}
 
   // Constructs the resource holder in-place
   template <class T>
   Resource(
       [[maybe_unused]] std::in_place_type_t<T>, ResourceManager& manager,
-      const ResourceFlags flags, auto&&... args) noexcept
-      : manager_{manager},
-        flags_{flags},
-        data_{T{std::forward<decltype(args)>(args)...}}
-  {
-  }
+      const Flags flags, auto&&... args) noexcept
+      : manager{manager},
+        flags{flags},
+        data{T{std::forward<decltype(args)>(args)...}} {}
 
   ~Resource() = default;
 
-  template <class T> [[nodiscard]] auto get() -> T*
-  {
-    return data_.get<T>();
+  template <class T> [[nodiscard]] auto get() -> T* {
+    return data.get<T>();
   }
 
-  template <class T> [[nodiscard]] auto get() const -> const T*
-  {
-    return data_.get<T>();
+  template <class T> [[nodiscard]] auto get() const -> const T* {
+    return data.get<T>();
   }
 
-  [[nodiscard]] const std::type_info& type() const noexcept
-  {
-    return data_.type();
+  [[nodiscard]] const std::type_info& type() const noexcept {
+    return data.type();
   }
 
   // Resource properties
-  [[nodiscard]] constexpr bool empty() const noexcept
-  {
-    return data_.empty();
+  [[nodiscard]] constexpr bool empty() const noexcept {
+    return data.empty();
   }
 
-  [[nodiscard]] constexpr bool required() const noexcept
-  {
-    return flags_.contains(ResourceFlags::Required);
+  [[nodiscard]] constexpr bool isRequired() const noexcept {
+    return flags.contains(Flags::kRequired);
   }
 
-  constexpr void require() noexcept
-  {
-    flags_.add(ResourceFlags::Required);
+  constexpr void markRequired() noexcept {
+    flags.add(Flags::kRequired);
   }
 
 private:
-  void reset(Any&& newData) noexcept
-  {
-    data_ = newData;
+  void reset(fuse::Any&& to) noexcept {
+    data = to;
   }
 
-  ResourceManager& manager_;
-  Any data_;                     //< The data
-  std::vector<Resource*> deps_;  //< Dependencies
-  Flags<ResourceFlags> flags_;   //< Flags
+  ResourceManager& manager;
+  fuse::Any data;               //< The data
+  std::vector<Resource*> deps;  //< Dependencies
+  fuse::Bits<Flags> flags;      //< Flags
 
   friend class ResourceManager;
 
-  IDAFUCKER_NONCOPYABLE(Resource);
+  FUSE_NONCOPYABLE(Resource);
 };
-
-IDAFUCKER_NAMESPACE_END
+}  // namespace idafucker

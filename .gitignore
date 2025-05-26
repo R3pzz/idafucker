@@ -1,8 +1,22 @@
-.qodo
-.vs
+# Output stuff
+build/
+msvc/
+out/
 
-vcpkg_installed
+# vcpkg artifacts
+vcpkg_installed/
+vcpkg_packages/
+vcpkg_buildtrees/
+vcpkg_downloads/
 
-[Bb]uild
-[Mm]svc
-[Oo]ut
+# NuGet packages
+packages/
+
+# CMake specific
+[Cc]MakeFiles/
+CMakeCache.txt
+
+# Misc
+.qodo/
+.vscode/
+.vs/

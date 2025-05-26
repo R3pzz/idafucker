@@ -1,0 +1,1 @@
+#include "WindowMessageTranslator.hpp"
