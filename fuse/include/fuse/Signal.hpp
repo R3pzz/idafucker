@@ -27,24 +27,24 @@ public:
   }
 
   constexpr std::size_t connect(Slot &&slot) noexcept {
-    slots.push_back(std::forward<Slot>(slot));
-    return slots.size() - 1;
+    slots_.push_back(std::forward<Slot>(slot));
+    return slots_.size() - 1;
   }
 
   constexpr void remove(const std::size_t id) noexcept {
-    slots.erase(std::begin(slots) + id);
+    slots_.erase(std::begin(slots_) + id);
   }
 
   constexpr void clear() noexcept {
-    slots.clear();
+    slots_.clear();
   }
 
   void emit(auto &&...args) const noexcept {
-    for (auto &&slot : slots)
+    for (auto &&slot : slots_)
       slot(std::forward<decltype(args)>(args)...);
   }
 
 private:
-  std::vector<Slot> slots{};
+  std::vector<Slot> slots_{};
 };
 }  // namespace fuse

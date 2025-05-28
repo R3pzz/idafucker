@@ -12,10 +12,10 @@ class Window final : public idafucker::Window {
 public:
   using Ref = std::shared_ptr<Window>;
 
-  struct Options : idafucker::WindowOptions {
-    static constexpr auto kDefaultUDF{L"C:/temp/idafucker/hyperui/"};
+  struct Options : idafucker::Window::Options {
+    static constexpr auto k_defaultUDF{L"C:/temp/idafucker/hyperui/"};
 
-    std::wstring userDataFolder{kDefaultUDF};
+    std::wstring userDataFolder{k_defaultUDF};
   };
 
   explicit Window(const idafucker::Application &app, const Options &options);

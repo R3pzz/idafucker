@@ -1,0 +1,59 @@
+Checks: >
+  -*,
+  bugprone-*,
+  google-*,
+  misc-*,
+  modernize-*,
+  performance-*,
+  readability-*,
+  -google-readability-braces-around-statements,
+  -google-readability-namespace-comments,
+  -google-runtime-references,
+  -misc-non-private-member-variables-in-classes,
+  -misc-const-correctness,
+  -misc-include-cleaner,
+  -modernize-use-trailing-return-type,
+  -performance-move-const-arg,
+  -readability-braces-around-statements,
+  -readability-identifier-length,
+  -readability-magic-numbers,
+  -readability-named-parameter,
+  -readability-redundant-declaration,
+  -readability-function-cognitive-complexity,
+  -readability-uppercase-literal-suffix,
+  -bugprone-narrowing-conversions,
+  -bugprone-macro-parenthesis,
+  -bugprone-easily-swappable-parameters,
+  -bugprone-implicit-widening-of-multiplication-result,
+  -bugprone-unchecked-optional-access
+
+# Turn all the warnings from the checks above into errors.
+WarningsAsErrors: "*"
+
+# C++23 library - we only need the .hpp files
+HeaderFilterRegex: "^(fuse/|idafucker/|hyperui/|unveil/).*\.hpp$"
+
+CheckOptions:
+  readability-identifier-naming.NamespaceCase: lower_case
+  readability-identifier-naming.ClassCase: CamelCase
+  readability-identifier-naming.StructCase: CamelCase
+  readability-identifier-naming.TemplateParameterCase: CamelCase
+  readability-identifier-naming.FunctionCase: camelBack
+  readability-identifier-naming.VariableCase: camelBack
+  readability-identifier-naming.ClassMemberCase: camelBack
+  readability-identifier-naming.PrivateMemberSuffix: _
+  readability-identifier-naming.ProtectedMemberSuffix: _
+  readability-identifier-naming.EnumConstantCase: CamelCase
+  readability-identifier-naming.ConstexprVariableCase: camelBack
+  readability-identifier-naming.ConstexprVariablePrefix: k_
+  readability-identifier-naming.GlobalConstantCase: camelBack
+  readability-identifier-naming.GlobalConstantPrefix: k_
+  readability-identifier-naming.MemberConstantCase: camelBack
+  readability-identifier-naming.MemberConstantPrefix: k_
+  readability-identifier-naming.StaticConstantCase: camelBack
+  readability-identifier-naming.StaticConstantPrefix: k_
+  readability-implicit-bool-conversion.AllowIntegerConditions: 1  
+  readability-implicit-bool-conversion.AllowPointerConditions: 1
+  readability-function-cognitive-complexity.IgnoreMacros: 1
+  modernize-use-nullptr.NullMacros: 1
+  

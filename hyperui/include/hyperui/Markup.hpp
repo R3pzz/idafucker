@@ -14,6 +14,8 @@ public:
     [[nodiscard]] fuse::Any construct(
         const std::filesystem::path& dataPath) const override;
     [[nodiscard]] const std::type_info& type() const noexcept override;
+
+    [[nodiscard]] static idafucker::ResourceFactory::Ref make();
   };
 
   constexpr Markup() noexcept = default;

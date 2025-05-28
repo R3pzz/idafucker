@@ -1,13 +1,10 @@
 #pragma once
-#include <hyperui/CoreDefines.hpp>
+#include <hyperui/Config.hpp>
 
-HYPERUI_NAMESPACE_BEGIN
-
-namespace detail
+namespace hyperui::detail
 {
 
-constexpr auto RpcInitScript{ // clang-format disable
-#if defined(IDAFUCKER_PLATFORM_WIN32)
+constexpr auto k_jsBridgeScript{ // clang-format disable
   LR"js(
 (() => {
     const pending = new Map();
@@ -62,11 +59,6 @@ constexpr auto RpcInitScript{ // clang-format disable
     });
 })();
   )js"
-#elif defined(IDAFUCKER_PLATFORM_LINUX)
-#else
-  #error "Platform not supported"
-#endif  // defined(IDAFUCKER_PLATFORM_WIN32)
 };
-}  // namespace detail
 
-HYPERUI_NAMESPACE_END
+}  // namespace hyperui::detail

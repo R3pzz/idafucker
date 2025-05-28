@@ -1,6 +1,6 @@
 #pragma once
-#include <idafucker/CoreDefines.hpp>
-#include <idafucker/base/BitSet.hpp>
+#include <unveil/Config.hpp>
+#include <fuse/Bits.hpp>
 
 #include <Zydis/Zydis.h>
 
@@ -9,43 +9,43 @@ IDAFUCKER_NAMESPACE_BEGIN
 namespace disasm
 {
 enum class PrefixGroup : std::uint8_t {
-  kNone,  //< *undefined*
-  kREX,   //< REX prefix group.
-  kXOP,   //< XOP prefix group (vector extensions).
-  kVEX,   //< VEX prefix group (vector extensions).
-  kEVEX,  //< EVEX prefix group (vector extensions).
-  kMVEX,  //< MVEX prefix group (vector extensions).
+  None,  //< *undefined*
+  REX,   //< REX prefix group.
+  XOP,   //< XOP prefix group (vector extensions).
+  VEX,   //< VEX prefix group (vector extensions).
+  EVEX,  //< EVEX prefix group (vector extensions).
+  MVEX,  //< MVEX prefix group (vector extensions).
 };
 
 struct PrefixEncoding {
   using WordSize = std::uint32_t;
 
   // Memory map: |XXX-----|--------|--------|--------|
-  static constexpr BitRange kGroup{0u, 2u};  //< Related prefix group.
+  static constexpr BitRange k_group{0u, 2u};  //< Related prefix group.
   // Memory map: |---XXXXX|--------|--------|--------|
-  static constexpr BitRange kRelativePos{
+  static constexpr BitRange k_relativePos{
       3u, 7u};  //< Prefix byte position relative to the instruction start.
   // Memory map: |--------|XXXXXXXX|XXXXXXXX|XXXXXXXX|
-  static constexpr BitRange kMeta{8u, 31u};  //< Group-specific prefix meta.
+  static constexpr BitRange k_meta{8u, 31u};  //< Group-specific prefix meta.
 
   [[nodiscard]] static constexpr WordSize encodeGroup(
       PrefixGroup group) noexcept {
-    return kGroup.write(static_cast<WordSize>(group));
+    return k_group.write(static_cast<WordSize>(group));
   }
 
   [[nodiscard]] static constexpr WordSize encodeRelativePos(
       std::uint8_t relativePos) noexcept {
-    return kRelativePos.write(static_cast<WordSize>(relativePos));
+    return k_relativePos.write(static_cast<WordSize>(relativePos));
   }
 
   [[nodiscard]] static constexpr WordSize encodeMeta(WordSize meta) noexcept {
-    return kMeta.write(static_cast<WordSize>(meta));
+    return k_meta.write(static_cast<WordSize>(meta));
   }
 };
 
 class Prefix {
 public:
-  static constexpr auto kUndefinedPos{0b11111u};
+  static constexpr auto k_undefinedPos{0b11111u};
 
   // Initialize a completely blank `Prefix` object.
   constexpr Prefix() noexcept = default;

@@ -124,10 +124,12 @@ private:
   std::vector<View> data_{};
 };
 
+# if 0
 template <typename Character>
 CommandLine(std::string_view) -> CommandLine<char>;
 template <typename Character>
 CommandLine(std::wstring_view) -> CommandLine<wchar_t>;
+# endif
 
 // Retrieve a command line that was passed to the system to create the current
 // process.

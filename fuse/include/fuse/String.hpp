@@ -20,8 +20,8 @@ struct ToUnicode final {
   }
 
 private:
-  [[nodiscard]] std::wstring impl(
-      const char* data, const std::size_t size) const;
+  [[nodiscard]] static std::wstring impl(const char* data,
+                                         const std::size_t size);
 };
 
 struct ToUtf8 final {
@@ -41,8 +41,8 @@ struct ToUtf8 final {
   }
 
 private:
-  [[nodiscard]] std::string impl(
-      const wchar_t* data, const std::size_t size) const;
+  [[nodiscard]] static std::string impl(const wchar_t* data,
+                                        const std::size_t size);
 };
 
 [[nodiscard]] auto unicodeCast(const auto& value) {

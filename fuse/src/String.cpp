@@ -1,11 +1,11 @@
-#include <fuse/String.hpp>
+#include <Windows.h>  // MultiByteToWideChar, WideCharToMultiByte
 
-#include <Windows.h> // MultiByteToWideChar, WideCharToMultiByte
+#include <fuse/String.hpp>
 
 namespace fuse
 {
-[[nodiscard]] std::wstring ToUnicode::impl(
-    const char* data, const std::size_t size) const {
+[[nodiscard]] std::wstring ToUnicode::impl(const char* data,
+                                           const std::size_t size) {
 #if FUSE_PLATFORM_WIN
   std::wstring converted{};
 
@@ -15,8 +15,8 @@ namespace fuse
     throw std::runtime_error{"bad wide char cast"};
 
   converted.resize(static_cast<std::size_t>(convertedSize));
-  if (::MultiByteToWideChar(
-          CP_UTF8, NULL, data, size, converted.data(), converted.size()) < 0)
+  if (::MultiByteToWideChar(CP_UTF8, NULL, data, size, converted.data(),
+                            converted.size()) < 0)
     throw std::runtime_error{"bad wide char cast"};
 
   return converted;
@@ -27,8 +27,8 @@ namespace fuse
 #endif
 }
 
-[[nodiscard]] std::string ToUtf8::impl(
-    const wchar_t* data, const std::size_t size) const {
+[[nodiscard]] std::string ToUtf8::impl(const wchar_t* data,
+                                       const std::size_t size) {
 #if FUSE_PLATFORM_WIN
   std::string converted{};
 
@@ -38,9 +38,8 @@ namespace fuse
     throw std::runtime_error{"bad multibyte cast"};
 
   converted.resize(static_cast<std::size_t>(convertedSize));
-  if (::WideCharToMultiByte(
-          CP_UTF8, NULL, data, size, converted.data(), converted.size(), NULL,
-          NULL) < 0)
+  if (::WideCharToMultiByte(CP_UTF8, NULL, data, size, converted.data(),
+                            converted.size(), NULL, NULL) < 0)
     throw std::runtime_error{"bad multibyte cast"};
 
   return converted;

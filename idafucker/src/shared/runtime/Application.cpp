@@ -11,15 +11,15 @@ namespace idafucker
 {
 
 Application::Application(const fuse::CommandLine<wchar_t> &commandLine)
-    : nativeApplication{new detail::NativeApplication{commandLine}} {}
+    : native_{new detail::NativeApplication{commandLine}} {}
 
 Application::~Application() {
   terminationEvent.emit();
 }
 
 void Application::runEventLoop(const std::function<void()> &loopFunc) noexcept {
-  while (!awaitingTermination)
-    nativeApplication->runEventLoop(loopFunc);
+  while (!terminating_)
+    native_->runEventLoop(loopFunc);
 }
 
 }  // namespace idafucker

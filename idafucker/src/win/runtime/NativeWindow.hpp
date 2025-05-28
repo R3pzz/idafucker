@@ -1,19 +1,19 @@
 #pragma once
 #define FUSE_EXPOSE_SYSTEM_HEADERS
 #include <idafucker/Config.hpp>
-#include <idafucker/runtime/Window.hpp>
 #include <idafucker/runtime/Application.hpp>
-#include <idafucker/runtime/WindowOptions.hpp>
+#include <idafucker/runtime/Window.hpp>
 
 #include <fuse/CommandLine.hpp>
 
 namespace idafucker::detail
 {
+
 class NativeWindow final {
 public:
-  explicit NativeWindow(
-      const Application& application, const WindowOptions& options,
-      Window* wrapper);
+  explicit NativeWindow(const Application& application,
+                        const Window::Options& options,
+                        Window* wrapper);
   ~NativeWindow() noexcept;
 
   void show() noexcept;
@@ -23,8 +23,8 @@ public:
   void restoreDefaultSize() noexcept;
   void adjustBounds(const Rectangle<int>& rect) noexcept;
   [[nodiscard]] Rectangle<int> clientAreaBounds() const noexcept;
-
   [[nodiscard]] int dpi() const noexcept;
+
   [[nodiscard]] constexpr HWND handle() const noexcept {
     return handle_;
   }
@@ -41,4 +41,5 @@ private:
 
   FUSE_NONCOPYABLE(NativeWindow);
 };
+
 }  // namespace idafucker::detail

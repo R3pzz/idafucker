@@ -18,8 +18,8 @@ class ResourceManager;
 class Resource final : public fuse::RefCountable<> {
 public:
   enum class Flags {
-    kNone = 0u,
-    kRequired =
+    None = 0u,
+    Required =
         1u << 0u,  //< The resource is required to stay in memory even if
                    // not referenced.
   };
@@ -57,11 +57,11 @@ public:
   }
 
   [[nodiscard]] constexpr bool isRequired() const noexcept {
-    return flags.contains(Flags::kRequired);
+    return flags.contains(Flags::Required);
   }
 
   constexpr void markRequired() noexcept {
-    flags.add(Flags::kRequired);
+    flags.add(Flags::Required);
   }
 
 private:

@@ -7,9 +7,9 @@
 #include <hyperui/Config.hpp>
 #include <hyperui/Window.hpp>
 
-#include <fuse/Signal.hpp>
-
 #include "WebViewHelpers.hpp"
+
+#include <fuse/Signal.hpp>
 
 namespace hyperui::detail
 {
@@ -29,8 +29,8 @@ public:
 
   [[nodiscard]] bool requestWebView2Creation(const std::wstring &udf);
 
-  HRESULT STDMETHODCALLTYPE
-  QueryInterface(REFIID riid, void **ppvObject) override {
+  HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid,
+                                           void **ppvObject) override {
     if (ppvObject == nullptr)
       return E_INVALIDARG;
 
@@ -51,21 +51,21 @@ public:
     return --refCount;
   }
 
-  HRESULT STDMETHODCALLTYPE
-  Invoke(HRESULT errorCode, ICoreWebView2Environment *result) override {
+  HRESULT STDMETHODCALLTYPE Invoke(HRESULT errorCode,
+                                   ICoreWebView2Environment *result) override {
     return handleEnvCreated(errorCode, result);
   }
 
-  HRESULT STDMETHODCALLTYPE
-  Invoke(HRESULT errorCode, ICoreWebView2Controller *result) override {
+  HRESULT STDMETHODCALLTYPE Invoke(HRESULT errorCode,
+                                   ICoreWebView2Controller *result) override {
     return handleCtrlCreated(errorCode, result);
   }
 
 private:
-  [[nodiscard]] HRESULT handleEnvCreated(
-      HRESULT code, ICoreWebView2Environment *env);
-  [[nodiscard]] HRESULT handleCtrlCreated(
-      HRESULT code, ICoreWebView2Controller *ctrl);
+  [[nodiscard]] HRESULT handleEnvCreated(HRESULT code,
+                                         ICoreWebView2Environment *env);
+  [[nodiscard]] HRESULT handleCtrlCreated(HRESULT code,
+                                          ICoreWebView2Controller *ctrl);
 
   std::atomic_size_t refCount{0u};
   std::function<void(ICoreWebView2Controller *)> completeHandler{};
@@ -85,8 +85,8 @@ public:
 
   constexpr COMEventHandler() noexcept = default;
 
-  HRESULT STDMETHODCALLTYPE
-  QueryInterface(REFIID riid, void **ppvObject) override {
+  HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid,
+                                           void **ppvObject) override {
     if (ppvObject == nullptr)
       return E_INVALIDARG;
 
@@ -112,9 +112,9 @@ public:
     }
   }
 
-  HRESULT STDMETHODCALLTYPE Invoke(
-      ICoreWebView2 *core,
-      ICoreWebView2WebMessageReceivedEventArgs *args) override {
+  HRESULT STDMETHODCALLTYPE
+  Invoke(ICoreWebView2 *core,
+         ICoreWebView2WebMessageReceivedEventArgs *args) override {
     return handleWebMessageReceived(core, args);
   }
 
@@ -127,8 +127,10 @@ public:
 
 private:
   [[nodiscard]] HRESULT handleWebMessageReceived(
-      ICoreWebView2 *core, ICoreWebView2WebMessageReceivedEventArgs *args);
-  [[nodiscard]] HRESULT handleInitScriptAdded(HRESULT code, LPCWSTR result);
+      [[maybe_unused]] ICoreWebView2 *,
+      ICoreWebView2WebMessageReceivedEventArgs *args) const;
+  [[nodiscard]] HRESULT handleInitScriptAdded(HRESULT code,
+                                              LPCWSTR result) const;
 
   std::atomic_size_t refCount{0u};
 

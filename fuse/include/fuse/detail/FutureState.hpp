@@ -11,9 +11,9 @@ namespace fuse::detail
 template <typename Type> class FutureState : public RefCountable<> {
 private:
   enum class Contained {
-    kNone,
-    kValue,
-    kException,
+    None,
+    Value,
+    Exception,
   };
 
 public:
@@ -21,86 +21,86 @@ public:
   ~FutureState() = default;
 
   FutureState &operator=(const Type &data) {
-    if (contained != Contained::kNone) [[unlikely]]
+    if (contained_ != Contained::None) [[unlikely]]
       throw std::runtime_error{"future state has a value"};
 
-    std::lock_guard lock{mutex};
-    value = data;
-    contained = Contained::kValue;
+    std::lock_guard lock{mutex_};
+    value_ = data;
+    contained_ = Contained::Value;
     return *this;
   }
 
   FutureState &operator=(Type &&data) {
-    if (contained != Contained::kNone) [[unlikely]]
+    if (contained_ != Contained::None) [[unlikely]]
       throw std::runtime_error{"future state has a value"};
 
-    std::lock_guard lock{mutex};
-    value = std::move(data);
-    contained = Contained::kValue;
+    std::lock_guard lock{mutex_};
+    value_ = std::move(data);
+    contained_ = Contained::Value;
     return *this;
   }
 
   FutureState &operator=(const std::exception_ptr &eptr) {
-    if (contained != Contained::kNone) [[unlikely]]
+    if (contained_ != Contained::None) [[unlikely]]
       throw std::runtime_error{"future state has a value"};
 
-    std::lock_guard lock{mutex};
-    exception = eptr;
-    contained = Contained::kException;
+    std::lock_guard lock{mutex_};
+    exception_ = eptr;
+    contained_ = Contained::Exception;
     return *this;
   }
 
   FutureState &operator=(std::exception_ptr &&eptr) {
-    if (contained != Contained::kNone) [[unlikely]]
+    if (contained_ != Contained::None) [[unlikely]]
       throw std::runtime_error{"future state has a value"};
 
-    std::lock_guard lock{mutex};
-    exception = std::move(eptr);
-    contained = Contained::kException;
+    std::lock_guard lock{mutex_};
+    exception_ = std::move(eptr);
+    contained_ = Contained::Exception;
     return *this;
   }
 
   [[nodiscard]] constexpr bool hasValue() const noexcept {
-    return contained == Contained::kValue;
+    return contained_ == Contained::Value;
   }
 
   [[nodiscard]] constexpr bool hasException() const noexcept {
-    return contained == Contained::kException;
+    return contained_ == Contained::Exception;
   }
 
   [[nodiscard]] constexpr bool ready() const noexcept {
-    return contained != Contained::kNone;
+    return contained_ != Contained::None;
   }
 
   [[nodiscard]] const Type &get() const {
     // Wait for some promise to set the value
-    std::unique_lock lock{mutex};
-    cv.wait(lock, [this] { return contained != Contained::kNone; });
+    std::unique_lock lock{mutex_};
+    cv_.wait(lock, [this] { return contained_ != Contained::None; });
 
-    if (contained == Contained::kException)
-      std::rethrow_exception(exception);
+    if (contained_ == Contained::Exception)
+      std::rethrow_exception(exception_);
     else
-      return value;
+      return value_;
   }
 
   [[nodiscard]] constexpr Type tryGet() const {
-    if (contained == Contained::kValue)
-      return value;
-    else if (contained == Contained::kException)
-      std::rethrow_exception(exception);
+    if (contained_ == Contained::Value)
+      return value_;
+    else if (contained_ == Contained::Exception)
+      std::rethrow_exception(exception_);
     return {};
   }
 
 private:
   union {
-    Type value{};
-    std::exception_ptr exception;
+    Type value_{};
+    std::exception_ptr exception_;
   };
 
-  Contained contained{Contained::kNone};
+  Contained contained_{Contained::None};
 
   // Multi-threading adapters
-  mutable std::condition_variable cv{};
-  mutable std::mutex mutex{};
+  mutable std::condition_variable cv_{};
+  mutable std::mutex mutex_{};
 };
 }  // namespace fuse::detail

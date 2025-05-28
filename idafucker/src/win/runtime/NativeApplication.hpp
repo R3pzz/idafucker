@@ -9,14 +9,12 @@ namespace idafucker::detail
 {
 class NativeApplication final {
 public:
-  static constexpr auto kClassName{L"IDAFUCKER"};
+  static constexpr auto k_className{L"IDAFUCKER"};
 
   explicit NativeApplication(const fuse::CommandLine<wchar_t> &commandLine);
   ~NativeApplication() noexcept;
 
-  [[nodiscard]] constexpr ATOM defaultWindowAtom() const noexcept {
-    return winAtom_;
-  }
+  [[nodiscard]] constexpr ATOM atom() const noexcept { return atom_; }
 
   void runEventLoop(const std::function<void()> &loopFunc) noexcept;
   
@@ -25,7 +23,7 @@ private:
   void unregisterClass() noexcept;
   void configureDpi();
 
-  ATOM winAtom_;
+  ATOM atom_;
 
   FUSE_NONCOPYABLE(NativeApplication);
 };

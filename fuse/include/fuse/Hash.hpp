@@ -6,8 +6,8 @@
 namespace fuse
 {
 struct Fnv1aSpecifications {
-  static constexpr auto kBasis = 0xcbf29ce484222325ull;
-  static constexpr auto kPrime = 0x00000100000001b3ull;
+  static constexpr auto k_basis{0xcbf29ce484222325ull};
+  static constexpr auto k_prime{0x00000100000001b3ull};
 };
 
 template <typename T> struct Hash;
@@ -17,10 +17,10 @@ template <typename Base> struct Hash<Base[]> {
 
   [[nodiscard]] constexpr std::size_t operator()(
       const Base data[], std::size_t length) const noexcept {
-    auto hash{Fnv1aSpecifications::kBasis};
+    auto hash{Fnv1aSpecifications::k_basis};
     for (std::size_t i{}; i < length; ++i) {
       hash ^= static_cast<std::size_t>(data[i]);
-      hash *= Fnv1aSpecifications::kPrime;
+      hash *= Fnv1aSpecifications::k_prime;
     }
 
     return hash;

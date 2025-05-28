@@ -17,9 +17,7 @@ public:
   Application(const fuse::CommandLine<wchar_t> &commandLine);
   ~Application();
 
-  constexpr void terminate() noexcept {
-    awaitingTermination = true;
-  }
+  constexpr void terminate() noexcept { terminating_ = true; }
 
   void runEventLoop(const std::function<void()> &loopFunc) noexcept;
 
@@ -29,8 +27,8 @@ public:
                            //`~ApplicationImpl()` gets called.
 
 private:
-  bool awaitingTermination{false};
-  std::unique_ptr<detail::NativeApplication> nativeApplication;
+  bool terminating_{false};
+  std::unique_ptr<detail::NativeApplication> native_;
 
   friend class detail::NativeWindow;
 

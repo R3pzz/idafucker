@@ -35,11 +35,17 @@ NativeEngine::NativeEngine(HWND window, const std::wstring &udf)
   // Install the message callback
   eventHandler->webMessageReceivedEvent.connect(
       [&](const std::wstring &message) {
-        jsMessageReceivedEvent.emit(message);
+        // We first need to convert the message into a UTF-8 string
+        auto utf8Message = fuse::utf8Cast(message);
+        jsMessageReceivedEvent.emit(
+            nlohmann::json::parse(std::move(utf8Message)));
       });
 
   EventRegistrationToken token{};
   core->add_WebMessageReceived(eventHandler.Get(), &token);
+
+  // After everything has been set up, show the WebView2 window
+  ctrl->put_IsVisible(TRUE);
 }
 
 void NativeEngine::loadFromMarkup(const Markup &markup) {

@@ -1,11 +1,11 @@
 #pragma once
 #include <memory> // unique_ptr
 
+#include <fuse/Bits.hpp>
 #include <fuse/Class.hpp>
 #include <fuse/Signal.hpp>
 
 #include <idafucker/runtime/Application.hpp>
-#include <idafucker/runtime/WindowOptions.hpp>
 #include <idafucker/runtime/events/Events.hpp>
 
 // Event bus outline:
@@ -23,9 +23,43 @@
 
 namespace idafucker
 {
+  
 class Window {
 public:
-  explicit Window(const Application& application, const WindowOptions& options);
+  struct Options {
+    enum class Flags : std::uint32_t {
+      None = 0u,
+
+      // Decorations:
+      HasFixedSize = 1u << 0u, //< This window is not resizable by the user.
+      HasCustomTitleBar = 1u << 1u, //< Ask system to remove the default title bar.
+      
+      // Window types:
+      IsPopup = 1u << 2u, //< This window is a popup window.
+    };
+
+    [[nodiscard]] constexpr bool hasFixedSize() const noexcept {
+      return flags.contains(Flags::HasFixedSize);
+    }
+    
+    [[nodiscard]] constexpr bool hasCustomTitleBar() const noexcept {
+      return flags.contains(Flags::HasCustomTitleBar);
+    }
+
+    [[nodiscard]] constexpr bool isDefault() const noexcept {
+      return !flags.contains(Flags::IsPopup);
+    }
+    
+    [[nodiscard]] constexpr bool isPopup() const noexcept {
+      return flags.contains(Flags::IsPopup);
+    }
+
+    std::wstring title{};
+    IntSize size{};
+    fuse::Bits<Flags> flags{};
+  };
+
+  explicit Window(const Application& application, const Options& options);
   virtual ~Window() noexcept;
 
   // Window visibility operations.
@@ -39,7 +73,7 @@ public:
   virtual void adjustBounds(const Rectangle<int>& rect) noexcept;
   [[nodiscard]] virtual Rectangle<int> clientAreaBounds() const noexcept;
 
-  // DPI support
+  // DPI support.
   [[nodiscard]] virtual int dpi() const noexcept;
 
   // Events:
@@ -57,12 +91,18 @@ protected:
   [[nodiscard]] virtual bool handleSizeChangedEvent(
       IntSize size, SizeChangedEvent::Type type);
 
-  std::unique_ptr<detail::NativeWindow> nativeWindow;
+  // Native is exposed for derived classes so that they can make custom calls
+  // to the native API.
+  [[nodiscard]] constexpr auto &native() noexcept { return *native_; }
+  [[nodiscard]] constexpr const auto &native() const noexcept { return *native_; }
+
 private:
+  std::unique_ptr<detail::NativeWindow> native_;
 
   friend class detail::NativeApplication;
   friend class detail::NativeWindow;
 
   FUSE_NONCOPYABLE(Window);
 };
+
 } // namespace idafucker

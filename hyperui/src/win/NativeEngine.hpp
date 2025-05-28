@@ -11,7 +11,7 @@ namespace hyperui::detail
 
 class NativeEngine final : public Engine {
 public:
-  NativeEngine(const Window , const std::wstring &udf);
+  NativeEngine(HWND window, const std::wstring &udf);
 
   void loadFromMarkup(const Markup &markup) override;
   void loadFromURL(const std::wstring &url) override;

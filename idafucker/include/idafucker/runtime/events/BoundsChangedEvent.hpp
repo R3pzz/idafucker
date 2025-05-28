@@ -17,9 +17,9 @@ public:
 class SizeChangedEvent : public BoundsChangedEvent {
 public:
   enum class Type {
-    kDefault = 0,    //< A regular size change.
-    kMinimized = 1,  //< The window was minimized.
-    kMaximized = 2,  //< The window was maximized.
+    Default = 0,    //< A regular size change.
+    Minimized = 1,  //< The window was minimized.
+    Maximized = 2,  //< The window was maximized.
   };
 
   constexpr SizeChangedEvent(Type type, IntSize size) noexcept

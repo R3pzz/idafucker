@@ -10,43 +10,43 @@
 namespace idafucker
 {
 
-Window::Window(const Application& application, const WindowOptions& options)
-    : nativeWindow{new detail::NativeWindow{application, options, this}} {}
+Window::Window(const Application& application, const Options& options)
+    : native_{new detail::NativeWindow{application, options, this}} {}
 
 Window::~Window() {
   closeEvent.emit();
 }
 
 void Window::show() noexcept {
-  nativeWindow->show();
+  native_->show();
 }
 
 void Window::hide() noexcept {
-  nativeWindow->hide();
+  native_->hide();
 }
 
 void Window::maximize() noexcept {
-  nativeWindow->maximize();
+  native_->maximize();
 }
 
 void Window::minimize() noexcept {
-  nativeWindow->minimize();
+  native_->minimize();
 }
 
 void Window::restoreDefaultSize() noexcept {
-  nativeWindow->restoreDefaultSize();
+  native_->restoreDefaultSize();
 }
 
 void Window::adjustBounds(const Rectangle<int>& rect) noexcept {
-  nativeWindow->adjustBounds(rect);
+  native_->adjustBounds(rect);
 }
 
 [[nodiscard]] Rectangle<int> Window::clientAreaBounds() const noexcept {
-  return nativeWindow->clientAreaBounds();
+  return native_->clientAreaBounds();
 }
 
 [[nodiscard]] int Window::dpi() const noexcept {
-  return nativeWindow->dpi();
+  return native_->dpi();
 }
 
 [[nodiscard]] bool Window::handleCloseEvent() {
@@ -54,8 +54,8 @@ void Window::adjustBounds(const Rectangle<int>& rect) noexcept {
   return false;
 }
 
-[[nodiscard]] bool Window::handleSizeChangedEvent(
-    IntSize size, SizeChangedEvent::Type type) {
+[[nodiscard]] bool Window::handleSizeChangedEvent(IntSize size,
+                                                  SizeChangedEvent::Type type) {
   boundsChangedEvent.emit(
       std::make_shared<SizeChangedEvent>(std::move(type), std::move(size)));
   return false;

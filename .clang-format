@@ -3,7 +3,7 @@ BasedOnStyle: Google
 
 # Basic formatting
 AccessModifierOffset: -2
-AlignAfterOpenBracket: AlwaysBreak
+AlignAfterOpenBracket: Align
 AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: false
 AlignEscapedNewlines: Left
@@ -21,7 +21,7 @@ AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: true
 AlwaysBreakTemplateDeclarations: MultiLine
 BinPackArguments: true
-BinPackParameters: true
+BinPackParameters: false
 
 # Braces
 BreakBeforeBraces: Custom
@@ -60,7 +60,6 @@ DisableFormat: false
 
 # Indentation
 FixNamespaceComments: true
-FixNamespaceComments: true
 IncludeBlocks: Regroup
 IncludeCategories:
   - Regex: '^<[a-z_]+>'  # Standard library headers (no extension or .h extension)
@@ -98,12 +97,6 @@ MacroBlockBegin: ''
 MacroBlockEnd: ''
 MaxEmptyLinesToKeep: 1
 NamespaceIndentation: None
-
-# Function declaration grouping settings
-SeparateDefinitionBlocks: Leave
-AllowShortEnumsOnASingleLine: false
-KeepEmptyLinesAtTheStartOfBlocks: false
-MaxEmptyLinesToKeep: 2
 
 # Penalties
 PenaltyBreakAssignment: 2

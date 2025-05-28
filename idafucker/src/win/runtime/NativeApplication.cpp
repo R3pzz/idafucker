@@ -1,8 +1,9 @@
 #define FUSE_EXPOSE_SYSTEM_HEADERS
 #include "NativeApplication.hpp"
-#include "NativeWindow.hpp"
 
 #include <objbase.h>
+
+#include "NativeWindow.hpp"
 
 #include <spdlog/spdlog.h>
 
@@ -10,10 +11,7 @@ namespace idafucker::detail
 {
 NativeApplication::NativeApplication(
     const fuse::CommandLine<wchar_t> &commandLine) {
-  // Initialize COM
   ::CoInitialize(NULL);
-
-  // Register the window class
   registerClass();
 
   // Configure DPI if requested
@@ -44,26 +42,28 @@ void NativeApplication::runEventLoop(
 }
 
 void NativeApplication::registerClass() {
+  constexpr auto k_hardwareAccelerated{CS_HREDRAW | CS_VREDRAW};
+
   WNDCLASSEX wc{
       .cbSize = sizeof(WNDCLASSEX),
-      .style = CS_HREDRAW | CS_VREDRAW,
+      .style = k_hardwareAccelerated,
       .lpfnWndProc = &NativeWindow::nativeMessageHandler,
-      .hInstance = ::GetModuleHandle(nullptr),
+      .hInstance = ::GetModuleHandleW(NULL),
       .hIcon = NULL,
       .hCursor = NULL,
-      .lpszClassName = kClassName,
+      .lpszClassName = k_className,
   };
 
-  if (winAtom_ = ::RegisterClassExW(&wc); winAtom_ == NULL)
+  if (atom_ = ::RegisterClassExW(&wc); atom_ == NULL)
     throw std::runtime_error{"failed registering window class"};
 }
 
 void NativeApplication::unregisterClass() noexcept {
-  ::UnregisterClass(MAKEINTATOM(winAtom_), ::GetModuleHandle(nullptr));
+  ::UnregisterClass(MAKEINTATOM(atom_), ::GetModuleHandle(nullptr));
 }
 
 void NativeApplication::configureDpi() {
-  constexpr auto kPerMonitorDpiAware{2};
+  constexpr auto k_perMonitorDPIAware{2};
 
   const auto setProcessDpiAwareness = [](int awareness) -> HRESULT {
     using Fn = HRESULT(WINAPI)(int);
@@ -84,7 +84,7 @@ void NativeApplication::configureDpi() {
           DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE) != TRUE)
     throw std::runtime_error{"failed setting process' DPI awareness context"};
 
-  if (const auto result = setProcessDpiAwareness(kPerMonitorDpiAware);
+  if (const auto result = setProcessDpiAwareness(k_perMonitorDPIAware);
       result != S_OK && result != E_ACCESSDENIED)
     throw std::runtime_error{"failed setting process' DPI awareness"};
 

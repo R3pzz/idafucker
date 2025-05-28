@@ -9,20 +9,20 @@ namespace idafucker
 class KeyboardEvent {
 public:
   enum class Type {
-    kKeyInput,        //< Indicates that a certain key on the keyboard was
-                      // pressed/released
-    kCharacterInput,  //< Indicates that a certain character was typed in
+    KeyInput,        //< Indicates that a certain key on the keyboard was
+                     // pressed/released
+    CharacterInput,  //< Indicates that a certain character was typed in
   };
 
   enum class State {
-    kPressed,
-    kReleased,
+    Pressed,
+    Released,
   };
 
   using Ref = std::shared_ptr<KeyboardEvent>;
 
   constexpr KeyboardEvent(std::size_t virtualCode, State state) noexcept
-      : type_{Type::kKeyInput}, virtualKeyCode_{virtualCode}, state_{state} {}
+      : type_{Type::KeyInput}, virtualKeyCode_{virtualCode}, state_{state} {}
 
   [[nodiscard]] constexpr Type type() const noexcept {
     return type_;

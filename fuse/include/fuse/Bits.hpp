@@ -83,55 +83,55 @@ public:
 
   constexpr Bits() noexcept = default;
 
-  constexpr Bits(auto &&value) noexcept : bits{Adapter::forward(value)} {}
+  constexpr Bits(auto &&value) noexcept : bits_{Adapter::forward(value)} {}
 
   [[nodiscard]] constexpr bool operator==(const auto rhs) const noexcept {
-    return bits == Adapter::forward(rhs);
+    return bits_ == Adapter::forward(rhs);
   }
 
   constexpr Bits &operator|=(const auto rhs) noexcept {
-    bits = (bits | Adapter::forward(rhs));
+    bits_ = (bits_ | Adapter::forward(rhs));
     return *this;
   }
 
   constexpr Bits &operator&=(const auto rhs) noexcept {
-    bits = (bits & Adapter::forward(rhs));
+    bits_ = (bits_ & Adapter::forward(rhs));
     return *this;
   }
 
   [[nodiscard]] constexpr Base operator|(const auto rhs) const noexcept {
-    return bits | Adapter::forward(rhs);
+    return bits_ | Adapter::forward(rhs);
   }
 
   [[nodiscard]] constexpr Base operator&(const auto rhs) const noexcept {
-    return bits & Adapter::forward(rhs);
+    return bits_ & Adapter::forward(rhs);
   }
 
   [[nodiscard]] constexpr operator Base() const noexcept {
-    return bits;
+    return bits_;
   }
 
   [[nodiscard]] constexpr bool contains(const auto flag) const noexcept {
-    return (bits & Adapter::forward(flag)) != Base{};
+    return (bits_ & Adapter::forward(flag)) != Base{};
   }
 
   constexpr void add(const auto flag) noexcept {
-    bits = (bits | Adapter::forward(flag));
+    bits_ = (bits_ | Adapter::forward(flag));
   }
 
   constexpr void remove(const auto flag) noexcept {
-    bits = (bits & ~Adapter::forward(flag));
+    bits_ = (bits_ & ~Adapter::forward(flag));
   }
 
   [[nodiscard]] constexpr Base get() const noexcept {
-    return bits;
+    return bits_;
   }
 
   [[nodiscard]] constexpr Base read(BitRange range) const noexcept {
-    return range.fetchFrom(bits);
+    return range.fetchFrom(bits_);
   }
 
 private:
-  Base bits{};
+  Base bits_{};
 };
 }  // namespace fuse

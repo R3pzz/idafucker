@@ -9,12 +9,12 @@ namespace fuse::detail
 template <std::size_t Size> class AnyBase {
 private:
   enum class Request {
-    kCopyConstruct,  //< Call a copy-constructor of a contained object
-    kMoveConstruct,  //< Call a move-constructor of a contained object
-    kDestroy,        //< Call a destructor of a contained object, free memory if
-                     // we're owning it
-    kCopy,           //< Call a copy-assign operator of a contained object
-    kMove,           //< Call a move-assign operator of a contained object
+    CopyConstruct,  //< Call a copy-constructor of a contained object
+    MoveConstruct,  //< Call a move-constructor of a contained object
+    Destroy,        //< Call a destructor of a contained object, free memory if
+                    // we're owning it
+    Copy,           //< Call a copy-assign operator of a contained object
+    Move,           //< Call a move-assign operator of a contained object
   };
 
   // Original idea taken from
@@ -25,7 +25,7 @@ private:
     auto lhs = static_cast<const T*>(any->data());
 
     switch (req) {
-      case Request::kCopyConstruct:
+      case Request::CopyConstruct:
         // Copy-construct Any from rhs assuming that any->reset() has
         // already been called
         if constexpr (std::is_copy_constructible_v<T>) {
@@ -34,7 +34,7 @@ private:
           ::new (const_cast<T*>(lhs)) T{*data};
         }
         break;
-      case Request::kMoveConstruct:
+      case Request::MoveConstruct:
         // Move-construct Any from rhs assuming that any->reset() has
         // already been called
         if constexpr (std::is_move_constructible_v<T>) {
@@ -43,18 +43,18 @@ private:
           ::new (const_cast<T*>(lhs)) T{std::move(*const_cast<T*>(data))};
         }
         break;
-      case Request::kDestroy:
+      case Request::Destroy:
         // Destruct an object owned by Any
         if constexpr (std::is_array_v<T>)
           delete[] lhs;
         else
-          any->repr_ == Representation::kEmbedded ? lhs->~T() : delete lhs;
+          any->repr_ == Representation::Embedded ? lhs->~T() : delete lhs;
         break;
-      case Request::kCopy:
+      case Request::Copy:
         if constexpr (std::is_copy_assignable_v<T>)
           *const_cast<T*>(lhs) = *static_cast<const T*>(rhs);
         break;
-      case Request::kMove:
+      case Request::Move:
         if constexpr (std::is_move_assignable_v<T>) {
           *const_cast<T*>(lhs) =
               std::move(*const_cast<T*>(static_cast<const T*>(rhs)));
@@ -72,9 +72,9 @@ private:
 
 public:
   enum class Representation {
-    kEmpty,     //< No data is stored
-    kEmbedded,  //< Data is stored internally, inside the Any object
-    kRemote,    //< Data is stored externally, we have the ownership of data
+    Empty,     //< No data is stored
+    Embedded,  //< Data is stored internally, inside the Any object
+    Remote,    //< Data is stored externally, we have the ownership of data
   };
 
   constexpr AnyBase() noexcept = default;
@@ -86,23 +86,23 @@ public:
       // Construct an object inside the embedded storage.
       rtti_ = &rttiFunction<Base>;
       type_ = &typeid(Base);
-      repr_ = Representation::kEmbedded;
+      repr_ = Representation::Embedded;
       ::new (reinterpret_cast<Base*>(&embedded_))
           Base{std::forward<decltype(value)>(value)};
     } else {
       // Construct an object in heap memory.
       rtti_ = &rttiFunction<Base>;
       type_ = &typeid(Base);
-      repr_ = Representation::kRemote;
+      repr_ = Representation::Remote;
       remote_ = new Base{std::move(value)};
     }
   }
 
   AnyBase(AnyBase&& other)
       : rtti_{other.rtti_}, type_{other.type_}, repr_{other.repr_} {
-    if (other.repr_ == Representation::kEmbedded)
-      rtti_(Request::kMoveConstruct, this, static_cast<const void*>(&other));
-    else if (other.repr_ == Representation::kRemote)
+    if (other.repr_ == Representation::Embedded)
+      rtti_(Request::MoveConstruct, this, static_cast<const void*>(&other));
+    else if (other.repr_ == Representation::Remote)
       remote_ = std::move(other.remote_);
   }
 
@@ -117,18 +117,18 @@ public:
     repr_ = rhs.repr_;
     type_ = rhs.type_;
     rtti_ = rhs.rtti_;
-    rtti_(Request::kCopyConstruct, this, static_cast<const void*>(&rhs));
+    rtti_(Request::CopyConstruct, this, static_cast<const void*>(&rhs));
     return *this;
   }
 
   // Get the raw data pointer
   [[nodiscard]] void* data() noexcept {
     switch (repr_) {
-      case Representation::kEmpty:
+      case Representation::Empty:
         return nullptr;
-      case Representation::kEmbedded:
+      case Representation::Embedded:
         return reinterpret_cast<void*>(std::addressof(embedded_));
-      case Representation::kRemote:
+      case Representation::Remote:
         return remote_;
     }
   }
@@ -136,11 +136,11 @@ public:
   // Get the raw data const pointer
   [[nodiscard]] const void* data() const noexcept {
     switch (repr_) {
-      case Representation::kEmpty:
+      case Representation::Empty:
         return nullptr;
-      case Representation::kEmbedded:
+      case Representation::Embedded:
         return reinterpret_cast<const void*>(std::addressof(embedded_));
-      case Representation::kRemote:
+      case Representation::Remote:
         return remote_;
     }
   }
@@ -162,18 +162,18 @@ public:
 
   // Check if this Any has a value
   [[nodiscard]] constexpr bool empty() const noexcept {
-    return repr_ == Representation::kEmpty;
+    return repr_ == Representation::Empty;
   }
 
   // Reset the value if it exists
   void reset() {
     if (rtti_ != nullptr)
-      rtti_(Request::kDestroy, this, nullptr);
+      rtti_(Request::Destroy, this, nullptr);
 
     remote_ = nullptr;
     rtti_ = nullptr;
     type_ = nullptr;
-    repr_ = Representation::kEmpty;
+    repr_ = Representation::Empty;
   }
 
 private:

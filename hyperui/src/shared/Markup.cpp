@@ -21,4 +21,8 @@ namespace hyperui
   return typeid(Markup);
 }
 
+[[nodiscard]] idafucker::ResourceFactory::Ref Markup::Factory::make() {
+  return std::make_shared<Factory>();
+}
+
 }  // namespace hyperui

@@ -1,6 +1,7 @@
+#include <hyperui.hpp>
+
 #include <idafucker/resources/ResourceManager.hpp>
 #include <idafucker/runtime/Application.hpp>
-#include <hyperui.hpp>
 
 #include <spdlog/spdlog.h>
 
@@ -15,11 +16,13 @@ int main(int argc, char* argv[]) {
 
     // Initialize the resource manager
     ResourceManager resourceManager{};
-    
+    resourceManager.registerFactory(".html", hyperui::Markup::Factory::make());
+
     // Create a sample window
     hyperui::Window::Options options{};
     options.title = L"idafucker | v0.1-a | Windows";
-    options.size = {800, 600};
+    options.size = {1200, 1600};
+    options.flags = hyperui::Window::Options::Flags::HasFixedSize;
 
     hyperui::Window window{app, options};
     window.closeEvent.connect([&] { app.terminate(); });
@@ -31,7 +34,15 @@ int main(int argc, char* argv[]) {
       }
     });
 
-    window.engine().loadFromURL(L"https://www.google.com/");
+    hyperui::Bridge bridge{window.engine()};
+    bridge.bindJSToNative("add", [](const nlohmann::json& args) -> std::string {
+      return std::to_string(args[0].get<int>() + args[1].get<int>());
+    });
+
+    auto bindExample = resourceManager.load(
+        "C:/Users/Murzila/source/repos/idafucker/examples/ui/bind/index.html",
+        Resource::Flags::Required);
+    window.engine().loadFromMarkup(*bindExample->get<hyperui::Markup>());
     window.show();
 
     // Run the event loop
