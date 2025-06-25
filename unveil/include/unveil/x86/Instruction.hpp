@@ -1,13 +1,11 @@
 #pragma once
-#include <idafucker/CoreDefines.hpp>
+#include <vector> // vector
 
-#include <Zydis/Zydis.h>
+#include <unveil/Config.hpp>
+#include <unveil/x86/Prefix.hpp>
+#include <unveil/x86/Operand.hpp>
 
-#include "operands/Mem.hpp"
-
-IDAFUCKER_NAMESPACE_BEGIN
-
-namespace disasm
+namespace unveil
 {
 // Instruction is layed out like:
 // [prefix] [opcode] [operand 1], [operand 2], ...
@@ -24,24 +22,18 @@ namespace disasm
 //    - operand count: how many operands the operation accepts;
 //    - jump length: short, near, far.
 
-
-
 class Instruction final {
 public:
-  // According to ZydisMnemonic::ZYDIS_MNEMONIC_REQUIRED_BITS, at least
-  // 11 bits bits are requires to represent all possible mnemonics.
   using Mnemonic = std::uint16_t;
 
   constexpr Instruction() noexcept = default;
 
-  constexpr Instruction(const ZydisDecodedInstruction &instr) noexcept
-      : mnemonic_{instr.mnemonic}, prefixes_{}
+  // Write this instruction in an assembly format.
+  [[nodiscard]] std::string dumpAssembly() const noexcept;
 
 private:
   Mnemonic mnemonic_{};       //< A mnemonic of the opcode of the instruction.
-  BitSet<Prefix> prefixes_{};  //< Prefixes the instruction has.
+  std::vector<Prefix> prefixes_{};  //< Prefixes the instruction has.
   std::vector<Operand> operands_{};  //< Operands of the instruction.
 };
-}  // namespace disasm
-
-IDAFUCKER_NAMESPACE_END
+}  // namespace unveil

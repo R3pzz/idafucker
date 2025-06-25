@@ -1,6 +1,5 @@
-#include <Windows.h>  // MultiByteToWideChar, WideCharToMultiByte
-
 #include <fuse/String.hpp>
+#include <fuse/Platform.hpp>
 
 namespace fuse
 {

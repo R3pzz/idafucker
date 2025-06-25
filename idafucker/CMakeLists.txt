@@ -9,7 +9,7 @@ file(GLOB_RECURSE IDAFUCKER_HEADERS CONFIGURE_DEPENDS
 find_package(spdlog CONFIG REQUIRED)
 
 # Remove main.cpp from core sources
-list(FILTER IDAFUCKER_CORE_SOURCES EXCLUDE REGEX "main\\.cpp$")
+list(FILTER IDAFUCKER_CORE_SOURCES EXCLUDE REGEX "^idafucker\\.cpp$")
 
 # 1. Core library
 add_library(idafucker_core ${IDAFUCKER_CORE_SOURCES} ${IDAFUCKER_HEADERS})
@@ -19,6 +19,7 @@ target_include_directories(idafucker_core PUBLIC
 )
 target_link_libraries(idafucker_core
     PUBLIC
+        bridge
         spdlog::spdlog_header_only
 )
 target_link_libraries(idafucker_core

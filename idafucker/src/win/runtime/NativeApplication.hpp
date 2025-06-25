@@ -1,9 +1,9 @@
 #pragma once
-#define FUSE_EXPOSE_SYSTEM_HEADERS
 #include <idafucker/Config.hpp>
 #include <idafucker/runtime/Application.hpp>
 
 #include <fuse/CommandLine.hpp>
+#include <fuse/Platform.hpp>
 
 namespace idafucker::detail
 {

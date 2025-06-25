@@ -1,11 +1,10 @@
-#define FUSE_EXPOSE_SYSTEM_HEADERS
 #include "NativeApplication.hpp"
-
-#include <objbase.h>
-
 #include "NativeWindow.hpp"
 
+#include <fuse/Platform.hpp>
+
 #include <spdlog/spdlog.h>
+#include <objbase.h>
 
 namespace idafucker::detail
 {

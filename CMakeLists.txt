@@ -43,6 +43,7 @@ include(Common)                      #  From cmake/Common.cmake
 # -------------------------------------------------
 #  Sub-projects
 # -------------------------------------------------
+add_subdirectory(bridge)             #  Platform abstraction library
 add_subdirectory(fuse)               #  Extended STL helpers
 add_subdirectory(unveil)             #  Disassembly engine
 add_subdirectory(hyperui)            #  WebView2 / WebKitGTK UI kit

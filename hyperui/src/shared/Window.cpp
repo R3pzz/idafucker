@@ -1,4 +1,3 @@
-#define FUSE_EXPOSE_SYSTEM_HEADERS
 #include <hyperui/Window.hpp>
 
 #if FUSE_PLATFORM_WIN

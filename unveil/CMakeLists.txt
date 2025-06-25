@@ -9,7 +9,7 @@ file(GLOB_RECURSE UNVEIL_HEADERS CONFIGURE_DEPENDS
 find_package(spdlog CONFIG REQUIRED)
 find_package(Zydis REQUIRED)
 
-add_library(unveil ${UNVEIL_SOURCES} ${UNVEIL_HEADERS})
+add_library(unveil ${UNVEIL_SOURCES} ${UNVEIL_HEADERS} "include/unveil.hpp")
 target_include_directories(unveil PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>

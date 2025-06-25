@@ -1,4 +1,3 @@
-#define FUSE_EXPOSE_SYSTEM_HEADERS
 #include <idafucker/runtime/Application.hpp>
 
 #if FUSE_PLATFORM_WIN

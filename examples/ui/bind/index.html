@@ -54,40 +54,23 @@
     <div class="card">
         <h2>RPC Demo UI</h2>
 
-        <label>Number A:</label>
-        <input type="number" id="inputA" value="3" />
+        <label>Process name to attach to:</label>
+        <input id="inputA" value="chrome.exe" />
 
-        <label>Number B:</label>
-        <input type="number" id="inputB" value="4" />
-
-        <button id="callNativeBtn">Call Native add(a, b)</button>
-        <button id="callJSBtn">Call JS multiply(a, b)</button>
+        <button id="attachToProcess">Attach to process</button>
 
         <div id="result">Result: (waiting)</div>
     </div>
 
     <script>
-    // Define a JS function that native can call
-    window.multiply = function(a, b) {
-      return a * b;
-    };
-
     document.getElementById('callNativeBtn').addEventListener('click', async () => {
-      const a = parseFloat(document.getElementById('inputA').value);
-      const b = parseFloat(document.getElementById('inputB').value);
+      const processName = document.getElementById('inputA').value;
       try {
-        const result = await window.nativeBridge.add(a, b);
-        document.getElementById('result').innerText = `Result from native: ${result}`;
+        const result = await window.nativeBridge.attachToProcess(processName);
+        document.getElementById('result').innerText = `Result: ${result}`;
       } catch (err) {
         document.getElementById('result').innerText = `Error: ${err}`;
       }
-    });
-
-    document.getElementById('callJSBtn').addEventListener('click', () => {
-      const a = parseFloat(document.getElementById('inputA').value);
-      const b = parseFloat(document.getElementById('inputB').value);
-      const result = window.multiply(a, b);
-      document.getElementById('result').innerText = `Result from JS: ${result}`;
     });
     </script>
 </body>

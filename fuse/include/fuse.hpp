@@ -9,6 +9,8 @@
 #include <fuse/Enum.hpp>
 #include <fuse/Future.hpp>
 #include <fuse/Hash.hpp>
+#include <fuse/Memory.hpp>
+#include <fuse/Platform.hpp>
 #include <fuse/RefCount.hpp>
 #include <fuse/Signal.hpp>
 #include <fuse/String.hpp>

@@ -1,6 +1,5 @@
-#define FUSE_EXPOSE_SYSTEM_HEADERS
 #include <fuse/CommandLine.hpp>
-#undef FUSE_EXPOSE_SYSTEM_HEADERS
+#include <fuse/Platform.hpp>
 
 namespace fuse
 {

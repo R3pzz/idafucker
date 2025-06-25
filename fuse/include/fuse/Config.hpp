@@ -40,11 +40,28 @@
   #endif
 #endif
 
-// Include default platform headers if necessary.
-#if defined(FUSE_EXPOSE_SYSTEM_HEADERS)
-  #if FUSE_PLATFORM_WIN
-    #define WIN32_LEAN_AND_MEAN
-    #define NOMINMAX
-    #include <Windows.h>
+// Complier/linker-specific macros
+#if defined(_MSC_VER)
+  // When a method is declared as "naked", the compiler does not geneterate
+  // a prologue and an epilogue for it, meaning that it will only contain the
+  // instructions you've put in the function body.
+  #if not defined(FUSE_NAKED)
+    #define FUSE_NAKED __declspec(naked)
+  #endif
+
+  // Prohibit the compiler from inlining the following method.
+  #if not defined(FUSE_NOINLINE)
+    #define FUSE_NOINLINE __declspec(noinline)
+  #endif
+
+  // Windows API-specific calling convention.
+  #if not defined(FUSE_STDCALL)
+    #define FUSE_STDCALL __stdcall
+  #endif
+  
+  // Sometimes, we would want to constrain the linker to put some code
+  // into the region we want it to be.
+  #if not defined(FUSE_SPECIFY_SECTION)
+    #define FUSE_SPECIFY_SECTION(section) __declspec(allocate(section))
   #endif
 #endif

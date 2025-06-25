@@ -1,5 +1,4 @@
 #pragma once
-#define FUSE_EXPOSE_SYSTEM_HEADERS
 #include <hyperui/Config.hpp>
 
 #if not defined(interface)

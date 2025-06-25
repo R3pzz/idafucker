@@ -1,4 +1,3 @@
-#define FUSE_EXPOSE_SYSTEM_HEADERS
 #include "NativeEngine.hpp"
 
 #include <fuse/String.hpp>

@@ -5,7 +5,6 @@
 
 #include <hyperui/Config.hpp>
 #include <hyperui/Engine.hpp>
-
 #include <fuse/String.hpp>
 #include <fuse/Future.hpp>
 

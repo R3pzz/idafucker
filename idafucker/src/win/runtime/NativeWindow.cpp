@@ -1,12 +1,11 @@
-#define FUSE_EXPOSE_SYSTEM_HEADERS
 #include "NativeWindow.hpp"
-
-#include <dwmapi.h>
-
-#include <idafucker/runtime/Window.hpp>
-
 #include "NativeApplication.hpp"
 #include "WindowMessageTranslator.hpp"
+
+#include <idafucker/runtime/Window.hpp>
+#include <fuse/Platform.hpp>
+
+#include <dwmapi.h>
 #pragma comment(lib, "dwmapi.lib")
 
 namespace idafucker::detail

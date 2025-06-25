@@ -5,6 +5,7 @@
 
 namespace fuse
 {
+
 struct Fnv1aSpecifications {
   static constexpr auto k_basis{0xcbf29ce484222325ull};
   static constexpr auto k_prime{0x00000100000001b3ull};
@@ -44,4 +45,9 @@ template <typename Char> struct Hash<std::basic_string<Char>> {
     return Hash<Char[]>{}(view.data(), view.size());
   }
 };
+
+[[nodiscard]] constexpr auto hash(auto &&value) noexcept {
+  return Hash<decltype(value)>(std::forward<decltype(value)>(value));
+}
+
 }  // namespace fuse

@@ -3,12 +3,11 @@
 #include <functional>  // function
 #include <string>      // wstring
 
-#define FUSE_EXPOSE_SYSTEM_HEADERS
-#include <hyperui/Config.hpp>
-#include <hyperui/Window.hpp>
-
 #include "WebViewHelpers.hpp"
 
+#include <hyperui/Config.hpp>
+#include <hyperui/Window.hpp>
+#include <fuse/Platform.hpp>
 #include <fuse/Signal.hpp>
 
 namespace hyperui::detail

@@ -1,8 +1,8 @@
 #pragma once
-#define FUSE_EXPOSE_SYSTEM_HEADERS
 #include <idafucker/Config.hpp>
 #include <idafucker/math/Common.hpp>
 #include <idafucker/runtime/events/BoundsChangedEvent.hpp>
+#include <fuse/Platform.hpp>
 
 namespace idafucker::messages
 {
