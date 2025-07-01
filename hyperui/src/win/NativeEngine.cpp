@@ -63,7 +63,7 @@ void NativeEngine::postJSMessage(const std::wstring &message) noexcept {
   core->PostWebMessageAsJson(message.c_str());
 }
 
-void NativeEngine::handleResizeEvent(const idafucker::Rectangle<int> &bounds) {
+void NativeEngine::handleResizeEvent(const introspect::Rectangle<int> &bounds) {
   ctrl->put_Bounds(*reinterpret_cast<const RECT *>(&bounds));
 }
 }  // namespace hyperui::detail

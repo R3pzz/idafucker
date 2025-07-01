@@ -1,6 +1,6 @@
 #pragma once
-#include <idafucker/CoreDefines.hpp>
-#include <idafucker/base/BitSet.hpp>
+#include <introspect/CoreDefines.hpp>
+#include <introspect/base/BitSet.hpp>
 
 #include "Fwd.hpp"
 

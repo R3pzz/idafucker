@@ -1,13 +1,13 @@
 #pragma once
 #include <hyperui/Config.hpp>
-#include <idafucker/resources/Resource.hpp>
-#include <idafucker/resources/ResourceFactory.hpp>
+#include <introspect/resources/Resource.hpp>
+#include <introspect/resources/ResourceFactory.hpp>
 
 namespace hyperui
 {
 class Markup {
 public:
-  class Factory final : public idafucker::ResourceFactory {
+  class Factory final : public introspect::ResourceFactory {
   public:
     constexpr Factory() noexcept = default;
 
@@ -15,7 +15,7 @@ public:
         const std::filesystem::path& dataPath) const override;
     [[nodiscard]] const std::type_info& type() const noexcept override;
 
-    [[nodiscard]] static idafucker::ResourceFactory::Ref make();
+    [[nodiscard]] static introspect::ResourceFactory::Ref make();
   };
 
   constexpr Markup() noexcept = default;

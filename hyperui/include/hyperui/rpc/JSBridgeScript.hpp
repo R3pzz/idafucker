@@ -35,7 +35,7 @@ constexpr auto k_jsBridgeScript{ // clang-format disable
             const handler = pending.get(msg.id);
             if (handler) {
                 pending.delete(msg.id);
-                msg.error ? handler.reject(msg.error) : handler.resolve(msg.result);
+                msg.exception ? handler.reject(msg.exception) : handler.resolve(msg.result);
             }
         } else if (msg.type === "call") {
             const { id, method, args } = msg;

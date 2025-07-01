@@ -1,5 +1,5 @@
 #pragma once
-#include <idafucker/CoreDefines.hpp>
+#include <introspect/CoreDefines.hpp>
 
 #include "OperandBase.hpp"
 

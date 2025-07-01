@@ -1,6 +1,10 @@
 #pragma once
 
+// Disable the implicitly deleted destructor warning.
+#pragma warning(disable: 4624)
+
 // A minimal set of includes a well-structured project should have.
+#include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <stdexcept>

@@ -1,6 +1,6 @@
 #pragma once
-#include <idafucker/CoreDefines.hpp>
-#include <idafucker/disasm/operands/Fwd.hpp>
+#include <introspect/CoreDefines.hpp>
+#include <introspect/disasm/operands/Fwd.hpp>
 
 #include <Zydis/Zydis.h>
 

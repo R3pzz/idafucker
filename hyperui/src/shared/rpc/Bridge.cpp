@@ -13,19 +13,22 @@ Bridge::Bridge(Engine &engine) noexcept : engine_{engine} {
 }
 
 void Bridge::handleIncomingMessage(nlohmann::json message) {
-  const auto &type = message["type"];
-  if (type == "call")
+  const std::string &type = message["type"];
+
+  if (type == "call") {
     handleCallMessage(message);
-  else if (type == "response")
+  } else if (type == "response") {
     handleResponseMessage(message);
-  else
+  } else {
     throw std::runtime_error{"bad message type"};
+  }
 }
 
 void Bridge::handleCallMessage(const nlohmann::json &message) const {
-  const auto it = jsToNativeBindings_.find(message["method"]);
-  if (it == std::end(jsToNativeBindings_))
+  const auto it = bindings_.find(message["method"]);
+  if (it == std::end(bindings_)) {
     return;
+  }
 
   nlohmann::json response{{"type", "response"}, {"id", message["id"]}};
   try {
@@ -38,18 +41,19 @@ void Bridge::handleCallMessage(const nlohmann::json &message) const {
 
 void Bridge::handleResponseMessage(const nlohmann::json &message) {
   const std::size_t id = message["id"];
-  if (id >= nativeToJSPromises_.size())
+  if (id >= promises_.size()) {
     return;
+  }
 
   if (message.contains("exception")) {
     std::string exception = message["exception"];
-    nativeToJSPromises_[id] =
+    promises_[id] =
         std::make_exception_ptr(std::exception{exception.c_str()});
   } else if (message.contains("result")) {
-    nativeToJSPromises_[id] = std::move(message["result"]);
+    promises_[id] = std::move(message["result"]);
   }
 
-  nativeToJSPromises_.erase(std::begin(nativeToJSPromises_) + id);
+  promises_.erase(std::begin(promises_) + id);
 }
 
 }  // namespace hyperui

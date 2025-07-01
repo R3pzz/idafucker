@@ -57,16 +57,16 @@
         <label>Process name to attach to:</label>
         <input id="inputA" value="chrome.exe" />
 
-        <button id="attachToProcess">Attach to process</button>
+        <button id="attach">Attach to process</button>
 
-        <div id="result">Result: (waiting)</div>
+        <div id="result">PID: (waiting)</div>
     </div>
 
     <script>
-    document.getElementById('callNativeBtn').addEventListener('click', async () => {
+    document.getElementById('attach').addEventListener('click', async () => {
       const processName = document.getElementById('inputA').value;
       try {
-        const result = await window.nativeBridge.attachToProcess(processName);
+        const result = await window.nativeBridge.attach(processName);
         document.getElementById('result').innerText = `Result: ${result}`;
       } catch (err) {
         document.getElementById('result').innerText = `Error: ${err}`;

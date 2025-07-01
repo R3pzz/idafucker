@@ -1,6 +1,6 @@
 #pragma once
-#include <idafucker/CoreDefines.hpp>
-#include <idafucker/exceptions/Exception.hpp>
+#include <introspect/CoreDefines.hpp>
+#include <introspect/exceptions/Exception.hpp>
 
 #include "Reg.hpp"
 #include "detail/ZydisMemAdapter.hpp"

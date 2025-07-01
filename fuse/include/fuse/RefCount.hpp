@@ -34,7 +34,7 @@ template <ConcurrentModel Model = ConcurrentModel::Atomic> class RefCountable {
 public:
   constexpr RefCountable() noexcept = default;
 
-  ~RefCountable() {
+  ~RefCountable() noexcept(false) {
     if (refs_ > 0u)
       throw std::runtime_error{"object is alive"};
   }

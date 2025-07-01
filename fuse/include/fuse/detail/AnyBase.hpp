@@ -130,6 +130,9 @@ public:
         return reinterpret_cast<void*>(std::addressof(embedded_));
       case Representation::Remote:
         return remote_;
+      default:
+        assert(false);
+        return nullptr;
     }
   }
 
@@ -142,6 +145,9 @@ public:
         return reinterpret_cast<const void*>(std::addressof(embedded_));
       case Representation::Remote:
         return remote_;
+      default:
+        assert(false);
+        return nullptr;
     }
   }
 

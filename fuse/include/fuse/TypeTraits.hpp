@@ -52,9 +52,15 @@ constexpr auto is_any_base_of_v =
 template <typename T>
 concept scalar = std::is_scalar<T>::value;
 
+template <typename T>
+concept represents_address =
+    std::is_pointer_v<T> ||
+    (std::is_integral_v<T> && sizeof(T) == sizeof(void*));
+
 // Function traits
 
-template <typename> struct function_traits {};
+template <typename>
+struct function_traits {};
 
 template <typename Return, typename... Args>
 struct function_traits<Return(Args...)> {
@@ -62,7 +68,8 @@ struct function_traits<Return(Args...)> {
   using args_type =
       std::conditional_t<sizeof...(Args) == 0u, void, std::tuple<Args...>>;
 
-  template <std::size_t I> using arg_at = std::tuple_element_t<I, args_type>;
+  template <std::size_t I>
+  using arg_at = std::tuple_element_t<I, args_type>;
 
   static constexpr bool has_args = sizeof...(Args) != 0u;
 };

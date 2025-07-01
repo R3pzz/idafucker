@@ -16,7 +16,7 @@ public:
   void loadFromURL(const std::wstring &url) override;
   void addJSInitializationScript(const std::wstring &script) override;
   void postJSMessage(const std::wstring &message) noexcept override;
-  void handleResizeEvent(const idafucker::Rectangle<int> &bounds) override;
+  void handleResizeEvent(const introspect::Rectangle<int> &bounds) override;
 
 private:
   void pumpMessagesUntil(auto &&function) noexcept {
