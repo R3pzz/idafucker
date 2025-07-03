@@ -7,6 +7,7 @@
 
 namespace introspect
 {
+
 class ResourceFactory {
 public:
   using Ref = std::shared_ptr<ResourceFactory>;
@@ -17,4 +18,5 @@ public:
       const std::filesystem::path& dataPath) const = 0;
   [[nodiscard]] virtual const std::type_info& type() const noexcept = 0;
 };
+
 }  // namespace introspect

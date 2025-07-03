@@ -20,6 +20,7 @@
 
 namespace introspect
 {
+
 // Stores resource registrations.
 class ResourceManager {
 public:
@@ -81,4 +82,5 @@ auto ResourceManager::construct(
   return fuse::RCHandle<Resource>{
       cache_.emplace(associatedPath, resource).first->second};
 }
+
 }  // namespace introspect

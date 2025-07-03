@@ -2,7 +2,6 @@
 #include <introspect/Config.hpp>
 #include <introspect/runtime/Application.hpp>
 #include <introspect/runtime/Window.hpp>
-
 #include <fuse/CommandLine.hpp>
 #include <fuse/Platform.hpp>
 
@@ -21,8 +20,8 @@ public:
   void maximize() noexcept;
   void minimize() noexcept;
   void restoreDefaultSize() noexcept;
-  void adjustBounds(const Rectangle<int>& rect) noexcept;
-  [[nodiscard]] Rectangle<int> clientAreaBounds() const noexcept;
+  void adjustBounds(const fuse::IntRectangle& rect) noexcept;
+  [[nodiscard]]fuse::IntRectangle clientAreaBounds() const noexcept;
   [[nodiscard]] int dpi() const noexcept;
 
   [[nodiscard]] constexpr HWND handle() const noexcept {

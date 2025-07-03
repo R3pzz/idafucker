@@ -41,7 +41,7 @@ endif()
 target_link_libraries(hyperui
     PUBLIC
         fuse
-        idafucker_core
+        introspect
 )
 
 target_enable_warnings(hyperui)

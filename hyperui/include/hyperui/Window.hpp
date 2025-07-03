@@ -31,7 +31,7 @@ public:
 
 protected:
   [[nodiscard]] bool handleSizeChangedEvent(
-      introspect::IntSize size, introspect::SizeChangedEvent::Type type) override;
+      fuse::Vector2i size, introspect::SizeChangedEvent::Type type) override;
 
 private:
   std::unique_ptr<Engine> engine_;

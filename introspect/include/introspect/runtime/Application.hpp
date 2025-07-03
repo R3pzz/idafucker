@@ -6,10 +6,13 @@
 
 namespace introspect
 {
+
 namespace detail
 {
+
 class NativeApplication;
 class NativeWindow;
+
 } // namespace detail
 
 class Application final {
@@ -34,4 +37,5 @@ private:
 
   FUSE_NONCOPYABLE(Application);
 };
+
 } // namespace introspect

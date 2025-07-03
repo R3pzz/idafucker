@@ -18,6 +18,7 @@
 
 namespace introspect
 {
+
 using DependencyList = std::vector<std::filesystem::path>;
 
 class ResourceDependencyResolver {
@@ -30,4 +31,5 @@ public:
   [[nodiscard]] virtual DependencyList resolve(
       const std::istream& stream) const = 0;
 };
+
 }  // namespace introspect

@@ -13,6 +13,7 @@
 
 namespace introspect
 {
+
 class ResourceManager;
 
 class Resource final : public fuse::RefCountable<> {
@@ -78,4 +79,5 @@ private:
 
   FUSE_NONCOPYABLE(Resource);
 };
+
 }  // namespace introspect

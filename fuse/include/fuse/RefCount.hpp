@@ -66,7 +66,7 @@ private:
 };
 
 template <typename T>
-concept ref_countable = is_any_base_of_v<
+concept ref_countable = concepts::one_of_bases<
     T, RefCountable<ConcurrentModel::None>,
     RefCountable<ConcurrentModel::Atomic>>;
 

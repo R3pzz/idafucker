@@ -16,7 +16,7 @@ Window::Window(const introspect::Application &app, const Options &options)
                                                      options.userDataFolder)} {}
 
 [[nodiscard]] bool Window::handleSizeChangedEvent(
-    introspect::IntSize size,
+    fuse::Vector2i size,
     introspect::SizeChangedEvent::Type type) {
   engine_->handleResizeEvent(clientAreaBounds());
   return introspect::Window::handleSizeChangedEvent(size, type);

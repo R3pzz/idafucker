@@ -4,6 +4,7 @@
 #include <fuse/Bits.hpp>
 #include <fuse/Class.hpp>
 #include <fuse/Signal.hpp>
+#include <fuse/math/Rectangle.hpp>
 
 #include <introspect/runtime/Application.hpp>
 #include <introspect/runtime/events/Events.hpp>
@@ -55,7 +56,7 @@ public:
     }
 
     std::wstring title{};
-    IntSize size{};
+    fuse::Vector2i size{};
     fuse::Bits<Flags> flags{};
   };
 
@@ -70,8 +71,8 @@ public:
   virtual void maximize() noexcept;
   virtual void minimize() noexcept;
   virtual void restoreDefaultSize() noexcept;
-  virtual void adjustBounds(const Rectangle<int>& rect) noexcept;
-  [[nodiscard]] virtual Rectangle<int> clientAreaBounds() const noexcept;
+  virtual void adjustBounds(const fuse::IntRectangle& rect) noexcept;
+  [[nodiscard]] virtual fuse::IntRectangle clientAreaBounds() const noexcept;
 
   // DPI support.
   [[nodiscard]] virtual int dpi() const noexcept;
@@ -89,7 +90,7 @@ public:
 protected:
   [[nodiscard]] virtual bool handleCloseEvent();
   [[nodiscard]] virtual bool handleSizeChangedEvent(
-      IntSize size, SizeChangedEvent::Type type);
+      fuse::Vector2i size, SizeChangedEvent::Type type);
 
   // Native is exposed for derived classes so that they can make custom calls
   // to the native API.

@@ -2,7 +2,6 @@
 #include <memory>  // shared_ptr
 
 #include <introspect/Config.hpp>
-#include <introspect/math/Common.hpp>
 
 namespace introspect
 {
@@ -22,7 +21,9 @@ public:
   using Ref = std::shared_ptr<KeyboardEvent>;
 
   constexpr KeyboardEvent(std::size_t virtualCode, State state) noexcept
-      : type_{Type::KeyInput}, virtualKeyCode_{virtualCode}, state_{state} {}
+      : type_{Type::KeyInput},
+        virtualKeyCode_{std::move(virtualCode)},
+        state_{std::move(state)} {}
 
   [[nodiscard]] constexpr Type type() const noexcept {
     return type_;

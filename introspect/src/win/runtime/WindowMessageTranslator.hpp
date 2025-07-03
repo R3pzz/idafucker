@@ -1,7 +1,7 @@
 #pragma once
 #include <introspect/Config.hpp>
-#include <introspect/math/Common.hpp>
 #include <introspect/runtime/events/BoundsChangedEvent.hpp>
+
 #include <fuse/Platform.hpp>
 
 namespace introspect::messages
@@ -10,8 +10,8 @@ namespace introspect::messages
 class SizeMessage {
 public:
   // A helper to extract the size argument from `wparam` and `lparam`.
-  [[nodiscard]] static constexpr IntSize translateSize(LPARAM lparam) noexcept {
-    return IntSize{LOWORD(lparam), HIWORD(lparam)};
+  [[nodiscard]] static constexpr fuse::Vector2i translateSize(LPARAM lparam) noexcept {
+    return fuse::Vector2i{LOWORD(lparam), HIWORD(lparam)};
   }
 
   // A helper to extract the way the window size was changed.
@@ -21,4 +21,4 @@ public:
   }
 };
 
-}  // namespace introspect
+}  // namespace introspect::messages

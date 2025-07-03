@@ -10,8 +10,8 @@ struct Field {
 
   constexpr Field() noexcept = default;
 
-  [[nodiscard]] static constexpr auto on(fuse::represents_address auto address) noexcept
-      -> decltype(address) {
+  [[nodiscard]] static constexpr auto on(
+      fuse::concepts::represents_address auto address) noexcept -> decltype(address) {
     using Address = decltype(address);
 
     if constexpr (std::is_pointer_v<Address>) {
@@ -24,7 +24,7 @@ struct Field {
 };
 
 template <typename Type, std::size_t Offset>
-[[nodiscard]] constexpr auto operator+(fuse::represents_address auto lhs,
+[[nodiscard]] constexpr auto operator+(fuse::concepts::represents_address auto lhs,
                                        Field<Type, Offset> rhs) noexcept
     -> decltype(lhs) {
   return lhs + Field<Type, Offset>::k_offset;

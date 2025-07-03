@@ -17,19 +17,17 @@ NativeWindow::NativeWindow(const Application& application,
   constexpr auto k_popupWindowStyle{WS_POPUPWINDOW};
   constexpr auto k_fixedSizeModifier{WS_THICKFRAME};
 
-  const auto style =
-      (options.isPopup() ? k_popupWindowStyle : k_defaultWindowStyle) &
-      ~k_fixedSizeModifier;
+  const auto style = (options.isPopup() ? k_popupWindowStyle : k_defaultWindowStyle) &
+                     ~k_fixedSizeModifier;
 
-  handle_ = ::CreateWindowExW(
-      {}, MAKEINTATOM(application.native_->atom()),
-      options.title.c_str(), style, 0, 0, options.size.x, options.size.y, NULL,
-      NULL, ::GetModuleHandleW(NULL), reinterpret_cast<LPVOID>(this));
+  handle_ = ::CreateWindowExW({}, MAKEINTATOM(application.native_->atom()),
+                              options.title.c_str(), style, 0, 0, options.size.x,
+                              options.size.y, NULL, NULL, ::GetModuleHandleW(NULL),
+                              reinterpret_cast<LPVOID>(this));
   if (handle_ == NULL)
     throw std::runtime_error{"failed creating a window"};
 
-  ::SetWindowLongPtrW(handle_, GWLP_USERDATA,
-                      reinterpret_cast<LONG_PTR>(wrapper));
+  ::SetWindowLongPtrW(handle_, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(wrapper));
 
   // Remove the DWM frame - it is useless when we want a custom title bar
   if (options.hasCustomTitleBar()) {
@@ -67,7 +65,7 @@ void NativeWindow::restoreDefaultSize() noexcept {
     ::ShowWindow(handle_, SW_SHOWNORMAL);
 }
 
-void NativeWindow::adjustBounds(const Rectangle<int>& rect) noexcept {
+void NativeWindow::adjustBounds(const fuse::IntRectangle& rect) noexcept {
   if (handle_ == NULL)
     return;
 
@@ -82,13 +80,12 @@ void NativeWindow::adjustBounds(const Rectangle<int>& rect) noexcept {
   if (rect.bottom != -1)
     target.bottom = rect.bottom;
 
-  ::SetWindowPos(handle_, NULL, target.left, target.top,
-                 target.right - target.left, target.bottom - target.top,
-                 SWP_NOZORDER | SWP_NOACTIVATE);
+  ::SetWindowPos(handle_, NULL, target.left, target.top, target.right - target.left,
+                 target.bottom - target.top, SWP_NOZORDER | SWP_NOACTIVATE);
 }
 
-[[nodiscard]] Rectangle<int> NativeWindow::clientAreaBounds() const noexcept {
-  Rectangle<int> bounds{};
+[[nodiscard]] fuse::IntRectangle NativeWindow::clientAreaBounds() const noexcept {
+  fuse::IntRectangle bounds{};
   ::GetClientRect(handle_, reinterpret_cast<LPRECT>(&bounds));
   return bounds;
 }
@@ -101,8 +98,7 @@ LRESULT CALLBACK NativeWindow::nativeMessageHandler(HWND hwnd,
                                                     UINT message,
                                                     WPARAM wparam,
                                                     LPARAM lparam) {
-  auto window =
-      reinterpret_cast<Window*>(::GetWindowLongPtrW(hwnd, GWLP_USERDATA));
+  auto window = reinterpret_cast<Window*>(::GetWindowLongPtrW(hwnd, GWLP_USERDATA));
   if (window == nullptr)
     return ::DefWindowProcW(hwnd, message, wparam, lparam);
 
@@ -121,8 +117,6 @@ LRESULT CALLBACK NativeWindow::nativeMessageHandler(HWND hwnd,
     break;
   }
 
-  return messageWasAcknowledged
-             ? 0
-             : ::DefWindowProcW(hwnd, message, wparam, lparam);
+  return messageWasAcknowledged ? 0 : ::DefWindowProcW(hwnd, message, wparam, lparam);
 }
 }  // namespace introspect::detail

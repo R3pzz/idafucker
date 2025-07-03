@@ -1,8 +1,8 @@
 #pragma once
+#include <hyperui/Config.hpp>
 #include <fuse/Class.hpp>
 #include <fuse/Signal.hpp>
-#include <hyperui/Config.hpp>
-#include <introspect/math/Common.hpp>
+#include <fuse/math/Rectangle.hpp>
 
 #include "Markup.hpp"
 
@@ -25,7 +25,7 @@ public:
   virtual void postJSMessage(const std::wstring &message) noexcept = 0;
 
   // Window-specific callbacks
-  virtual void handleResizeEvent(const introspect::Rectangle<int> &bounds) = 0;
+  virtual void handleResizeEvent(const fuse::IntRectangle &bounds) = 0;
 
   // Events
   fuse::Signal<void(nlohmann::json)> jsMessageReceivedEvent{};

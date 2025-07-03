@@ -36,11 +36,11 @@ void Window::restoreDefaultSize() noexcept {
   native_->restoreDefaultSize();
 }
 
-void Window::adjustBounds(const Rectangle<int>& rect) noexcept {
+void Window::adjustBounds(const fuse::IntRectangle& rect) noexcept {
   native_->adjustBounds(rect);
 }
 
-[[nodiscard]] Rectangle<int> Window::clientAreaBounds() const noexcept {
+[[nodiscard]] fuse::IntRectangle Window::clientAreaBounds() const noexcept {
   return native_->clientAreaBounds();
 }
 
@@ -53,7 +53,7 @@ void Window::adjustBounds(const Rectangle<int>& rect) noexcept {
   return false;
 }
 
-[[nodiscard]] bool Window::handleSizeChangedEvent(IntSize size,
+[[nodiscard]] bool Window::handleSizeChangedEvent(fuse::Vector2i size,
                                                   SizeChangedEvent::Type type) {
   boundsChangedEvent.emit(
       std::make_shared<SizeChangedEvent>(std::move(type), std::move(size)));

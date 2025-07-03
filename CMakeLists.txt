@@ -65,4 +65,4 @@ endif()
 
 # Print a small summary at the end of configuration.
 include(CMakePrintHelpers)
-cmake_print_variables(CMAKE_BUILD_TYPE HYPER_WARN_AS_ERROR BUILD_SHARED_LIBS)
+cmake_print_variables(CMAKE_BUILD_TYPE INTROSPECT_WARN_AS_ERROR BUILD_SHARED_LIBS)

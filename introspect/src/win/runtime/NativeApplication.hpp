@@ -7,6 +7,7 @@
 
 namespace introspect::detail
 {
+
 class NativeApplication final {
 public:
   static constexpr auto k_className{L"introspect::main"};
@@ -27,4 +28,5 @@ private:
 
   FUSE_NONCOPYABLE(NativeApplication);
 };
+
 }  // namespace introspect::detail

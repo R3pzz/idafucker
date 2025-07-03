@@ -11,10 +11,10 @@
 // `trace` to more important and least detailed - `critical`.
 #if _DEBUG
   // We would like to log out every step of the execution when debugging.
-  #define IDAFUCKER_SPDLOG_LEVEL (spdlog::level::trace)
+  #define INTROSPECT_SPDLOG_LEVEL (spdlog::level::trace)
 #else
   // No need to pollute the console/logs with useless debugger info.
-  #define IDAFUCKER_SPDLOG_LEVEL (spdlog::level::info)
+  #define INTROSPECT_SPDLOG_LEVEL (spdlog::level::info)
 #endif
 
 int main() {
@@ -22,7 +22,7 @@ int main() {
 
   try {
     // Set the minimum logging level
-    spdlog::set_level(IDAFUCKER_SPDLOG_LEVEL);
+    spdlog::set_level(INTROSPECT_SPDLOG_LEVEL);
 
     // Initialize the main runtime
     Application app{fuse::systemCommandLine()};
@@ -67,7 +67,7 @@ int main() {
     });
 
     auto bindExample = resourceManager.load(
-        "C:/Users/Murzila/source/repos/introspect/examples/ui/bind/index.html",
+        "C:/Users/Murzila/source/repos/idafucker/examples/ui/bind/index.html",
         Resource::Flags::Required);
     window.engine().loadFromMarkup(*bindExample->get<hyperui::Markup>());
     window.show();

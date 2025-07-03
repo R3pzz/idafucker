@@ -2,10 +2,11 @@
 #include <memory>  // shared_ptr
 
 #include <introspect/Config.hpp>
-#include <introspect/math/Common.hpp>
+#include <fuse/math/Vector2.hpp>
 
 namespace introspect
 {
+
 class BoundsChangedEvent {
 public:
   using Ref = std::shared_ptr<BoundsChangedEvent>;
@@ -22,19 +23,20 @@ public:
     Maximized = 2,  //< The window was maximized.
   };
 
-  constexpr SizeChangedEvent(Type type, IntSize size) noexcept
-      : type_{type}, size_{size} {}
+  constexpr SizeChangedEvent(Type type, fuse::Vector2i size) noexcept
+      : type_{std::move(type)}, size_{std::move(size)} {}
 
   [[nodiscard]] constexpr Type type() const noexcept {
     return type_;
   }
 
-  [[nodiscard]] constexpr IntSize size() const noexcept {
+  [[nodiscard]] constexpr fuse::Vector2i size() const noexcept {
     return size_;
   }
 
 private:
   Type type_{};
-  IntSize size_{};
+  fuse::Vector2i size_{};
 };
+
 }  // namespace introspect
