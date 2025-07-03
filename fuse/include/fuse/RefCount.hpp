@@ -65,12 +65,18 @@ private:
   mutable ValueType refs_{};
 };
 
+namespace concepts
+{
+
 template <typename T>
-concept ref_countable = concepts::one_of_bases<
+concept ref_countable = one_of_bases<
     T, RefCountable<ConcurrentModel::None>,
     RefCountable<ConcurrentModel::Atomic>>;
 
-template <ref_countable T> class RCHandle {
+} // namespace concepts
+
+template <concepts::ref_countable T>
+class RCHandle {
 public:
   constexpr RCHandle() noexcept = default;
 
@@ -194,6 +200,6 @@ private:
   T* handle_{};
 };
 
-template <ref_countable T> RCHandle(T*) -> RCHandle<T>;
-template <ref_countable T> RCHandle(std::shared_ptr<T>) -> RCHandle<T>;
+template <concepts::ref_countable T> RCHandle(T*) -> RCHandle<T>;
+template <concepts::ref_countable T> RCHandle(std::shared_ptr<T>) -> RCHandle<T>;
 }  // namespace fuse
