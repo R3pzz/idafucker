@@ -2,6 +2,7 @@
 #include <memory>  // shared_ptr
 
 #include <introspect/Config.hpp>
+
 #include <fuse/math/Vector2.hpp>
 
 namespace introspect

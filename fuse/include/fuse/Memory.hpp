@@ -35,7 +35,7 @@ public:
 
   // Manual casting.
   template <typename Type>
-    requires (std::is_pointer_v<Type>)
+    requires(std::is_pointer_v<Type>)
   [[nodiscard]] constexpr auto as() const noexcept -> Type {
     return reinterpret_cast<Type>(value_);
   }
@@ -79,7 +79,7 @@ public:
 
   // Pointer retrieval.
   template <typename Type>
-    requires (std::is_pointer_v<Type>)
+    requires(std::is_pointer_v<Type>)
   [[nodiscard]] constexpr auto get() const noexcept -> Type {
     return reinterpret_cast<Type>(value_);
   }

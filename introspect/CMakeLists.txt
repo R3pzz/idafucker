@@ -1,9 +1,9 @@
 # Gather sources
 file(GLOB_RECURSE INTROSPECT_SOURCES CONFIGURE_DEPENDS
-     "src/**/*.cpp" "src/**/*.cxx"
+    "src/**/*.cpp" "src/**/*.cxx"
 )
 file(GLOB_RECURSE INTROSPECT_HEADERS CONFIGURE_DEPENDS
-     "include/**/*.hpp" "include/**/*.h"
+    "include/**/*.hpp" "include/**/*.h"
 )
 
 find_package(spdlog CONFIG REQUIRED)
@@ -16,14 +16,14 @@ target_include_directories(introspect PUBLIC
 )
 target_link_libraries(introspect
     PUBLIC
-        bridge
-        spdlog::spdlog_header_only
+    bridge
+    spdlog::spdlog_header_only
 )
 target_link_libraries(introspect
     PUBLIC
-        fuse
-        unveil
-        hyperui
+    fuse
+    unveil
+    hyperui
 )
 target_enable_warnings(introspect)
 
@@ -31,7 +31,7 @@ target_enable_warnings(introspect)
 add_executable(introspect_app "src/main.cpp")
 target_link_libraries(introspect_app
     PRIVATE
-        introspect
+    introspect
 )
 target_enable_warnings(introspect_app)
 

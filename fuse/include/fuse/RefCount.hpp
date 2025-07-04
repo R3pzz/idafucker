@@ -13,7 +13,8 @@ enum class ConcurrentModel {
 
 namespace detail
 {
-template <typename Type, ConcurrentModel> struct select_concurrent_storage {};
+template <typename Type, ConcurrentModel>
+struct select_concurrent_storage {};
 
 template <typename Type>
 struct select_concurrent_storage<Type, ConcurrentModel::None> {
@@ -26,11 +27,11 @@ struct select_concurrent_storage<Type, ConcurrentModel::Atomic> {
 };
 
 template <typename Type, ConcurrentModel Model>
-using select_concurrent_storage_t =
-    typename select_concurrent_storage<Type, Model>::type;
+using select_concurrent_storage_t = typename select_concurrent_storage<Type, Model>::type;
 }  // namespace detail
 
-template <ConcurrentModel Model = ConcurrentModel::Atomic> class RefCountable {
+template <ConcurrentModel Model = ConcurrentModel::Atomic>
+class RefCountable {
 public:
   constexpr RefCountable() noexcept = default;
 
@@ -69,11 +70,11 @@ namespace concepts
 {
 
 template <typename T>
-concept ref_countable = one_of_bases<
-    T, RefCountable<ConcurrentModel::None>,
-    RefCountable<ConcurrentModel::Atomic>>;
+concept ref_countable = one_of_bases<T,
+                                     RefCountable<ConcurrentModel::None>,
+                                     RefCountable<ConcurrentModel::Atomic>>;
 
-} // namespace concepts
+}  // namespace concepts
 
 template <concepts::ref_countable T>
 class RCHandle {
@@ -93,8 +94,7 @@ public:
   }
 
   // Construct from shared_ptr
-  explicit RCHandle(const std::shared_ptr<T>& ref) noexcept
-      : handle_{ref.get()} {
+  explicit RCHandle(const std::shared_ptr<T>& ref) noexcept : handle_{ref.get()} {
     if (handle_ != nullptr)
       handle_->refAdded();
   }
@@ -110,8 +110,7 @@ public:
     return handle_ == rhs.handle_;
   }
 
-  [[nodiscard]] constexpr bool operator==(
-      const std::shared_ptr<T>& rhs) const noexcept {
+  [[nodiscard]] constexpr bool operator==(const std::shared_ptr<T>& rhs) const noexcept {
     return handle_ == rhs.get();
   }
 
@@ -200,6 +199,8 @@ private:
   T* handle_{};
 };
 
-template <concepts::ref_countable T> RCHandle(T*) -> RCHandle<T>;
-template <concepts::ref_countable T> RCHandle(std::shared_ptr<T>) -> RCHandle<T>;
+template <concepts::ref_countable T>
+RCHandle(T*) -> RCHandle<T>;
+template <concepts::ref_countable T>
+RCHandle(std::shared_ptr<T>) -> RCHandle<T>;
 }  // namespace fuse

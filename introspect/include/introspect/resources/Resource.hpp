@@ -20,9 +20,8 @@ class Resource final : public fuse::RefCountable<> {
 public:
   enum class Flags {
     None = 0u,
-    Required =
-        1u << 0u,  //< The resource is required to stay in memory even if
-                   // not referenced.
+    Required = 1u << 0u,  //< The resource is required to stay in memory even if
+                          // not referenced.
   };
 
   // Constructs the resource holder from an any-object
@@ -31,20 +30,21 @@ public:
 
   // Constructs the resource holder in-place
   template <class T>
-  Resource(
-      [[maybe_unused]] std::in_place_type_t<T>, ResourceManager& manager,
-      const Flags flags, auto&&... args) noexcept
-      : manager{manager},
-        flags{flags},
-        data{T{std::forward<decltype(args)>(args)...}} {}
+  Resource([[maybe_unused]] std::in_place_type_t<T>,
+           ResourceManager& manager,
+           const Flags flags,
+           auto&&... args) noexcept
+      : manager{manager}, flags{flags}, data{T{std::forward<decltype(args)>(args)...}} {}
 
   ~Resource() = default;
 
-  template <class T> [[nodiscard]] auto get() -> T* {
+  template <class T>
+  [[nodiscard]] auto get() -> T* {
     return data.get<T>();
   }
 
-  template <class T> [[nodiscard]] auto get() const -> const T* {
+  template <class T>
+  [[nodiscard]] auto get() const -> const T* {
     return data.get<T>();
   }
 

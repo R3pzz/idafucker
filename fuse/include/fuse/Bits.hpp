@@ -32,15 +32,13 @@ public:
   }
 
   // Mask out the value and shift it to the beginning.
-  [[nodiscard]] constexpr auto fetchFrom(auto value) const noexcept
-      -> decltype(value) {
+  [[nodiscard]] constexpr auto fetchFrom(auto value) const noexcept -> decltype(value) {
     return (value & mask<decltype(value)>()) >> begin_;
   }
 
   // Shift the value to the correct position and ensure
   // that the value is trucated to fit the width.
-  [[nodiscard]] constexpr auto storeTo(auto value) const noexcept
-      -> decltype(value) {
+  [[nodiscard]] constexpr auto storeTo(auto value) const noexcept -> decltype(value) {
     return (value << begin_) & mask<decltype(value)>();
   }
 
@@ -57,9 +55,11 @@ namespace detail
 // type. This class separates scoped enums from standard integer types and
 // provides a way to forward the arguments while automatically unpacking the
 // scoped enum into its underlying type.
-template <typename T> struct bit_set_mask_adapter {
-  using Base = typename std::conditional_t<
-      std::is_enum_v<T>, std::underlying_type<T>, std::type_identity<T>>::type;
+template <typename T>
+struct bit_set_mask_adapter {
+  using Base = typename std::conditional_t<std::is_enum_v<T>,
+                                           std::underlying_type<T>,
+                                           std::type_identity<T>>::type;
 
   [[nodiscard]] static constexpr auto forward(const auto &value) noexcept {
     return reinterpret_cast<const Base &>(value);

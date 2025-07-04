@@ -1,11 +1,13 @@
 #include "NativeWindow.hpp"
+
+#include <dwmapi.h>
+
+#include <introspect/runtime/Window.hpp>
+
 #include "NativeApplication.hpp"
 #include "WindowMessageTranslator.hpp"
 
-#include <introspect/runtime/Window.hpp>
 #include <fuse/Platform.hpp>
-
-#include <dwmapi.h>
 #pragma comment(lib, "dwmapi.lib")
 
 namespace introspect::detail

@@ -11,13 +11,15 @@ struct Fnv1aSpecifications {
   static constexpr auto k_prime{0x00000100000001b3ull};
 };
 
-template <typename T> struct Hash;
+template <typename T>
+struct Hash;
 
-template <typename Base> struct Hash<Base[]> {
+template <typename Base>
+struct Hash<Base[]> {
   constexpr Hash() noexcept = default;
 
-  [[nodiscard]] constexpr std::size_t operator()(
-      const Base data[], std::size_t length) const noexcept {
+  [[nodiscard]] constexpr std::size_t operator()(const Base data[],
+                                                 std::size_t length) const noexcept {
     auto hash{Fnv1aSpecifications::k_basis};
     for (std::size_t i{}; i < length; ++i) {
       hash ^= static_cast<std::size_t>(data[i]);
@@ -28,7 +30,8 @@ template <typename Base> struct Hash<Base[]> {
   }
 };
 
-template <typename Char> struct Hash<std::basic_string_view<Char>> {
+template <typename Char>
+struct Hash<std::basic_string_view<Char>> {
   constexpr Hash() noexcept = default;
 
   [[nodiscard]] constexpr auto operator()(std::basic_string_view<Char> view)
@@ -37,11 +40,12 @@ template <typename Char> struct Hash<std::basic_string_view<Char>> {
   }
 };
 
-template <typename Char> struct Hash<std::basic_string<Char>> {
+template <typename Char>
+struct Hash<std::basic_string<Char>> {
   constexpr Hash() noexcept = default;
 
-  [[nodiscard]] constexpr auto operator()(std::basic_string<Char> view)
-      const noexcept -> decltype(Hash<Char[]>{}(view.data(), view.size())) {
+  [[nodiscard]] constexpr auto operator()(std::basic_string<Char> view) const noexcept
+      -> decltype(Hash<Char[]>{}(view.data(), view.size())) {
     return Hash<Char[]>{}(view.data(), view.size());
   }
 };

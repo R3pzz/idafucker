@@ -1,5 +1,5 @@
 #pragma once
-#include <span> // span
+#include <span>  // span
 
 #include <fuse/Bits.hpp>
 #include <unveil/Config.hpp>
@@ -25,11 +25,9 @@ struct PrefixEncoding {
   static constexpr fuse::BitRange k_relativePos{
       3u, 7u};  //< Prefix byte position relative to the instruction start.
   // Memory map: |--------|XXXXXXXX|XXXXXXXX|XXXXXXXX|
-  static constexpr fuse::BitRange k_meta{8u,
-                                         31u};  //< Group-specific prefix meta.
+  static constexpr fuse::BitRange k_meta{8u, 31u};  //< Group-specific prefix meta.
 
-  [[nodiscard]] static constexpr WordSize encodeGroup(
-      PrefixGroup group) noexcept {
+  [[nodiscard]] static constexpr WordSize encodeGroup(PrefixGroup group) noexcept {
     return k_group.storeTo(static_cast<WordSize>(group));
   }
 
@@ -59,7 +57,8 @@ public:
              PrefixEncoding::encodeMeta(meta)} {}
 
   // Upcast this object to a prefix specification.
-  template <typename T> [[nodiscard]] constexpr auto as() noexcept -> T& {
+  template <typename T>
+  [[nodiscard]] constexpr auto as() noexcept -> T& {
     return static_cast<Prefix&>(*this);
   }
 
@@ -69,8 +68,7 @@ public:
   }
 
   [[nodiscard]] constexpr PrefixGroup group() const noexcept {
-    return static_cast<PrefixGroup>(
-        PrefixEncoding::k_group.fetchFrom(sig_).get());
+    return static_cast<PrefixGroup>(PrefixEncoding::k_group.fetchFrom(sig_).get());
   }
 
   [[nodiscard]] constexpr std::uint8_t relativePos() const noexcept {
@@ -94,14 +92,17 @@ private:
 // Represents any of the REX... prefixes.
 class REX : public Prefix {
 public:
-  enum class Type : std::uint8_t { B, R, X, W, };
+  enum class Type : std::uint8_t {
+    B,
+    R,
+    X,
+    W,
+  };
 
-  constexpr REX() noexcept
-      : Prefix{PrefixGroup::REX, k_undefinedPos, 0u} {}
+  constexpr REX() noexcept : Prefix{PrefixGroup::REX, k_undefinedPos, 0u} {}
 
   constexpr REX(Type type, std::uint8_t relativePos) noexcept
-      : Prefix{PrefixGroup::REX, relativePos,
-               static_cast<std::uint32_t>(type)} {}
+      : Prefix{PrefixGroup::REX, relativePos, static_cast<std::uint32_t>(type)} {}
 
   [[nodiscard]] constexpr Type type() const noexcept {
     return static_cast<Type>(meta());
@@ -112,8 +113,10 @@ class OrderedPrefixView {
 public:
   // Construct the view from two contiguous iterators.
   template <std::contiguous_iterator ContiguousIterator>
-  constexpr OrderedPrefixView(ContiguousIterator &&begin, ContiguousIterator &&end) noexcept
-      : prefixes_{std::forward<ContiguousIterator>(begin), std::forward<ContiguousIterator>(end)} {}
+  constexpr OrderedPrefixView(ContiguousIterator&& begin,
+                              ContiguousIterator&& end) noexcept
+      : prefixes_{std::forward<ContiguousIterator>(begin),
+                  std::forward<ContiguousIterator>(end)} {}
 
   // Print out only effective prefixes the prefix list has.
   [[nodiscard]] std::string dumpEffective() const;

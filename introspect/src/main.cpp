@@ -53,7 +53,8 @@ int main() {
     bridge.bind("attach", [](const nlohmann::json &args) -> std::string {
       const std::string &name = args[0u];
 
-      auto process = bridge::process::ProcessRegistry::find(fuse::unicodeCast(name), false);
+      auto process = bridge::process::ProcessRegistry::find(fuse::unicodeCast(name),
+                                                            false);
       if (!process.has_value()) {
         return process.error().explain();
       }
@@ -71,7 +72,7 @@ int main() {
         Resource::Flags::Required);
     window.engine().loadFromMarkup(*bindExample->get<hyperui::Markup>());
     window.show();
-    
+
     // Run the event loop
     app.runEventLoop([&] { resourceManager.observe(); });
   } catch (std::exception &e) {

@@ -34,9 +34,9 @@ public:
   // abstract path, by which the resource will be identified. In-place
   // resources can not be reloaded.
   template <class T>
-  auto construct(
-      const std::filesystem::path& associatedPath, Resource::Flags flags,
-      auto&&... args) -> fuse::RCHandle<Resource>;
+  auto construct(const std::filesystem::path& associatedPath,
+                 Resource::Flags flags,
+                 auto&&... args) -> fuse::RCHandle<Resource>;
 
   // Refreshes the resource contents from its associated file.
   void reload(const std::filesystem::path& path);
@@ -54,33 +54,30 @@ public:
       -> fuse::RCHandle<Resource>;
 
   // Registering a resource factory.
-  void registerFactory(
-      const std::string& extension, ResourceFactory::Ref factory);
+  void registerFactory(const std::string& extension, ResourceFactory::Ref factory);
 
 private:
   template <class T>
   using ExtensionMap = std::unordered_map<std::filesystem::path, std::shared_ptr<T>>;
 
-  ExtensionMap<Resource> cache_{};  //< Resource cache.
+  ExtensionMap<Resource> cache_{};             //< Resource cache.
   ExtensionMap<ResourceFactory> factories_{};  //< Resource factories.
 
   FUSE_NONCOPYABLE(ResourceManager);
 };
 
 template <class T>
-auto ResourceManager::construct(
-    const std::filesystem::path& associatedPath, Resource::Flags flags,
-    auto&&... args) -> fuse::RCHandle<Resource> {
+auto ResourceManager::construct(const std::filesystem::path& associatedPath,
+                                Resource::Flags flags,
+                                auto&&... args) -> fuse::RCHandle<Resource> {
   const auto cache = cache_.find(associatedPath);
   if (cache != std::end(cache_))
     return fuse::RCHandle<Resource>{cache->second};
 
-  auto resource = new Resource{
-      std::in_place_type<T>, *this, flags,
-      std::forward<decltype(args)>(args)...};
+  auto resource = new Resource{std::in_place_type<T>, *this, flags,
+                               std::forward<decltype(args)>(args)...};
 
-  return fuse::RCHandle<Resource>{
-      cache_.emplace(associatedPath, resource).first->second};
+  return fuse::RCHandle<Resource>{cache_.emplace(associatedPath, resource).first->second};
 }
 
 }  // namespace introspect

@@ -4,9 +4,8 @@
 namespace bridge::win::syscalls
 {
 
-#define BRIDGE_DEFINE_SYSCALL(index, name) \
-    constexpr SyscallInstance<index> name{};
+#define BRIDGE_DEFINE_SYSCALL(index, name) constexpr SyscallInstance<index> name{};
 
 BRIDGE_DEFINE_SYSCALL(0x19u, ntQueryInformationProcess);
 
-} // namespace bridge::win::syscalls
+}  // namespace bridge::win::syscalls

@@ -53,7 +53,7 @@ struct Signature {
 class Operand {
 public:
   constexpr Operand() noexcept = default;
-  
+
   constexpr Operand(Signature signature) noexcept : signature{signature} {}
 
   constexpr Operand(Signature signature, std::int64_t disp) noexcept

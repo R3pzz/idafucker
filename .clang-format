@@ -140,7 +140,7 @@ UseTab: Never
 # C++20 and C++23 specific settings
 IndentRequires: true
 InsertBraces: false
-SeparateDefinitionBlocks: Always
+#SeparateDefinitionBlocks: Always
 EmptyLineBeforeAccessModifier: LogicalBlock
 PackConstructorInitializers: NextLine
 QualifierAlignment: Left

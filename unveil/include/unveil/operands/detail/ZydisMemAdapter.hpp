@@ -10,7 +10,8 @@ namespace disasm::detail
 {
 
 struct ZydisMemAdapter {
-  [[nodiscard]] static constexpr AddressingMode parseMode(const ZydisDecodedOperand &op) noexcept {
+  [[nodiscard]] static constexpr AddressingMode parseMode(
+      const ZydisDecodedOperand &op) noexcept {
     switch (op.encoding) {
     case ZYDIS_OPERAND_ENCODING_MODRM_REG:
     case ZYDIS_OPERAND_ENCODING_MODRM_RM:
@@ -26,6 +27,6 @@ struct ZydisMemAdapter {
   }
 };
 
-} // namespace disasm::detail
+}  // namespace disasm::detail
 
 IDAFUCKER_NAMESPACE_END

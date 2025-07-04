@@ -6,7 +6,8 @@
 
 namespace fuse::detail
 {
-template <std::size_t Size> class AnyBase {
+template <std::size_t Size>
+class AnyBase {
 private:
   enum class Request {
     CopyConstruct,  //< Call a copy-constructor of a contained object
@@ -25,41 +26,38 @@ private:
     auto lhs = static_cast<const T*>(any->data());
 
     switch (req) {
-      case Request::CopyConstruct:
-        // Copy-construct Any from rhs assuming that any->reset() has
-        // already been called
-        if constexpr (std::is_copy_constructible_v<T>) {
-          auto data =
-              static_cast<const T*>(static_cast<const AnyBase*>(rhs)->data());
-          ::new (const_cast<T*>(lhs)) T{*data};
-        }
-        break;
-      case Request::MoveConstruct:
-        // Move-construct Any from rhs assuming that any->reset() has
-        // already been called
-        if constexpr (std::is_move_constructible_v<T>) {
-          auto data =
-              static_cast<const T*>(static_cast<const AnyBase*>(rhs)->data());
-          ::new (const_cast<T*>(lhs)) T{std::move(*const_cast<T*>(data))};
-        }
-        break;
-      case Request::Destroy:
-        // Destruct an object owned by Any
-        if constexpr (std::is_array_v<T>)
-          delete[] lhs;
-        else
-          any->repr_ == Representation::Embedded ? lhs->~T() : delete lhs;
-        break;
-      case Request::Copy:
-        if constexpr (std::is_copy_assignable_v<T>)
-          *const_cast<T*>(lhs) = *static_cast<const T*>(rhs);
-        break;
-      case Request::Move:
-        if constexpr (std::is_move_assignable_v<T>) {
-          *const_cast<T*>(lhs) =
-              std::move(*const_cast<T*>(static_cast<const T*>(rhs)));
-        }
-        break;
+    case Request::CopyConstruct:
+      // Copy-construct Any from rhs assuming that any->reset() has
+      // already been called
+      if constexpr (std::is_copy_constructible_v<T>) {
+        auto data = static_cast<const T*>(static_cast<const AnyBase*>(rhs)->data());
+        ::new (const_cast<T*>(lhs)) T{*data};
+      }
+      break;
+    case Request::MoveConstruct:
+      // Move-construct Any from rhs assuming that any->reset() has
+      // already been called
+      if constexpr (std::is_move_constructible_v<T>) {
+        auto data = static_cast<const T*>(static_cast<const AnyBase*>(rhs)->data());
+        ::new (const_cast<T*>(lhs)) T{std::move(*const_cast<T*>(data))};
+      }
+      break;
+    case Request::Destroy:
+      // Destruct an object owned by Any
+      if constexpr (std::is_array_v<T>)
+        delete[] lhs;
+      else
+        any->repr_ == Representation::Embedded ? lhs->~T() : delete lhs;
+      break;
+    case Request::Copy:
+      if constexpr (std::is_copy_assignable_v<T>)
+        *const_cast<T*>(lhs) = *static_cast<const T*>(rhs);
+      break;
+    case Request::Move:
+      if constexpr (std::is_move_assignable_v<T>) {
+        *const_cast<T*>(lhs) = std::move(*const_cast<T*>(static_cast<const T*>(rhs)));
+      }
+      break;
     }
   }
 
@@ -67,8 +65,7 @@ private:
 
   // Can we embed an object inside this any?
   template <typename T>
-  static constexpr auto is_embeddable_v =
-      sizeof(std::remove_cvref_t<T>) <= Size;
+  static constexpr auto is_embeddable_v = sizeof(std::remove_cvref_t<T>) <= Size;
 
 public:
   enum class Representation {
@@ -98,8 +95,7 @@ public:
     }
   }
 
-  AnyBase(AnyBase&& other)
-      : rtti_{other.rtti_}, type_{other.type_}, repr_{other.repr_} {
+  AnyBase(AnyBase&& other) : rtti_{other.rtti_}, type_{other.type_}, repr_{other.repr_} {
     if (other.repr_ == Representation::Embedded)
       rtti_(Request::MoveConstruct, this, static_cast<const void*>(&other));
     else if (other.repr_ == Representation::Remote)
@@ -124,40 +120,42 @@ public:
   // Get the raw data pointer
   [[nodiscard]] void* data() noexcept {
     switch (repr_) {
-      case Representation::Empty:
-        return nullptr;
-      case Representation::Embedded:
-        return reinterpret_cast<void*>(std::addressof(embedded_));
-      case Representation::Remote:
-        return remote_;
-      default:
-        assert(false);
-        return nullptr;
+    case Representation::Empty:
+      return nullptr;
+    case Representation::Embedded:
+      return reinterpret_cast<void*>(std::addressof(embedded_));
+    case Representation::Remote:
+      return remote_;
+    default:
+      assert(false);
+      return nullptr;
     }
   }
 
   // Get the raw data const pointer
   [[nodiscard]] const void* data() const noexcept {
     switch (repr_) {
-      case Representation::Empty:
-        return nullptr;
-      case Representation::Embedded:
-        return reinterpret_cast<const void*>(std::addressof(embedded_));
-      case Representation::Remote:
-        return remote_;
-      default:
-        assert(false);
-        return nullptr;
+    case Representation::Empty:
+      return nullptr;
+    case Representation::Embedded:
+      return reinterpret_cast<const void*>(std::addressof(embedded_));
+    case Representation::Remote:
+      return remote_;
+    default:
+      assert(false);
+      return nullptr;
     }
   }
 
   // Type-compare and get a typed data pointer
-  template <typename T> [[nodiscard]] auto get() noexcept -> T* {
+  template <typename T>
+  [[nodiscard]] auto get() noexcept -> T* {
     return type() == typeid(T) ? static_cast<T*>(data()) : nullptr;
   }
 
   // Type-compare and get a typed data const pointer
-  template <typename T> [[nodiscard]] auto get() const noexcept -> const T* {
+  template <typename T>
+  [[nodiscard]] auto get() const noexcept -> const T* {
     return type() == typeid(T) ? static_cast<const T*>(data()) : nullptr;
   }
 

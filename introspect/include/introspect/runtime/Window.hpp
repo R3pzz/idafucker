@@ -1,13 +1,13 @@
 #pragma once
-#include <memory> // unique_ptr
+#include <memory>  // unique_ptr
+
+#include <introspect/runtime/Application.hpp>
+#include <introspect/runtime/events/Events.hpp>
 
 #include <fuse/Bits.hpp>
 #include <fuse/Class.hpp>
 #include <fuse/Signal.hpp>
 #include <fuse/math/Rectangle.hpp>
-
-#include <introspect/runtime/Application.hpp>
-#include <introspect/runtime/events/Events.hpp>
 
 // Event bus outline:
 // Window: |
@@ -24,7 +24,7 @@
 
 namespace introspect
 {
-  
+
 class Window {
 public:
   struct Options {
@@ -32,17 +32,17 @@ public:
       None = 0u,
 
       // Decorations:
-      HasFixedSize = 1u << 0u, //< This window is not resizable by the user.
-      HasCustomTitleBar = 1u << 1u, //< Ask system to remove the default title bar.
-      
+      HasFixedSize = 1u << 0u,       //< This window is not resizable by the user.
+      HasCustomTitleBar = 1u << 1u,  //< Ask system to remove the default title bar.
+
       // Window types:
-      IsPopup = 1u << 2u, //< This window is a popup window.
+      IsPopup = 1u << 2u,  //< This window is a popup window.
     };
 
     [[nodiscard]] constexpr bool hasFixedSize() const noexcept {
       return flags.contains(Flags::HasFixedSize);
     }
-    
+
     [[nodiscard]] constexpr bool hasCustomTitleBar() const noexcept {
       return flags.contains(Flags::HasCustomTitleBar);
     }
@@ -50,7 +50,7 @@ public:
     [[nodiscard]] constexpr bool isDefault() const noexcept {
       return !flags.contains(Flags::IsPopup);
     }
-    
+
     [[nodiscard]] constexpr bool isPopup() const noexcept {
       return flags.contains(Flags::IsPopup);
     }
@@ -89,13 +89,17 @@ public:
 
 protected:
   [[nodiscard]] virtual bool handleCloseEvent();
-  [[nodiscard]] virtual bool handleSizeChangedEvent(
-      fuse::Vector2i size, SizeChangedEvent::Type type);
+  [[nodiscard]] virtual bool handleSizeChangedEvent(fuse::Vector2i size,
+                                                    SizeChangedEvent::Type type);
 
   // Native is exposed for derived classes so that they can make custom calls
   // to the native API.
-  [[nodiscard]] constexpr auto &native() noexcept { return *native_; }
-  [[nodiscard]] constexpr const auto &native() const noexcept { return *native_; }
+  [[nodiscard]] constexpr auto& native() noexcept {
+    return *native_;
+  }
+  [[nodiscard]] constexpr const auto& native() const noexcept {
+    return *native_;
+  }
 
 private:
   std::unique_ptr<detail::NativeWindow> native_;
@@ -106,4 +110,4 @@ private:
   FUSE_NONCOPYABLE(Window);
 };
 
-} // namespace introspect
+}  // namespace introspect

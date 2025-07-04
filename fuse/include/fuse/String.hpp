@@ -8,8 +8,9 @@ namespace fuse
 {
 // std::basic_string/std::basic_string_view -like types.
 template <typename T, typename Char>
-concept std_string_like =
-    is_any_of_v<T, std::basic_string<Char>, std::basic_string_view<Char>>;
+concept std_string_like = is_any_of_v<T,
+                                      std::basic_string<Char>,
+                                      std::basic_string_view<Char>>;
 
 struct ToUnicode final {
   constexpr ToUnicode() noexcept = default;
@@ -20,8 +21,7 @@ struct ToUnicode final {
   }
 
 private:
-  [[nodiscard]] static std::wstring impl(const char* data,
-                                         const std::size_t size);
+  [[nodiscard]] static std::wstring impl(const char* data, const std::size_t size);
 };
 
 struct ToUtf8 final {
@@ -41,8 +41,7 @@ struct ToUtf8 final {
   }
 
 private:
-  [[nodiscard]] static std::string impl(const wchar_t* data,
-                                        const std::size_t size);
+  [[nodiscard]] static std::string impl(const wchar_t* data, const std::size_t size);
 };
 
 [[nodiscard]] auto unicodeCast(const auto& value) {

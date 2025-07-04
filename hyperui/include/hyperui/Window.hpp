@@ -1,5 +1,5 @@
 #pragma once
-#include <filesystem> // path
+#include <filesystem>  // path
 
 #include <hyperui/Config.hpp>
 #include <hyperui/Engine.hpp>
@@ -7,7 +7,7 @@
 
 namespace hyperui
 {
-  
+
 // A `Window` extension that is built to handle WebView2 engine events
 class Window final : public introspect::Window {
 public:
@@ -31,7 +31,8 @@ public:
 
 protected:
   [[nodiscard]] bool handleSizeChangedEvent(
-      fuse::Vector2i size, introspect::SizeChangedEvent::Type type) override;
+      fuse::Vector2i size,
+      introspect::SizeChangedEvent::Type type) override;
 
 private:
   std::unique_ptr<Engine> engine_;

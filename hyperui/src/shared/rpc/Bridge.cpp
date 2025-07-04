@@ -47,8 +47,7 @@ void Bridge::handleResponseMessage(const nlohmann::json &message) {
 
   if (message.contains("exception")) {
     std::string exception = message["exception"];
-    promises_[id] =
-        std::make_exception_ptr(std::exception{exception.c_str()});
+    promises_[id] = std::make_exception_ptr(std::exception{exception.c_str()});
   } else if (message.contains("result")) {
     promises_[id] = std::move(message["result"]);
   }

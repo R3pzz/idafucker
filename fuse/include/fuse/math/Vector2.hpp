@@ -10,8 +10,7 @@ class Vector2 {
 public:
   constexpr Vector2() noexcept = default;
 
-  constexpr Vector2(Base x, Base y) noexcept
-      : x{std::move(x)}, y{std::move(y)} {}
+  constexpr Vector2(Base x, Base y) noexcept : x{std::move(x)}, y{std::move(y)} {}
 
   Base x{}, y{};
 };

@@ -2,8 +2,7 @@
 
 namespace introspect
 {
-auto ResourceManager::load(
-    const std::filesystem::path& path, const Resource::Flags flags)
+auto ResourceManager::load(const std::filesystem::path& path, const Resource::Flags flags)
     -> fuse::RCHandle<Resource> {
   // Look for the resource in the cache
   const auto cache = cache_.find(path);
@@ -33,9 +32,8 @@ void ResourceManager::reload(const std::filesystem::path& path) {
 }
 
 void ResourceManager::reload(const fuse::RCHandle<Resource>& resource) {
-  const auto it = std::find_if(
-      std::begin(cache_), std::end(cache_),
-      [&](const auto& pair) { return pair.second == resource; });
+  const auto it = std::find_if(std::begin(cache_), std::end(cache_),
+                               [&](const auto& pair) { return pair.second == resource; });
   if (it == std::end(cache_))
     return;
 
@@ -57,8 +55,7 @@ void ResourceManager::erase(const std::filesystem::path& path, bool force) {
 void ResourceManager::observe() {
   for (auto it = std::begin(cache_); it != std::end(cache_);) {
     if (it->second->refCount() == 0u && !it->second->isRequired())
-      it =
-          cache_.erase(it);  //< The resource will de-allocate itself on release
+      it = cache_.erase(it);  //< The resource will de-allocate itself on release
     else
       ++it;
   }
@@ -73,8 +70,8 @@ void ResourceManager::observe() {
   return fuse::RCHandle<Resource>{it->second};
 }
 
-void ResourceManager::registerFactory(
-    const std::string& extension, ResourceFactory::Ref factory) {
+void ResourceManager::registerFactory(const std::string& extension,
+                                      ResourceFactory::Ref factory) {
   factories_[extension] = std::move(factory);
 }
 }  // namespace introspect

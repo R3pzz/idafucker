@@ -4,6 +4,4 @@
 namespace fuse
 {
 
-
-
 }  // namespace fuse

@@ -30,13 +30,13 @@ public:
   using Identifier = std::size_t;
   using EntryPoint = int(int, char **);
 
-  constexpr Module(const wchar_t *name) noexcept
-      : name_{name} {}
+  constexpr Module(const wchar_t *name) noexcept : name_{name} {}
 
-  constexpr Module(std::wstring name) noexcept
-      : name_{std::move(name)} {}
+  constexpr Module(std::wstring name) noexcept : name_{std::move(name)} {}
 
-  [[nodiscard]] constexpr const std::wstring &name() const noexcept { return name_; }
+  [[nodiscard]] constexpr const std::wstring &name() const noexcept {
+    return name_;
+  }
 
 private:
   std::wstring name_{};  //< Name of the module.

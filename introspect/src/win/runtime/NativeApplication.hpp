@@ -15,10 +15,12 @@ public:
   explicit NativeApplication(const fuse::CommandLine<wchar_t> &commandLine);
   ~NativeApplication() noexcept;
 
-  [[nodiscard]] constexpr ATOM atom() const noexcept { return atom_; }
+  [[nodiscard]] constexpr ATOM atom() const noexcept {
+    return atom_;
+  }
 
   void runEventLoop(const std::function<void()> &loopFunc) noexcept;
-  
+
 private:
   void registerClass();
   void unregisterClass() noexcept;

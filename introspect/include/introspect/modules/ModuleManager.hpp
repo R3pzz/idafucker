@@ -7,7 +7,6 @@ namespace introspect
 
 class ModuleManager final {
 public:
-  
 };
 
-} // namespace introspect
+}  // namespace introspect

@@ -7,8 +7,7 @@
 namespace bridge::win::process
 {
 
-class ProcessRegistry final {
-public:
+struct ProcessRegistry final {
   // Try to find a process matching its full name against a string passed in `name`. If
   // `openInPlace` is `true`, resulting `Process` will have an open handle to the process.
   // Otherwise, the resulting `Process` will be referenced by its PID.
@@ -23,9 +22,6 @@ public:
   // Returns an `std::vector` of all processes that the regex matched against.
   [[nodiscard]] static StatusOr<std::vector<Process>> findAllMatching(
       const std::wregex &expression) noexcept;
-
-private:
-  ProcessRegistry() = delete;
 };
 
 }  // namespace bridge::win::process

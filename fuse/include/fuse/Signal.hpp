@@ -10,7 +10,8 @@ namespace fuse
 template <typename Type>
 concept slot_like = std::is_function_v<Type>;
 
-template <slot_like Signature> class Signal {
+template <slot_like Signature>
+class Signal {
 public:
   using Slot = std::function<Signature>;
 

@@ -1,5 +1,5 @@
 #pragma once
-#include <filesystem> // path
+#include <filesystem>  // path
 
 #include <introspect/Config.hpp>
 
@@ -11,4 +11,4 @@ public:
   static constexpr auto k_moduleInterface{L"module_interface"};
 };
 
-} // namespace introspect
+}  // namespace introspect

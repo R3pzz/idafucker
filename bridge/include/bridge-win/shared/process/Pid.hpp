@@ -8,4 +8,4 @@ using Pid = DWORD;
 
 constexpr Pid k_badPid{0u};
 
-} // namespace bridge::win::process
+}  // namespace bridge::win::process

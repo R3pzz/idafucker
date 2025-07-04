@@ -17,6 +17,6 @@ enum class AddressingMode : std::uint8_t {
   kDirect = 1u << 0u,
   kIndirect = 1u << 1u,
 };
-} // namespace disasm
+}  // namespace disasm
 
 IDAFUCKER_NAMESPACE_END

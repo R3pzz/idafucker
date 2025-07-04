@@ -1,15 +1,15 @@
 #include "NativeApplication.hpp"
+
+#include <objbase.h>
+
 #include "NativeWindow.hpp"
 
 #include <fuse/Platform.hpp>
-
 #include <spdlog/spdlog.h>
-#include <objbase.h>
 
 namespace introspect::detail
 {
-NativeApplication::NativeApplication(
-    const fuse::CommandLine<wchar_t> &commandLine) {
+NativeApplication::NativeApplication(const fuse::CommandLine<wchar_t> &commandLine) {
   ::CoInitialize(NULL);
   registerClass();
 
@@ -23,8 +23,7 @@ NativeApplication::~NativeApplication() noexcept {
   ::CoUninitialize();
 }
 
-void NativeApplication::runEventLoop(
-    const std::function<void()> &loopFunc) noexcept {
+void NativeApplication::runEventLoop(const std::function<void()> &loopFunc) noexcept {
   MSG message{};
   while (::PeekMessageW(&message, nullptr, 0u, 0u, PM_REMOVE)) {
     ::TranslateMessage(&message);
@@ -79,8 +78,7 @@ void NativeApplication::configureDpi() {
     return function(awareness);
   };
 
-  if (::SetProcessDpiAwarenessContext(
-          DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE) != TRUE)
+  if (::SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE) != TRUE)
     throw std::runtime_error{"failed setting process' DPI awareness context"};
 
   if (const auto result = setProcessDpiAwareness(k_perMonitorDPIAware);

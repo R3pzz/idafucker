@@ -8,8 +8,8 @@ namespace bridge::win::process
 
 class Process final {
 public:
+  constexpr Process() noexcept = default;
   constexpr Process(Pid pid) noexcept : data_{std::move(pid)} {}
-
   constexpr Process(HANDLE handle) noexcept : data_{std::move(handle)} {}
 
   [[nodiscard]] StatusOr<Pid> pid() const noexcept;
@@ -25,8 +25,7 @@ private:
     constexpr Data(Pid pid) noexcept
         : data_{static_cast<std::size_t>(pid) | k_isInPIDMode} {}
 
-    constexpr Data(HANDLE handle) noexcept
-        : handle_{std::move(handle)} {}
+    constexpr Data(HANDLE handle) noexcept : handle_{std::move(handle)} {}
 
     [[nodiscard]] constexpr Pid pid() const noexcept {
       return data_.contains(k_isInPIDMode) ? static_cast<Pid>(data_ & ~k_isInPIDMode)

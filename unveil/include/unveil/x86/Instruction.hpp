@@ -1,9 +1,9 @@
 #pragma once
-#include <vector> // vector
+#include <vector>  // vector
 
 #include <unveil/Config.hpp>
-#include <unveil/x86/Prefix.hpp>
 #include <unveil/x86/Operand.hpp>
+#include <unveil/x86/Prefix.hpp>
 
 namespace unveil
 {
@@ -32,8 +32,8 @@ public:
   [[nodiscard]] std::string dumpAssembly() const noexcept;
 
 private:
-  Mnemonic mnemonic_{};       //< A mnemonic of the opcode of the instruction.
-  std::vector<Prefix> prefixes_{};  //< Prefixes the instruction has.
+  Mnemonic mnemonic_{};              //< A mnemonic of the opcode of the instruction.
+  std::vector<Prefix> prefixes_{};   //< Prefixes the instruction has.
   std::vector<Operand> operands_{};  //< Operands of the instruction.
 };
 }  // namespace unveil

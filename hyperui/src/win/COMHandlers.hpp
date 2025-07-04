@@ -3,10 +3,11 @@
 #include <functional>  // function
 #include <string>      // wstring
 
-#include "WebViewHelpers.hpp"
-
 #include <hyperui/Config.hpp>
 #include <hyperui/Window.hpp>
+
+#include "WebViewHelpers.hpp"
+
 #include <fuse/Platform.hpp>
 #include <fuse/Signal.hpp>
 
@@ -22,19 +23,16 @@ public:
       __uuidof(ICoreWebView2CreateCoreWebView2ControllerCompletedHandler)};
 
   constexpr COMCreationHandler(HWND window, auto &&completeHandler) noexcept
-      : completeHandler{std::forward<decltype(completeHandler)>(
-            completeHandler)},
+      : completeHandler{std::forward<decltype(completeHandler)>(completeHandler)},
         window{window} {}
 
   [[nodiscard]] bool requestWebView2Creation(const std::wstring &udf);
 
-  HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid,
-                                           void **ppvObject) override {
+  HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject) override {
     if (ppvObject == nullptr)
       return E_INVALIDARG;
 
-    if (::IsEqualIID(riid, kEnvCreatedIID) ||
-        ::IsEqualIID(riid, kCtrlCreatedIID)) {
+    if (::IsEqualIID(riid, kEnvCreatedIID) || ::IsEqualIID(riid, kCtrlCreatedIID)) {
       *ppvObject = this;
       return S_OK;
     } else {
@@ -61,10 +59,8 @@ public:
   }
 
 private:
-  [[nodiscard]] HRESULT handleEnvCreated(HRESULT code,
-                                         ICoreWebView2Environment *env);
-  [[nodiscard]] HRESULT handleCtrlCreated(HRESULT code,
-                                          ICoreWebView2Controller *ctrl);
+  [[nodiscard]] HRESULT handleEnvCreated(HRESULT code, ICoreWebView2Environment *env);
+  [[nodiscard]] HRESULT handleCtrlCreated(HRESULT code, ICoreWebView2Controller *ctrl);
 
   std::atomic_size_t refCount{0u};
   std::function<void(ICoreWebView2Controller *)> completeHandler{};
@@ -77,20 +73,19 @@ class COMEventHandler
     : public ICoreWebView2WebMessageReceivedEventHandler,
       public ICoreWebView2AddScriptToExecuteOnDocumentCreatedCompletedHandler {
 public:
-  static constexpr auto kWebMessageReceivedIID{
+  static constexpr auto k_webMessageReceivedIID{
       __uuidof(ICoreWebView2WebMessageReceivedEventHandler)};
-  static constexpr auto kInitScriptAddedIID{__uuidof(
-      ICoreWebView2AddScriptToExecuteOnDocumentCreatedCompletedHandler)};
+  static constexpr auto k_initScriptAddedIID{
+      __uuidof(ICoreWebView2AddScriptToExecuteOnDocumentCreatedCompletedHandler)};
 
   constexpr COMEventHandler() noexcept = default;
 
-  HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid,
-                                           void **ppvObject) override {
+  HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject) override {
     if (ppvObject == nullptr)
       return E_INVALIDARG;
 
-    if (::IsEqualIID(riid, kWebMessageReceivedIID) ||
-        ::IsEqualIID(riid, kInitScriptAddedIID)) {
+    if (::IsEqualIID(riid, k_webMessageReceivedIID) ||
+        ::IsEqualIID(riid, k_initScriptAddedIID)) {
       *ppvObject = this;
       return S_OK;
     } else {
@@ -112,8 +107,7 @@ public:
   }
 
   HRESULT STDMETHODCALLTYPE
-  Invoke(ICoreWebView2 *core,
-         ICoreWebView2WebMessageReceivedEventArgs *args) override {
+  Invoke(ICoreWebView2 *core, ICoreWebView2WebMessageReceivedEventArgs *args) override {
     return handleWebMessageReceived(core, args);
   }
 
@@ -128,8 +122,7 @@ private:
   [[nodiscard]] HRESULT handleWebMessageReceived(
       [[maybe_unused]] ICoreWebView2 *,
       ICoreWebView2WebMessageReceivedEventArgs *args) const;
-  [[nodiscard]] HRESULT handleInitScriptAdded(HRESULT code,
-                                              LPCWSTR result) const;
+  [[nodiscard]] HRESULT handleInitScriptAdded(HRESULT code, LPCWSTR result) const;
 
   std::atomic_size_t refCount{0u};
 

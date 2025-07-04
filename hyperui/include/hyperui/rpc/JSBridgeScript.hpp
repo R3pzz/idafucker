@@ -4,8 +4,8 @@
 namespace hyperui::detail
 {
 
-constexpr auto k_jsBridgeScript{ // clang-format disable
-  LR"js(
+constexpr auto k_jsBridgeScript{// clang-format disable
+                                LR"js(
 (() => {
     const pending = new Map();
     let idCounter = 1;
@@ -58,7 +58,6 @@ constexpr auto k_jsBridgeScript{ // clang-format disable
         }
     });
 })();
-  )js"
-};
+  )js"};
 
 }  // namespace hyperui::detail

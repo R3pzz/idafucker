@@ -26,11 +26,11 @@ private:
       ::DispatchMessageW(&message);
     }
   }
-  
+
   HWND window{};
   wrl::ComPtr<ICoreWebView2> core{};
   wrl::ComPtr<ICoreWebView2Controller> ctrl{};
   wrl::ComPtr<COMEventHandler> eventHandler{};
 };
 
-}  // namespace hyperui:::detail
+}  // namespace hyperui::detail

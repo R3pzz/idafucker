@@ -1,11 +1,11 @@
 #pragma once
 #include <hyperui/Config.hpp>
-#include <fuse/Class.hpp>
-#include <fuse/Signal.hpp>
-#include <fuse/math/Rectangle.hpp>
 
 #include "Markup.hpp"
 
+#include <fuse/Class.hpp>
+#include <fuse/Signal.hpp>
+#include <fuse/math/Rectangle.hpp>
 #include <nlohmann/json.hpp>
 
 namespace hyperui

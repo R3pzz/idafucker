@@ -8,7 +8,8 @@
 
 namespace fuse::detail
 {
-template <typename Type> class FutureState : public RefCountable<> {
+template <typename Type>
+class FutureState : public RefCountable<> {
 private:
   enum class Contained {
     None,

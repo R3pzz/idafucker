@@ -12,7 +12,7 @@ using Any = detail::AnyBase<40u>;
 }
 
 template <typename T>
-[[nodiscard]] Any makeInPlaceAny(auto&&... args) {
+[[nodiscard]] Any makeInPlaceAny(auto &&...args) {
   return Any{T{std::forward<decltype(args)>(args)...}};
 }
 }  // namespace fuse

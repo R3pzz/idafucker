@@ -19,8 +19,7 @@ struct Signature {
   // |XXX-----|--------|--------|--------|
   static constexpr fuse::BitRange k_type{0u, 2u};  //< The type of the operand.
   // |--------|--------|XXXXXXXX|XXXXXXXX|
-  static constexpr fuse::BitRange k_meta{
-      16u, 31u};  //< Operand-specific metadata field.
+  static constexpr fuse::BitRange k_meta{16u, 31u};  //< Operand-specific metadata field.
 
   constexpr Signature() noexcept = default;
 
@@ -104,16 +103,14 @@ struct MemEncoding {
     return k_mode.storeTo(static_cast<std::uint16_t>(AddressMode::Direct));
   }
 
-  [[nodiscard]] static constexpr std::uint16_t encodeDisp(
-      const Reg &baseReg) noexcept {
+  [[nodiscard]] static constexpr std::uint16_t encodeDisp(const Reg &baseReg) noexcept {
     return k_mode.storeTo(static_cast<std::uint16_t>(AddressMode::Indirect)) |
            k_baseReg.storeTo(static_cast<std::uint16_t>(baseReg.id()));
   }
 
-  [[nodiscard]] static constexpr std::uint16_t encodeSIB(
-      const Reg &baseReg,
-      const Reg &indexReg,
-      std::uint8_t scale) noexcept {
+  [[nodiscard]] static constexpr std::uint16_t encodeSIB(const Reg &baseReg,
+                                                         const Reg &indexReg,
+                                                         std::uint8_t scale) noexcept {
     return k_mode.storeTo(static_cast<std::uint16_t>(AddressMode::Indirect)) |
            k_baseReg.storeTo(static_cast<std::uint16_t>(baseReg.id())) |
            k_indexReg.storeTo(static_cast<std::uint16_t>(indexReg.id())) |
@@ -123,8 +120,7 @@ struct MemEncoding {
 
 class Mem : public Operand {
 public:
-  constexpr Mem() noexcept
-      : Operand{Signature::writeOperandType(OperandType::Mem)} {}
+  constexpr Mem() noexcept : Operand{Signature::writeOperandType(OperandType::Mem)} {}
 
   // Memory address is loaded in as an immediate value:
   // `direct`:`0x1000`
@@ -148,8 +144,7 @@ public:
                 std::uint8_t scale,
                 std::int64_t disp) noexcept
       : Operand{Signature::writeOperandType(OperandType::Mem) |
-                    Signature::writeMeta(
-                        MemEncoding::encodeSIB(base, index, scale)),
+                    Signature::writeMeta(MemEncoding::encodeSIB(base, index, scale)),
                 disp} {}
 
   [[nodiscard]] constexpr std::int64_t disp() const noexcept {

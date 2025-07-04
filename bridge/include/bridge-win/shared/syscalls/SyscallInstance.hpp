@@ -1,11 +1,11 @@
 #pragma once
-#include <array> // array
+#include <array>  // array
 
 #include <fuse/Platform.hpp>
 
 namespace bridge::win::syscalls
 {
-  
+
 template <std::size_t Index>
 class SyscallInstance final {
 public:
@@ -17,7 +17,7 @@ public:
 
 private:
 #pragma section(".syscall", execute, read)
-// The byte code was taken out straight from IDA(`ntdll.dll`).
+  // The byte code was taken out straight from IDA(`ntdll.dll`).
   FUSE_SPECIFY_SECTION(".syscall")
   static inline const std::array<std::uint8_t, 11u> k_syscallStub{
       0x4Cu, 0x8Bu, 0xD1u,                // `mov r10, rcx`
@@ -33,4 +33,4 @@ private:
   }
 };
 
-} // namespace bridge::win::syscalls
+}  // namespace bridge::win::syscalls

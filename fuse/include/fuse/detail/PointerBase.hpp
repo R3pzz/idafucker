@@ -3,8 +3,9 @@
 
 namespace fuse::detail
 {
-  
-template <typename Address> class PointerBase {
+
+template <typename Address>
+class PointerBase {
   static_assert(std::is_integral_v<Address> && std::is_unsigned_v<Address>,
                 "`Address` can only be an unsigned integer.");
 

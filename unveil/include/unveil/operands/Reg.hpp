@@ -8,8 +8,7 @@ IDAFUCKER_NAMESPACE_BEGIN
 namespace disasm
 {
 
-enum class RegId : std::uint16_t {
-};
+enum class RegId : std::uint16_t {};
 
 class Reg : public Operand {
 public:

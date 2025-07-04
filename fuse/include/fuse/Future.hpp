@@ -5,7 +5,8 @@
 
 namespace fuse
 {
-template <typename Type> class Future {
+template <typename Type>
+class Future {
 public:
   Future(auto &promise) noexcept : state_{promise.state_} {}
 
@@ -45,7 +46,8 @@ private:
   RCHandle<detail::FutureState<Type>> state_;
 };
 
-template <typename Type> class Promise {
+template <typename Type>
+class Promise {
 public:
   Promise() noexcept : state_{new detail::FutureState<Type>{}} {}
 
@@ -100,7 +102,8 @@ private:
   // gets destroyed.
   RCHandle<detail::FutureState<Type>> state_;
 
-  template <class> friend class Future;
+  template <class>
+  friend class Future;
 
   FUSE_NONCOPYABLE(Promise);
 };

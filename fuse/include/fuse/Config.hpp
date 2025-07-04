@@ -1,7 +1,7 @@
 #pragma once
 
 // Disable the implicitly deleted destructor warning.
-#pragma warning(disable: 4624)
+#pragma warning(disable : 4624)
 
 // A minimal set of includes a well-structured project should have.
 #include <cassert>
@@ -62,7 +62,7 @@
   #if not defined(FUSE_STDCALL)
     #define FUSE_STDCALL __stdcall
   #endif
-  
+
   // Sometimes, we would want to constrain the linker to put some code
   // into the region we want it to be.
   #if not defined(FUSE_SPECIFY_SECTION)

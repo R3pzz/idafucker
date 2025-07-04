@@ -1,7 +1,7 @@
-#include <hyperui/Markup.hpp>
+#include <fstream>   // wifstream
+#include <iterator>  // istreambuf_iterator
 
-#include <fstream> // wifstream
-#include <iterator> // istreambuf_iterator
+#include <hyperui/Markup.hpp>
 
 namespace hyperui
 {
@@ -12,9 +12,8 @@ namespace hyperui
   if (!stream.is_open()) [[unlikely]]
     throw std::runtime_error{"bad data path"};
 
-  return fuse::makeAny<Markup>(std::wstring{
-      std::istreambuf_iterator<wchar_t>{stream},
-      std::istreambuf_iterator<wchar_t>{}});
+  return fuse::makeAny<Markup>(std::wstring{std::istreambuf_iterator<wchar_t>{stream},
+                                            std::istreambuf_iterator<wchar_t>{}});
 }
 
 [[nodiscard]] const std::type_info& Markup::Factory::type() const noexcept {

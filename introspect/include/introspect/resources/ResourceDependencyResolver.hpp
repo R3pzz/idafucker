@@ -28,8 +28,7 @@ public:
   virtual ~ResourceDependencyResolver() noexcept = default;
 
   // Parse the resource and extract all dependencies
-  [[nodiscard]] virtual DependencyList resolve(
-      const std::istream& stream) const = 0;
+  [[nodiscard]] virtual DependencyList resolve(const std::istream& stream) const = 0;
 };
 
 }  // namespace introspect

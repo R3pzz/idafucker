@@ -3,10 +3,9 @@
 namespace hyperui::detail
 {
 
-[[nodiscard]] bool COMCreationHandler::requestWebView2Creation(
-    const std::wstring &udf) {
-  return SUCCEEDED(::CreateCoreWebView2EnvironmentWithOptions(
-      nullptr, udf.c_str(), nullptr, this));
+[[nodiscard]] bool COMCreationHandler::requestWebView2Creation(const std::wstring &udf) {
+  return SUCCEEDED(
+      ::CreateCoreWebView2EnvironmentWithOptions(nullptr, udf.c_str(), nullptr, this));
 }
 
 HRESULT COMCreationHandler::handleEnvCreated(HRESULT code,
@@ -34,9 +33,8 @@ HRESULT COMCreationHandler::handleCtrlCreated(HRESULT code,
   return S_OK;
 }
 
-[[nodiscard]] HRESULT COMEventHandler::handleInitScriptAdded(
-    HRESULT code,
-    LPCWSTR result) const {
+[[nodiscard]] HRESULT COMEventHandler::handleInitScriptAdded(HRESULT code,
+                                                             LPCWSTR result) const {
   initScriptAddedEvent.emit(FAILED(code), result);
   return S_OK;
 }

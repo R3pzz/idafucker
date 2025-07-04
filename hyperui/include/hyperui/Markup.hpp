@@ -19,7 +19,6 @@ public:
   };
 
   constexpr Markup() noexcept = default;
-
   constexpr Markup(std::wstring buffer) noexcept : buffer_{std::move(buffer)} {}
 
   [[nodiscard]] constexpr const std::wstring& buffer() const noexcept {

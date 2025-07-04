@@ -18,4 +18,4 @@ using namespace ::bridge::win;
 using namespace ::bridge::linux;
 #endif
 
-} // namespace bridge
+}  // namespace bridge

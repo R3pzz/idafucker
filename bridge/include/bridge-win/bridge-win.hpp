@@ -3,7 +3,7 @@
 #include <bridge-win/shared/process/Pid.hpp>
 #include <bridge-win/shared/process/Process.hpp>
 #include <bridge-win/shared/process/ProcessRegistry.hpp>
-#include <bridge-win/shared/structures/detail/Field.hpp>
 #include <bridge-win/shared/structures/Peb.hpp>
+#include <bridge-win/shared/structures/detail/Field.hpp>
 #include <bridge-win/shared/syscalls/SyscallInstance.hpp>
 #include <bridge-win/shared/syscalls/Syscalls.hpp>
