@@ -1,0 +1,11 @@
+{
+  "name": "Sample Module",
+  "description": "A Sample Module for testing",
+  "version": "1.0.0",
+  "signature": "<base64 of SHA-256 of the module folder>",
+  "requirements": [
+    "Filesystem",
+    "Network",
+    "ProcessTree"
+  ]
+}

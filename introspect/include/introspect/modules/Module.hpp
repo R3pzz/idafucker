@@ -1,46 +1,70 @@
 #pragma once
-#include <string>  // wstring
-#include <vector>  // vector
+#include <memory>  // unique_ptr
 
+#include <fuse/Class.hpp>
 #include <introspect/Config.hpp>
+#include <introspect/modules/Manifest.hpp>
+#include <introspect/modules/ModuleId.hpp>
+#include <introspect/resources/ResourceFactory.hpp>
 
-#include <fuse/Hash.hpp>
-
-//
-// The flow:
-//   - System scans known module folders for any .dll/.so files;
-//   - If the file is found, system loads the file into memory,
-//     finds its entry point and the `module_interface` export;
-//   - If the export is found, the system caches its directory
-//     and proceeds to checking other modules.
-//   - When all modules are cached, systems checks the config file
-//     to see which modules should be loaded.
-//   - For each module, it instantiates its own sandbox(custom
-//     allocator, custom memory read/write ops, etc...).
-//   - After that, it checks for its dependencies, and loads them.
-//     if any of the dependencies is not found, the process aborts.
-//   - After loading the dependencies, the main() function is called.
-//
+#include <boost/uuid/uuid.hpp>
+#include <nlohmann/json.hpp>
 
 namespace introspect
 {
 
 class Module final {
 public:
-  using Identifier = std::size_t;
-  using EntryPoint = int(int, char **);
+  // Constructs an empty, default module.
+  constexpr Module() noexcept = default;
 
-  constexpr Module(const wchar_t *name) noexcept : name_{name} {}
-
-  constexpr Module(std::wstring name) noexcept : name_{std::move(name)} {}
-
-  [[nodiscard]] constexpr const std::wstring &name() const noexcept {
-    return name_;
+  [[nodiscard]] constexpr const ModuleId &id() const noexcept {
+    return id_;
   }
 
+  [[nodiscard]] constexpr const std::filesystem::path &path() const noexcept {
+    return path_;
+  }
+
+  [[nodiscard]] static Module parse(const nlohmann::json &json);
+
 private:
-  std::wstring name_{};  //< Name of the module.
-  EntryPoint *entryPoint_{};
+  // Used for path-independent module identification.
+  ModuleId id_{};
+  // Path to a folder containing the associated module.
+  std::filesystem::path path_{};
+
+  // Module manifest containing the metadata parsed from a `manifest.json` file.
+  std::unique_ptr<Manifest> manifest_{};
+
+  // The sandbox this module is being ran in.
+  std::unique_ptr<Sandbox> sandbox_{};
+
+  FUSE_NONCOPYABLE(Module);
+};
+
+class ModuleFactory final : public ResourceFactory {
+public:
+  enum class VerificationResult {
+    Verified,
+    RootNotFound,
+    ManifestNotFound,
+    NameMissing,
+    VersionMissing,
+    HashMismatch,
+  };
+
+  constexpr ModuleFactory(bool checkIntegrity) noexcept
+      : checkIntegrity_{std::move(checkIntegrity)} {}
+
+  [[nodiscard]] fuse::Any construct(const std::filesystem::path &path) const override;
+  [[nodiscard]] const std::type_info &type() const noexcept override;
+  
+  [[nodiscard]] VerificationResult verify(
+      const std::filesystem::path &path) const noexcept;
+
+private:
+  bool checkIntegrity_;
 };
 
 }  // namespace introspect

@@ -7,12 +7,17 @@ file(GLOB_RECURSE INTROSPECT_HEADERS CONFIGURE_DEPENDS
 )
 
 find_package(spdlog CONFIG REQUIRED)
+find_package(Boost REQUIRED)
 
 # 1. Introspect
 add_library(introspect ${INTROSPECT_SOURCES} ${INTROSPECT_HEADERS})
 target_include_directories(introspect PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
+)
+target_include_directories(introspect
+    PUBLIC
+        ${Boost_INCLUDE_DIRS} # Boost::uuid
 )
 target_link_libraries(introspect
     PUBLIC
@@ -31,7 +36,7 @@ target_enable_warnings(introspect)
 add_executable(introspect_app "src/main.cpp")
 target_link_libraries(introspect_app
     PRIVATE
-    introspect
+        introspect
 )
 target_enable_warnings(introspect_app)
 

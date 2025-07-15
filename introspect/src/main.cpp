@@ -31,6 +31,10 @@ int main() {
     ResourceManager resourceManager{};
     resourceManager.registerFactory(".html", hyperui::Markup::Factory::make());
 
+    // Initialize the module manager
+    ModuleManager moduleManager{};
+    moduleManager.registerModuleDirectory("modules/");
+
     // Create a sample window
     hyperui::Window::Options options{};
     options.title = L"introspect | v0.1-a | Windows";
