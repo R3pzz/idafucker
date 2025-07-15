@@ -50,6 +50,13 @@ concept represents_address = std::is_pointer_v<T> ||
                              (std::is_integral_v<T> && sizeof(T) == sizeof(void*));
 template <typename Derived, typename... Bases>
 concept one_of_bases = (std::is_base_of_v<Bases, Derived> || ...);
+template <typename T>
+concept iterable = requires(T t) {
+  // We check against `common_with` so that we can drop the refs/crefs that the iterators
+  // usually tend to return when dereferenced.
+  {t.begin()} -> std::forward_iterator;
+  {t.end()} -> std::forward_iterator;
+};
 
 }  // namespace concepts
 

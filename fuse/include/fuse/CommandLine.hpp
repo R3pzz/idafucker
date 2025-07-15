@@ -90,9 +90,9 @@ class CommandLine {
 public:
   using View = std::basic_string_view<Character>;
 
-  static constexpr auto kDelimiter = detail::select_delimiter<Character>::value;
+  static constexpr auto k_delimiter = detail::select_delimiter<Character>::value;
   static constexpr auto
-      kArgumentIdentifier = detail::select_argument_identifier<Character>::value;
+      k_argumentIdentifier = detail::select_argument_identifier<Character>::value;
 
   constexpr CommandLine(Character *data) noexcept : data_{tokenize(data)} {}
 
@@ -105,10 +105,22 @@ public:
       return {};
 
     const auto next = std::next(it);
-    if (next == std::end(data_) || next->starts_with(kArgumentIdentifier))
+    if (next == std::end(data_) || next->starts_with(k_argumentIdentifier))
       return {*it};
 
     return {*it, *next};
+  }
+
+  [[nodiscard]] constexpr View executable() const noexcept {
+    if (data_.empty()) [[unlikely]] {
+      return {};
+    }
+
+    const auto &path = data_.at(0u);
+    if (path.starts_with(k_argumentIdentifier)) {
+      return {};
+    }
+    return path;
   }
 
 private:
@@ -116,7 +128,7 @@ private:
     std::vector<View> tokens{};
     std::size_t tokenStart{}, tokenEnd{};
 
-    while ((tokenEnd = data.find(kDelimiter, tokenStart)) != std::string::npos) {
+    while ((tokenEnd = data.find(k_delimiter, tokenStart)) != std::string::npos) {
       tokens.push_back(data.substr(tokenStart, tokenEnd - tokenStart));
       tokenStart = tokenEnd + 1u;
     }

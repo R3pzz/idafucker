@@ -5,7 +5,6 @@
 #include <vector>  // vector
 
 #include <introspect/Config.hpp>
-
 #include <fuse/Any.hpp>
 #include <fuse/Bits.hpp>
 #include <fuse/Class.hpp>

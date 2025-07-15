@@ -1,4 +1,8 @@
 #pragma once
+
+// 'return': conversion from 'unsigned __int64' to 'ULONG', possible loss of data
+#pragma warning(disable: 4244)
+
 #include <atomic>      // atomic_size_t
 #include <functional>  // function
 #include <string>      // wstring
