@@ -1,11 +1,13 @@
 {
   "dependencies": [
     "boost-signals2",
-    "boost-test",
     "boost-thread",
+    "boost-uuid",
+    "libsodium",
     "nlohmann-json",
     "spdlog",
     "zydis",
-    "webview2"
+    "webview2",
+    "catch2"
   ]
 }

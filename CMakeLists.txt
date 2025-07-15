@@ -54,8 +54,8 @@ add_subdirectory(modules)
 #  Testing & docs (optional)
 # -------------------------------------------------
 if(INTROSPECT_BUILD_TESTS)
+    # Each submodule provides its own tests in their CMakeLists.txt
     enable_testing()
-    add_subdirectory(tests)
 endif()
 
 if(INTROSPECT_BUILD_DOCS)
