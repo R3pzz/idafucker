@@ -34,7 +34,7 @@ template <typename Fn, typename... Args>
 
 }  // namespace
 
-[[nodiscard]] StatusOr<Process> ProcessRegistry::find(const std::wstring &name,
+[[nodiscard]] StatusOr<Process> ProcessRegistry::find(const std::wstring_view &name,
                                                       const bool openInPlace) noexcept {
   if (name.empty()) [[unlikely]] {
     return Status::makeBadArgument();

@@ -11,7 +11,7 @@ struct ProcessRegistry final {
   // Try to find a process matching its full name against a string passed in `name`. If
   // `openInPlace` is `true`, resulting `Process` will have an open handle to the process.
   // Otherwise, the resulting `Process` will be referenced by its PID.
-  [[nodiscard]] static StatusOr<Process> find(const std::wstring &name,
+  [[nodiscard]] static StatusOr<Process> find(const std::wstring_view &name,
                                               const bool openInPlace = true) noexcept;
 
   // Try to find a process matching its full name against a regex passed in `expression`.
