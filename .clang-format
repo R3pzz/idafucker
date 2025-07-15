@@ -65,23 +65,17 @@ IncludeCategories:
   - Regex: '^<[a-z_]+>'  # Standard library headers (no extension or .h extension)
     Priority: 1
     SortPriority: 0
-  - Regex: '^<[a-z_]+\.(h|hpp)>'  # Standard library headers with extensions
+  - Regex: '^<[a-z_]+\.(h|hpp)>'  # Other external headers
     Priority: 1
     SortPriority: 0
-  - Regex: '^<introspect/.*>'  # introspect headers
+  - Regex: '^<(bridge|fuse|introspect|hyperui|unveil)/.*>'  # Component headers
     Priority: 2
     SortPriority: 0
-  - Regex: '^<hyperui/.*>'  # hyperui headers
-    Priority: 2
-    SortPriority: 0
-  - Regex: '^".*\.hpp"'  # Project .hpp headers
+  - Regex: '^".*\.(h|hh|hpp)"'  # Local include headers
     Priority: 3
     SortPriority: 0
-  - Regex: '^<.*>'  # All other external headers
-    Priority: 4
-    SortPriority: 0
   - Regex: '.*'  # Anything else
-    Priority: 5
+    Priority: 4
     SortPriority: 0
 IncludeIsMainRegex: '([-_](test|unittest))?$'
 IndentCaseLabels: false
